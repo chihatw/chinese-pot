@@ -1,35 +1,29 @@
-# Mockup Photo
--  [unsplash](https://source.unsplash.com/random)
+# firebase プロジェクトの設定
+- Authentication を開始して、 mail と google を有効にする
+- Cloud Firestore を開始する
 
-# Add shadcn components
-- [shadcn - components](https://ui.shadcn.com/docs/components)
-```shell
-pnpm dlx shadcn-ui@latest add calendar
-```
-# Set NEXTAUTH_SECRET
-- `.env`
+
+# `.env.local`
+- json ファイルを環境変数に設定するときは、key を`""` で囲んで、[改行を削除](https://www.textfixer.com/tools/remove-line-breaks.php)
+## `NEXTAUTH_SECRET`
 ```shell
 openssl rand -base64 32
 ```
-# Create Firebase Secret Key
-- `console` > `プロジェクトの設定` > `サービスアカウント` > `新しい秘密鍵を生成`
-- `gitignore`にファイル名を追加
-```
-# Firebase
-secretKey.json # ←ダウンロードした秘密鍵
-```
+## `NEXT_PUBLIC_FIREBASE_CONFIG`
+- firebase SDK で使用
+- console から `firebaseConfig`を取得
+
+## `NEXT_FIREBASE_SERVICE_ACCOUNT_KEY`
+- firebase Admin SDK　で使用
+- サービスアカウント > `新しい秘密鍵を生成`
+
+## `NEXT_PUBLIC_ADMIN_UID`
+- admin の uid を設定
+- `SetAdminButton`を押して、`NEXT_PUBLIC_ADMIN_UID`の`Custom Claim` に `Admin` を設定する
 
 # error??
 - 2023/9/19 firebase auth のログインエラーが`auth/invalid-login-credentials` のみ
 
-# deploy Firebase Admin SDK 
-- [How to add Firebase service account json files to Vercel](https://dev.to/vvo/how-to-add-firebase-service-account-json-files-to-vercel-ph5)
-- json ファイルは`key`にも引用符が必要
-```json
-{
-  "key":"property"
-}
-```
 
 # deploy
 ## `Firebase: Error (auth/unauthorized-domain).`がでた場合
@@ -51,3 +45,6 @@ shadcn で primary color が設定されているので、
 middleware で取得できる
 https://github.com/vercel/next.js/issues/43704#issuecomment-1411186664
 ただし、ページ毎に呼び出す必要がある
+
+# Mockup Photo
+-  [unsplash](https://source.unsplash.com/random)
