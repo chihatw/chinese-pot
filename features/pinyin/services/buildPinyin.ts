@@ -6,7 +6,9 @@ import {
   Pinyin,
   TONES,
   TWO_CHAR_CONSONANTS,
+  VOWELS,
 } from "..";
+import { VowelType } from "../schema";
 
 export const buildPinyin = (value: string): Pinyin | undefined => {
   const tail = value.at(-1) || "";
@@ -14,26 +16,19 @@ export const buildPinyin = (value: string): Pinyin | undefined => {
   if (TONES.includes(tail)) {
     tone = tail;
   }
-  const valueOmitTone = !!tail ? value.slice(0, value.length - 1) : value;
+  const valueOmitTone = !!tone ? value.slice(0, value.length - 1) : value;
   const consonant = getConsonant(valueOmitTone);
   const valueOmitToneConsonant = valueOmitTone.slice(consonant.length);
 
-  const { vowel, vowelType } = getVowel(valueOmitToneConsonant);
+  const vowel = getVowel(valueOmitToneConsonant);
 
   let pinyin: Pinyin | undefined = undefined;
 
-  // トーン必須
-  if (!!tone) {
-    // 母音と子音の組み合わせをチェック
-    if (isValidPinyin({ consonant, vowel, vowelType })) {
-      pinyin = {
-        tone,
-        consonant,
-        vowel,
-        vowelType,
-      };
-    }
-  }
+  pinyin = {
+    tone,
+    consonant,
+    vowel,
+  };
 
   return pinyin;
 };
@@ -52,41 +47,20 @@ const getConsonant = (value: string) => {
   return "";
 };
 
-const getVowel = (value: string): Pick<Pinyin, "vowel" | "vowelType"> => {
-  if (MAJOR_FULL_VOWELS.includes(value)) {
-    return {
-      vowel: value,
-      vowelType: "major",
-    };
-  }
-
-  if (MINOR_FULL_VOWELS.includes(value)) {
-    return {
-      vowel: value,
-      vowelType: "minor",
-    };
-  }
-
-  if (HALF_VOWELS.includes(value)) {
-    return {
-      vowel: value,
-      vowelType: "half",
-    };
-  }
-  return {
-    vowel: "",
-    vowelType: undefined,
-  };
+const getVowel = (value: string): string => {
+  return VOWELS.includes(value) ? value : "";
 };
 
-const isValidPinyin = ({
+export const isValidPinyin = ({
   consonant,
   vowel,
-  vowelType,
-}: Omit<Pinyin, "tone">) => {
-  // 母音がないのは異常
-  if (!vowel) return false;
+  // vowelType,
+  tone,
+}: Pinyin) => {
+  // tone, 母音がないのは異常
+  if (!tone || !vowel) return false;
 
+  const vowelType = getVowelType(vowel);
   // 副母音で、子音がないのは異常
   if (vowelType === "minor" && !consonant) return false;
 
@@ -104,4 +78,13 @@ export const buildPinyins = (value: string) => {
     pinyins.push(pinyin);
   }
   return pinyins;
+};
+
+export const getVowelType: (vowel: string) => VowelType | undefined = (
+  vowel,
+) => {
+  if (MAJOR_FULL_VOWELS.includes(vowel)) return "major";
+  if (MINOR_FULL_VOWELS.includes(vowel)) return "minor";
+  if (HALF_VOWELS.includes(vowel)) return "half";
+  return undefined;
 };

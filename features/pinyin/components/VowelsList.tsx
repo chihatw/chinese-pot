@@ -5,7 +5,7 @@ import { pinyinColor } from "../services/pinyinColor";
 const VowelsList = () => {
   return (
     <div className="grid max-w-md gap-y-5">
-      <div className="text-4xl font-extrabold">Vowels</div>
+      <div className="text-4xl font-extrabold">Vowel List</div>
       <div>
         <div className="text-xl font-extrabold">{`Major Full Vowels - ${MAJOR_FULL_VOWELS.length}`}</div>
         <div>

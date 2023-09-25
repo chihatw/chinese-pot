@@ -1,3 +1,5 @@
+import PinyinForm from "./components/PinyinForm";
+import PinyinLine from "./components/PinyinLine";
 import PinyinList from "./components/PinyinList";
 import {
   ONE_CHAR_CONSONANTS,
@@ -12,8 +14,11 @@ import {
   buildVowels,
 } from "./constants/vowels";
 import { Pinyin } from "./schema";
-import { buildPinyin, buildPinyins } from "./services/buildPinyin";
-import { isDisable } from "./services/utils";
+import {
+  buildPinyin,
+  buildPinyins,
+  isValidPinyin,
+} from "./services/buildPinyin";
 
 const CONSONANTS = [...ONE_CHAR_CONSONANTS, ...TWO_CHAR_CONSONANTS];
 
@@ -27,6 +32,8 @@ export {
   MAJOR_FULL_VOWELS,
   MINOR_FULL_VOWELS,
   ONE_CHAR_CONSONANTS,
+  PinyinForm,
+  PinyinLine,
   PinyinList,
   TONES,
   TWO_CHAR_CONSONANTS,
@@ -35,7 +42,7 @@ export {
   buildPinyin,
   buildPinyins,
   buildVowels,
-  isDisable,
+  isValidPinyin,
 };
 
 export type { Pinyin };

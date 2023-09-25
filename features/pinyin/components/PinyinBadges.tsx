@@ -1,12 +1,19 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Pinyin } from "..";
+import { Pinyin, isValidPinyin } from "..";
 import { pinyinColor } from "../services/pinyinColor";
 
 const PinyinBadges = ({ pinyin }: { pinyin: Pinyin | undefined }) => {
-  if (!pinyin) return null;
+  if (!pinyin || (!pinyin.consonant && !pinyin.vowel && !pinyin.consonant))
+    return null;
+
   return (
-    <div className="flex items-center overflow-hidden rounded border-2 border-stone-400">
+    <div
+      className={cn(
+        isValidPinyin(pinyin) ? "border-solid" : "border-dashed",
+        "flex items-center overflow-hidden rounded border-2 border-stone-400 ",
+      )}
+    >
       {pinyin.consonant ? (
         <Badge
           variant="outline"
@@ -23,9 +30,11 @@ const PinyinBadges = ({ pinyin }: { pinyin: Pinyin | undefined }) => {
           {pinyin.vowel}
         </Badge>
       ) : null}
-      <Badge variant="outline" className="m-0 rounded-none bg-white px-1">
-        {pinyin.tone}
-      </Badge>
+      {pinyin.tone ? (
+        <Badge variant="outline" className="m-0 rounded-none bg-white px-1">
+          {pinyin.tone}
+        </Badge>
+      ) : null}
     </div>
   );
 };

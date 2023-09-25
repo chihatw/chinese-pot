@@ -1,16 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { Pinyin, buildPinyins, isDisable } from "..";
-import PinyinBadges from "./PinyinBadges";
+import { Pinyin, PinyinLine, buildPinyins } from "..";
 
 const PinyinForm = () => {
   const [value, setValue] = useState<{
     pinyinStr: string;
-    hanzi: string;
     pinyins: (Pinyin | undefined)[];
-  }>({ pinyinStr: "", pinyins: [], hanzi: "" });
+  }>({ pinyinStr: "", pinyins: [] });
 
   useEffect(() => {
     const pinyins = buildPinyins(value.pinyinStr);
@@ -18,16 +15,8 @@ const PinyinForm = () => {
   }, [value.pinyinStr]);
 
   return (
-    <div className="max-w-md space-y-4">
-      <div className="text-4xl font-extrabold">PinyinForm</div>
-      <Input
-        className="bg-white"
-        placeholder="漢字"
-        value={value.hanzi}
-        onChange={(e) =>
-          setValue((prev) => ({ ...prev, hanzi: e.target.value }))
-        }
-      />
+    <div className="w-full max-w-md space-y-4">
+      <div className="text-4xl font-extrabold">Pinyin Form</div>
       <Input
         className="peer bg-white"
         placeholder="拼音"
@@ -39,14 +28,7 @@ const PinyinForm = () => {
           }))
         }
       />
-      <div className="flex flex-wrap gap-x-1 px-2">
-        {value.pinyins.map((pinyin, index) => (
-          <PinyinBadges key={index} pinyin={pinyin} />
-        ))}
-      </div>
-      <div className="text-right">
-        <Button disabled={isDisable(value.hanzi, value.pinyins)}>Submit</Button>
-      </div>
+      <PinyinLine pinyins={value.pinyins} />
     </div>
   );
 };

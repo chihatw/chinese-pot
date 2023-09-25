@@ -5,7 +5,7 @@ import { pinyinColor } from "../services/pinyinColor";
 const ConsonantsList = () => {
   return (
     <div className="grid max-w-md gap-y-5">
-      <div className="text-4xl font-extrabold">Consonants</div>
+      <div className="text-4xl font-extrabold">Consonant List</div>
       <div>
         <div className="text-xl font-extrabold">{`One Char Consonants - ${ONE_CHAR_CONSONANTS.length}`}</div>
         <div>
