@@ -6,6 +6,14 @@ import { Hanzi, HanziMeta } from "..";
 const COLLECTION = "hanzis";
 const COLLECTION_META = "hanzisMeta";
 
+export const getHanzis = async () => {
+  const snapshot = await dbAdmin
+    .collection(COLLECTION)
+    .withConverter(hanziConverter)
+    .get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 export const addHanzi = async (hanzi: Hanzi) => {
   await dbAdmin
     .collection(COLLECTION)

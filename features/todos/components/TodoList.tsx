@@ -5,6 +5,7 @@ import RemoveButton from "./RemoveButton";
 
 const TodoList = async () => {
   const todos = await getTodosAdmin();
+
   return (
     <div className="w-full max-w-sm space-y-4">
       <div className="text-center text-2xl font-extrabold">TodoList</div>

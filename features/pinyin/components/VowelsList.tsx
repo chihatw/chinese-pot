@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+
 import { HALF_VOWELS, MAJOR_FULL_VOWELS, MINOR_FULL_VOWELS, VOWELS } from "..";
 import { pinyinColor } from "../services/pinyinColor";
 
@@ -107,13 +108,6 @@ const VowelsList = () => {
             </Badge>
           ))}
         </div>
-        {/* <div>
-          {HALF_VOWELS.map((vowel) => (
-            <Badge key={vowel} variant="outline" className={pinyinColor(vowel)}>
-              {vowel}
-            </Badge>
-          ))}
-        </div> */}
       </div>
       <div>
         <div className="text-xl font-extrabold">{`Vowels - ${VOWELS.length}`}</div>

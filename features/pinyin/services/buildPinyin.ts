@@ -7,8 +7,8 @@ import {
   TONES,
   TWO_CHAR_CONSONANTS,
   VOWELS,
+  VowelType,
 } from "..";
-import { VowelType } from "../schema";
 
 export const buildPinyin = (value: string): Pinyin | undefined => {
   const tail = value.at(-1) || "";

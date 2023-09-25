@@ -1,14 +1,15 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Pinyin, PinyinLine, buildPinyin } from "@/features/pinyin";
+import { Pinyin, PinyinLine } from "@/features/pinyin";
 import { useEffect, useState } from "react";
-import {
-  Hanzi,
-  addHanziAction,
-  createNewHanzi,
-  isValidHanziFormData,
-} from "..";
+
+import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
+
+import { Hanzi } from "..";
+import { addHanziAction } from "../services/actions";
+import { createNewHanzi, isValidHanziFormData } from "../services/util";
 
 const HanziForm = () => {
   const [value, setValue] = useState<
@@ -28,6 +29,7 @@ const HanziForm = () => {
       form: value.form,
       pinyin: value.pinyin!,
     });
+
     addHanziAction(newHanzi);
     setValue({ form: "", pinyin: undefined, pinyinStr: "" });
   };

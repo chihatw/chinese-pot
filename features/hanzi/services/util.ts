@@ -1,4 +1,5 @@
-import { Pinyin, isValidPinyin } from "@/features/pinyin";
+import { Pinyin } from "@/features/pinyin";
+import { isValidPinyin } from "@/features/pinyin/services/buildPinyin";
 import { nanoid } from "nanoid";
 import { Hanzi } from "..";
 

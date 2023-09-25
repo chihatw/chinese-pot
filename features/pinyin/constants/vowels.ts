@@ -71,6 +71,12 @@ export const MINOR_FULL_VOWELS = [
   "iong",
 ];
 
+export const VOWELS = [
+  ...MAJOR_FULL_VOWELS,
+  ...MINOR_FULL_VOWELS,
+  ...HALF_VOWELS,
+];
+
 export const buildMajorFullVowels = () => {
   const { fullVowels } = buildVowels();
   return fullVowels.filter((vowel) => MAJOR_VOWEL_HEAD.includes(vowel.at(0)!));

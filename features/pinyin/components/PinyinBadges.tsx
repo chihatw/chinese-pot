@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Pinyin, isValidPinyin } from "..";
+
+import { Pinyin } from "..";
+import { isValidPinyin } from "../services/buildPinyin";
 import { pinyinColor } from "../services/pinyinColor";
 
 const PinyinBadges = ({ pinyin }: { pinyin: Pinyin | undefined }) => {

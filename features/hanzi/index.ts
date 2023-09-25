@@ -1,8 +1,7 @@
 import HanziForm from "./components/HanziForm";
+import HanziList from "./components/HanziList";
 import { Hanzi, HanziMeta } from "./schema";
-import { addHanziAction } from "./services/actions";
-import { createNewHanzi, isValidHanziFormData } from "./services/util";
-
-export { HanziForm, addHanziAction, createNewHanzi, isValidHanziFormData };
+// note コンポーネント以外も集約すると、 firebase admin SDK でエラーが起きる
+export { HanziForm, HanziList };
 
 export type { Hanzi, HanziMeta };

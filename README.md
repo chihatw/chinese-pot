@@ -48,3 +48,6 @@ https://github.com/vercel/next.js/issues/43704#issuecomment-1411186664
 
 # Mockup Photo
 -  [unsplash](https://source.unsplash.com/random)
+
+# TODO firestore のエミュレータ
+# TODO mongodb から hanzi のインポート
