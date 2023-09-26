@@ -1,3 +1,4 @@
+import PinyinBadge from "./components/PinyinBadge";
 import PinyinForm from "./components/PinyinForm";
 import PinyinLine from "./components/PinyinLine";
 import PinyinList from "./components/PinyinList";
@@ -28,6 +29,7 @@ export {
   MAJOR_FULL_VOWELS,
   MINOR_FULL_VOWELS,
   ONE_CHAR_CONSONANTS,
+  PinyinBadge,
   PinyinForm,
   PinyinLine,
   PinyinList,

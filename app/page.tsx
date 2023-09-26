@@ -1,7 +1,7 @@
 "server only";
 
 import { HanziForm, HanziList } from "@/features/hanzi";
-import { PinyinForm, PinyinList } from "@/features/pinyin";
+import { PinyinList } from "@/features/pinyin";
 import { SeedsList } from "@/features/seeds";
 
 export default async function Home() {
@@ -11,7 +11,6 @@ export default async function Home() {
         <SeedsList />
         <HanziForm />
         <HanziList />
-        <PinyinForm />
         <PinyinList />
       </div>
     </main>

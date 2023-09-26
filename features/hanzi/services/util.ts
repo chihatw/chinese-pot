@@ -52,3 +52,33 @@ export const getVowelCounts = (hanzis: Hanzi[]) => {
     {} as { [key: string]: number },
   );
 };
+
+export const getToneCounts = (hanzis: Hanzi[]) => {
+  return hanzis.reduce(
+    (acc, cur) => {
+      return {
+        ...acc,
+        [cur.pinyin.tone]: (acc[cur.pinyin.tone] || 0) + 1,
+      };
+    },
+    {} as { [key: string]: number },
+  );
+};
+
+export const getCorrectVowel = (vowel: string, consonant: string) => {
+  const pair = VOWEL_PAIRS[vowel as keyof typeof VOWEL_PAIRS];
+  // 弱母音で子音がない場合、語頭型を使う
+  if (!!pair && !consonant) {
+    vowel = pair;
+  }
+  return vowel;
+};
+
+export const getHanzisByVowel = (hanzis: Hanzi[], vowel: string) => {
+  return hanzis.filter((hanzi) => {
+    const target: string[] = [vowel];
+    const pair = VOWEL_PAIRS[vowel as keyof typeof VOWEL_PAIRS];
+    !!pair && target.push(pair);
+    return target.includes(hanzi.pinyin.vowel);
+  });
+};

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { EXTROVERTED_VOWELS, MINOR_FULL_VOWELS, VOWEL_PAIRS } from "..";
-import { pinyinColor } from "../services/pinyinColor";
+import { EXTROVERTED_VOWELS, MINOR_FULL_VOWELS, VOWEL_PAIRS } from "../../..";
+import { pinyinColor } from "../../../services/pinyinColor";
 
 const MinorVowelsRow = ({ startAt }: { startAt: string }) => {
   return (

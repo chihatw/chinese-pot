@@ -1,11 +1,10 @@
-import { Pinyin } from "..";
-import PinyinBadges from "./PinyinBadges";
+import { Pinyin, PinyinBadge } from "..";
 
 const PinyinLine = ({ pinyins }: { pinyins: (Pinyin | undefined)[] }) => {
   return (
     <div className="flex flex-wrap gap-x-1 px-2">
       {pinyins.map((pinyin, index) => (
-        <PinyinBadges key={index} pinyin={pinyin} />
+        <PinyinBadge key={index} pinyin={pinyin} />
       ))}
     </div>
   );

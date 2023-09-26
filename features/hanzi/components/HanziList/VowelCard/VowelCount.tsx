@@ -1,4 +1,4 @@
-import PinyinBadges from "@/features/pinyin/components/PinyinBadges";
+import { PinyinBadge } from "@/features/pinyin";
 
 const VowelCount = ({ vowel, count }: { vowel: string; count: number }) => {
   return (
@@ -8,7 +8,7 @@ const VowelCount = ({ vowel, count }: { vowel: string; count: number }) => {
           <p className="flex-1  pl-1">--</p>
         ) : (
           <div className="flex">
-            <PinyinBadges pinyin={{ consonant: "", tone: "", vowel }} />
+            <PinyinBadge pinyin={{ consonant: "", tone: "", vowel }} />
           </div>
         )}
       </div>

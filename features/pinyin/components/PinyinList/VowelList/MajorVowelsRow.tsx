@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { MAJOR_FULL_VOWELS } from "..";
-import { pinyinColor } from "../services/pinyinColor";
+import { MAJOR_FULL_VOWELS } from "../../..";
+import { pinyinColor } from "../../../services/pinyinColor";
 
 const MajorVowelsRow = ({ startAt }: { startAt: string }) => {
   return (

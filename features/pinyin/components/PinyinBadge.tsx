@@ -5,7 +5,7 @@ import { Pinyin } from "..";
 import { isValidPinyin } from "../services/buildPinyin";
 import { pinyinColor } from "../services/pinyinColor";
 
-const PinyinBadges = ({ pinyin }: { pinyin: Pinyin | undefined }) => {
+const PinyinBadge = ({ pinyin }: { pinyin: Pinyin | undefined }) => {
   if (!pinyin || (!pinyin.consonant && !pinyin.vowel && !pinyin.consonant))
     return null;
 
@@ -41,4 +41,4 @@ const PinyinBadges = ({ pinyin }: { pinyin: Pinyin | undefined }) => {
   );
 };
 
-export default PinyinBadges;
+export default PinyinBadge;
