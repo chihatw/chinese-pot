@@ -5,7 +5,7 @@ import {
 } from "next/font/google";
 
 export const fontSans = FontSans({
-  weight: ["100", "400", "900"],
+  weight: ["100", "400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-sans",
 });

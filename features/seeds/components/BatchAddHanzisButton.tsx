@@ -16,7 +16,6 @@ const BatchAddHanzisButton = () => {
   const subSet = HANZIS.slice(start, length);
 
   const handleSubmit = () => {
-    console.log({ start, length, subSet });
     batchAddHanzisAction(subSet);
     toast({ description: `added ${subSet.length} hanzis` });
   };

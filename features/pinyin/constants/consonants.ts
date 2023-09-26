@@ -20,3 +20,5 @@ export const ONE_CHAR_CONSONANTS = [
 ];
 
 export const buildOneCharConsonants = "bpmfdtnlzcsrjqxgkh".split("");
+
+export const TWO_CHAR_CONSONANTS = ["zh", "ch", "sh"];

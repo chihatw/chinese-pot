@@ -2,6 +2,59 @@ const MAJOR_VOWEL_HEAD = ["a", "o", "e"];
 const MINOR_VOWEL_HEAD = ["u", "v", "i"];
 const HALF_VOWELS_HEAD = ["y", "w"];
 
+// 子音がつかない
+export const INTROVERTED_VOWELS = [
+  "you",
+  "yai",
+  "wei",
+  "yun",
+  "wen",
+  "yuan",
+  "weng",
+];
+
+// 子音が必ずつく
+export const EXTROVERTED_VOWELS = ["iu", "un", "ui", "ue"];
+
+// 子音の有無で形が変化
+export const VOWEL_PAIRS = {
+  i: "yi",
+  u: "wu",
+  v: "yu",
+  uo: "wo",
+  ie: "ye",
+  ia: "ya",
+  ua: "wa",
+  uai: "wai",
+  ve: "yue",
+  iao: "yao",
+  in: "yin",
+  uan: "wan",
+  ian: "yan",
+  ing: "ying",
+  uang: "wang",
+  iang: "yang",
+  iong: "yong",
+};
+
+// 子音がなくても形が変化しない
+export const MAJOR_FULL_VOWELS = [
+  "a",
+  "o",
+  "e",
+  "ai",
+  "ei",
+  "ao",
+  "ou",
+  "er",
+  "an",
+  "en",
+  "ang",
+  "ong",
+  "eng",
+];
+
+// INTROVERTED_VOWELS + VOWEL_PAIRS
 export const HALF_VOWELS = [
   "yi",
   "wu",
@@ -10,47 +63,31 @@ export const HALF_VOWELS = [
   "ye",
   "ya",
   "wa",
-  "yin",
-  "wen",
-  "yun",
   "wei",
-  "you",
   "yue",
-  "wan",
-  "yan",
+  "you",
   "yao",
   "wai",
   "yai",
-  "ying",
+  "yin",
+  "wen",
+  "yun",
+  "wan",
+  "yan",
   "yuan",
+  "ying",
   "wang",
   "yang",
   "yong",
   "weng",
 ];
 
-export const MAJOR_FULL_VOWELS = [
-  "a",
-  "o",
-  "e",
-  "an",
-  "en",
-  "ai",
-  "ei",
-  "ao",
-  "ou",
-  "er",
-  "ang",
-  "ong",
-  "eng",
-];
-
+// EXTROVERTED_VOWELS + VOWEL_PAIRS
 export const MINOR_FULL_VOWELS = [
   "u",
   "v",
   "i",
   "un",
-  "vn",
   "in",
   "ui",
   "uo",
@@ -62,7 +99,6 @@ export const MINOR_FULL_VOWELS = [
   "ia",
   "ing",
   "uan",
-  "van",
   "ian",
   "iao",
   "uai",
@@ -107,7 +143,6 @@ const vowelsGroups = [
     "an",
     "en",
     "un",
-    "vn",
     "in",
     "ai",
     "ei",
@@ -139,7 +174,6 @@ const vowelsGroups = [
     "you",
     "yue",
     "uan",
-    "van",
     "ian",
     "wan",
     "yan",
