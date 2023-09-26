@@ -32,6 +32,31 @@ export const addHanzi = async (hanzi: Hanzi) => {
     });
 };
 
+export const batchAddHanzis = async (hanzis: Hanzi[]) => {
+  const batch = dbAdmin.batch();
+  for (const hanzi of hanzis) {
+    batch.set(
+      dbAdmin
+        .collection(COLLECTION)
+        .withConverter(hanziConverter)
+        .doc(hanzi.id),
+      hanzi,
+    );
+    batch.set(
+      dbAdmin
+        .collection(COLLECTION_META)
+        .withConverter(hanziMetaConverter)
+        .doc(hanzi.id),
+      {
+        id: hanzi.id,
+        createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
+      },
+    );
+  }
+  await batch.commit();
+};
+
 const hanziConverter: FirestoreDataConverter<Hanzi> = {
   fromFirestore(snapshot) {
     const data = snapshot.data();

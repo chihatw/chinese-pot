@@ -49,5 +49,26 @@ https://github.com/vercel/next.js/issues/43704#issuecomment-1411186664
 # Mockup Photo
 -  [unsplash](https://source.unsplash.com/random)
 
-# TODO firestore のエミュレータ
-# TODO mongodb から hanzi のインポート
+# firebase エミュレータ
+```zsh
+# fish ではエラーになるので、 zsh を選ぶ
+zsh
+
+# 設定で Emulator を選ぶ
+firebase init
+
+# エミュレータの立ち上げ
+firebase emulators:start
+```
+
+## エミュレータへの接続
+### Admin SDK firestore
+環境変数に`FIRESTORE_EMULATOR_HOST`を設定
+### Admin SDK auth
+環境変数に`FIREBASE_AUTH_EMULATOR_HOST`を設定
+### Web SDK auth
+```js
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+const auth = getAuth();
+connectAuthEmulator(auth, "http://127.0.0.1:9099");
+```

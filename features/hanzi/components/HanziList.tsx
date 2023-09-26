@@ -8,7 +8,7 @@ const HanziList = async () => {
 
   return (
     <div className="w-full max-w-md space-y-4">
-      <div className="text-4xl font-extrabold">Hanzi List</div>
+      <div className="text-4xl font-extrabold">{`Hanzi List - ${hanzis.length}`}</div>
       <div className="space-y-1">
         {hanzis.map((hanzi) => (
           <HanziLine key={hanzi.id} hanzi={hanzi} />

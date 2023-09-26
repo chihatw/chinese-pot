@@ -10,7 +10,7 @@
   .button {
     outline-color: transparent !important;
   }
-   /* remove focus border */
+  /* remove focus border */
   input:focus {
     box-shadow: transparent !important;
     border-color: transparent !important;
@@ -20,4 +20,9 @@
     outline: transparent !important;
     text-decoration: underline !important;
   }
+}
+
+/* hide emulators bottom caution */
+.firebase-emulator-warning {
+  display: none;
 }
