@@ -1,4 +1,4 @@
-import { Pinyin, VOWEL_PAIRS } from "@/features/pinyin";
+import { Pinyin, PinyinFilter, VOWEL_PAIRS } from "@/features/pinyin";
 import { isValidPinyin } from "@/features/pinyin/services/buildPinyin";
 import { nanoid } from "nanoid";
 import { Hanzi } from "..";
@@ -81,4 +81,22 @@ export const getHanzisByVowel = (hanzis: Hanzi[], vowel: string) => {
     !!pair && target.push(pair);
     return target.includes(hanzi.pinyin.vowel);
   });
+};
+
+export const filterPinyin = (hanzi: Hanzi, filter: PinyinFilter) => {
+  const pinyin = hanzi.pinyin;
+
+  if (!!filter.consonants.length) {
+    if (!filter.consonants.includes(pinyin.consonant)) return false;
+  }
+
+  if (!!filter.vowels.length) {
+    if (!filter.vowels.includes(pinyin.vowel)) return false;
+  }
+
+  if (!!filter.tone) {
+    if (pinyin.tone !== filter.tone) return false;
+  }
+
+  return true;
 };
