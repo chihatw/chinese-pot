@@ -1,6 +1,7 @@
 import {
   JetBrains_Mono as FontMono,
-  Roboto as FontSans,
+  // Roboto as FontSans,
+  Noto_Sans_HK as FontSans,
   Zen_Maru_Gothic,
 } from "next/font/google";
 

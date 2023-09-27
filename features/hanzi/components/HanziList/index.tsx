@@ -1,4 +1,6 @@
 import { getHanzis } from "../../services/firestore";
+import FormFilterContainer from "./FormFilterContainer";
+import HanzisContextProvider from "./HanzisContextProvider";
 import MarksMonitor from "./MarksMonitor";
 import PinyinFilterContainer from "./PinyinFilterContainer";
 
@@ -8,11 +10,13 @@ const HanziList = async () => {
   const marks = hanzis.filter((hanzi) => !hanzi.pinyin.tone);
 
   return (
-    <div className="w-full max-w-md space-y-4">
-      <MarksMonitor marks={marks} />
-      <div className="bg-yellow-200 bg-opacity-40 p-4">👷 TODO: FormFilter</div>
-      <PinyinFilterContainer hanzis={hanzisOmitMarks} />
-    </div>
+    <HanzisContextProvider hanzis={hanzisOmitMarks}>
+      <div className="w-full max-w-md space-y-8">
+        <MarksMonitor marks={marks} />
+        <FormFilterContainer hanzis={hanzisOmitMarks} />
+        <PinyinFilterContainer hanzis={hanzisOmitMarks} />
+      </div>
+    </HanzisContextProvider>
   );
 };
 

@@ -2,7 +2,7 @@ import { PinyinBadge, PinyinFilter } from "@/features/pinyin";
 
 const FilterMonitor = ({ filter }: { filter: PinyinFilter }) => {
   return (
-    <div className="flex gap-x-1">
+    <div className="flex flex-wrap gap-1">
       {filter.consonants.map((consonant) => (
         <PinyinBadge
           key={consonant}

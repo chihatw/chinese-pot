@@ -5,7 +5,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
-import { Pinyin, PinyinBadge } from "@/features/pinyin";
+import { PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
 import { Hanzi } from "../../../../..";
 import { getCorrectVowel, getToneCounts } from "../../../../../services/util";
@@ -59,19 +59,24 @@ const Content = ({ hanzis }: { hanzis: Hanzi[] }) => {
     <div className="space-y-2">
       {Object.entries(toneCounts)
         .sort((a, b) => b[1] - a[1])
-        .map(([tone, count], index) => {
+        .map(([tone], index) => {
+          const currentVowel = getCorrectVowel(
+            hanzis[0].pinyin.vowel,
+            hanzis[0].pinyin.consonant,
+          );
           return (
             <>
               <div key={tone} className="grid grid-cols-[auto_1fr] gap-x-4">
-                <ToneCount
-                  pinyin={{ ...hanzis[0].pinyin, tone }}
-                  count={count}
-                />
-                <div className="flex flex-wrap items-center gap-x-2">
+                <div className="grid place-items-center">
+                  <PinyinBadge
+                    pinyin={{ ...hanzis[0].pinyin, tone, vowel: currentVowel }}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-x-1">
                   {hanzis
                     .filter((hanzi) => hanzi.pinyin.tone === tone)
                     .map((hanzi) => (
-                      <div key={hanzi.id} className="font-extralight">
+                      <div key={hanzi.id} className="text-sm">
                         {hanzi.form}
                       </div>
                     ))}
@@ -83,17 +88,6 @@ const Content = ({ hanzis }: { hanzis: Hanzi[] }) => {
             </>
           );
         })}
-    </div>
-  );
-};
-
-const ToneCount = ({ pinyin, count }: { pinyin: Pinyin; count: number }) => {
-  return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="flex">
-        <PinyinBadge pinyin={pinyin} />
-      </div>
-      <div className="font-bold">{count}</div>
     </div>
   );
 };

@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { PinyinFilter } from "@/features/pinyin";
 import { buildPinyinFilter } from "@/features/pinyin/services/buildPinyin";
+import { fontSans } from "@/lib/fonts";
 import { useEffect, useState } from "react";
 import { Hanzi } from "../../..";
 import { filterPinyin } from "../../../services/util";
@@ -26,7 +27,7 @@ const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
 
   return (
     <div className="space-y-4">
-      <div className="text-4xl font-extrabold">拼音篩選</div>
+      <div className={`text-4xl font-bold ${fontSans.className}`}>拼音篩選</div>
       <Input
         className=" bg-white"
         placeholder="拼音篩選"

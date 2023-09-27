@@ -9,6 +9,7 @@ import {
   TWO_CHAR_CONSONANTS,
 } from "./constants/consonants";
 import { TONES } from "./constants/tones";
+import { VOWEL_FILTER } from "./constants/vowelfilter";
 
 import {
   EXTROVERTED_VOWELS,
@@ -17,7 +18,6 @@ import {
   MAJOR_FULL_VOWELS,
   MINOR_FULL_VOWELS,
   VOWELS,
-  VOWEL_FILTER,
   VOWEL_PAIRS,
 } from "./constants/vowels";
 import { Pinyin, PinyinFilter, VowelType } from "./schema";

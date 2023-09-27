@@ -8,7 +8,7 @@ const MinorVowelsRow = ({ startAt }: { startAt: string }) => {
       {MINOR_FULL_VOWELS.filter((vowel) => !EXTROVERTED_VOWELS.includes(vowel))
         .filter((vowel) => vowel.at(0) === startAt)
         .map((vowel) => {
-          const pair = VOWEL_PAIRS[vowel as keyof typeof VOWEL_PAIRS];
+          const pair = VOWEL_PAIRS[vowel];
           return (
             <div key={vowel} className="flex flex-nowrap">
               <Badge variant="outline" className={pinyinColor(vowel)}>

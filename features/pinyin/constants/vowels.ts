@@ -17,7 +17,7 @@ export const INTROVERTED_VOWELS = [
 export const EXTROVERTED_VOWELS = ["iu", "un", "ui", "ue"];
 
 // 子音の有無で形が変化
-export const VOWEL_PAIRS = {
+export const VOWEL_PAIRS: { [key: string]: string } = {
   i: "yi",
   u: "wu",
   v: "yu",
@@ -113,92 +113,6 @@ export const VOWELS = [
   ...HALF_VOWELS,
 ];
 
-export const VOWEL_FILTER = {
-  a: ["a", "ai", "ao", "an", "ang"],
-  o: ["o", "ou", "ong"],
-  e: ["e", "ei", "er", "en", "eng"],
-  ai: ["ai"],
-  ei: ["ei"],
-  ao: ["ao"],
-  ou: ["ou"],
-  er: ["er"],
-  an: ["an", "ang"],
-  en: ["en", "eng"],
-  ang: ["ang"],
-  on: ["ong"],
-  ong: ["ong"],
-  eng: ["eng"],
-  u: ["u", "un", "ui", "uo", "ue", "ua", "uan", "uai", "uang"],
-  v: ["v", "ve"],
-  i: ["i", "in", "iu", "ie", "ia", "ing", "ian", "iao", "iang", "iong"],
-  un: ["un"],
-  in: ["in", "ing"],
-  ui: ["ui"],
-  uo: ["uo"],
-  iu: ["iu"],
-  ve: ["ve"],
-  ie: ["ie"],
-  ue: ["ue"],
-  ua: ["ua", "uan", "uai", "uang"],
-  ia: ["ia", "ian", "iao", "iang"],
-  ing: ["ing"],
-  uan: ["uan", "uang"],
-  ian: ["ian", "iang"],
-  iao: ["iao"],
-  uai: ["uai"],
-  uang: ["uang"],
-  iang: ["iang"],
-  io: ["iong"],
-  ion: ["iong"],
-  iong: ["iong"],
-  y: [
-    "yi",
-    "yu",
-    "ye",
-    "ya",
-    "yue",
-    "you",
-    "yao",
-    "yai",
-    "yin",
-    "yun",
-    "yan",
-    "yuan",
-    "ying",
-    "yang",
-    "yong",
-  ],
-  yi: ["yi", "yin", "ying"],
-  w: ["wu", "wo", "wa", "wei", "wai", "wen", "wan", "wang", "weng"],
-  wu: ["wu"],
-  yu: ["yu", "yue", "yun", "yuan"],
-  wo: ["wo"],
-  ye: ["ye"],
-  ya: ["ya", "yao", "yai", "yan", "yang"],
-  wa: ["wa", "wai", "wan", "wang"],
-  we: ["wei", "wen", "weng"],
-  wei: ["wei"],
-  yue: ["yue"],
-  yo: ["you", "yong"],
-  you: ["you"],
-  yao: ["yao"],
-  wai: ["wai"],
-  yai: ["yai"],
-  yin: ["yin", "ying"],
-  wen: ["wen", "weng"],
-  yun: ["yun"],
-  wan: ["wan", "wang"],
-  yan: ["yan", "yang"],
-  yua: ["yuan"],
-  yuan: ["yuan"],
-  ying: ["ying"],
-  wang: ["wang"],
-  yang: ["yang"],
-  yon: ["yong"],
-  yong: ["yong"],
-  weng: ["weng"],
-};
-
 export const buildMajorFullVowels = () => {
   const { fullVowels } = buildVowels();
   return fullVowels.filter((vowel) => MAJOR_VOWEL_HEAD.includes(vowel.at(0)!));
@@ -271,23 +185,3 @@ const vowelsGroups = [
   ], // 19
   ["ying", "yuan", "uang", "iang", "wang", "yang", "iong", "yong", "weng"], // 9
 ];
-
-export const buildVowelFilter = () => {
-  return VOWELS.reduce(
-    (acc, cur) => {
-      let cloned = { ...acc };
-      // 母音から、先頭から1文字、2文字...のように部分文字列を作る
-      for (let i = 1; i <= cur.length; i++) {
-        const key = cur.slice(0, i);
-        cloned = {
-          ...cloned,
-          // 部分文字列と自身の対応を記録する
-          [key]: cloned[key] ? [...cloned[key], cur] : [cur],
-        };
-      }
-
-      return cloned;
-    },
-    {} as { [key: string]: string[] },
-  );
-};

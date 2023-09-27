@@ -5,7 +5,7 @@ import { PinyinFilter } from "@/features/pinyin";
 import React, { useState } from "react";
 import { Hanzi } from "../../../..";
 import { getHanzisByVowel, getVowelCounts } from "../../../../services/util";
-import FormsMonitor from "./FormsMonitor";
+import FormsMonitor from "../../FormsMonitor";
 import VowelCard from "./VowelCard";
 
 export const VowelCardList = React.memo(function Arrow_function_occurs_error({
