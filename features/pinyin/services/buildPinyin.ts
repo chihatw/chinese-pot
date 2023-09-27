@@ -51,7 +51,7 @@ export const buildPinyinFilter = (value: string): PinyinFilter => {
 
   let vowels = getVowelsByConsonants(value, consonants);
 
-  if (!!tone) {
+  if (!!tone && vowels.length > 1) {
     const shortest = getShortestVowel(vowels);
     vowels = [shortest];
   }

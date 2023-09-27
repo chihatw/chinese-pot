@@ -7,8 +7,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Pinyin, PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
-import { Hanzi } from "../../..";
-import { getCorrectVowel, getToneCounts } from "../../../services/util";
+import { Hanzi } from "../../../../..";
+import { getCorrectVowel, getToneCounts } from "../../../../../services/util";
 
 const VowelConsonantBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const hanzi = hanzis[0];

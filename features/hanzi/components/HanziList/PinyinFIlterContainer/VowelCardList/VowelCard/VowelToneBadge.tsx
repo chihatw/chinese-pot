@@ -7,8 +7,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Pinyin, PinyinBadge } from "@/features/pinyin";
 
-import { Hanzi } from "../../..";
-import { getConsonantCounts, getCorrectVowel } from "../../../services/util";
+import { Hanzi } from "../../../../..";
+import {
+  getConsonantCounts,
+  getCorrectVowel,
+} from "../../../../../services/util";
 
 const VowelToneBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const hanzi = hanzis.at(0)!;

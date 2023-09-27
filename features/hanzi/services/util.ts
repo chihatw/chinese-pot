@@ -37,11 +37,12 @@ export const getVowelCounts = (hanzis: Hanzi[]) => {
   return hanzis.reduce(
     (acc, cur) => {
       let vowel = cur.pinyin.vowel;
+
+      // 弱母音の場合、子音ありの形に統一して計上する
       const pair = Object.entries(VOWEL_PAIRS)
         .filter(([, value]) => value === vowel)
         ?.at(0);
       if (pair) {
-        // console.log(`”${vowel}"は"${pair.at(0)}"に含める`);
         vowel = pair.at(0)!;
       }
       return {
