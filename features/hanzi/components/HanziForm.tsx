@@ -36,7 +36,7 @@ const HanziForm = () => {
 
   return (
     <form className="w-full max-w-md space-y-4" action={handleSubmit}>
-      <div className="text-4xl font-extrabold"> Hanzi Form</div>
+      <div className="text-4xl font-bold">漢字登録</div>
       <Input
         className="bg-white"
         placeholder="漢字"
@@ -57,6 +57,9 @@ const HanziForm = () => {
         }
       />
       <PinyinLine pinyins={[value.pinyin]} />
+      <div className="bg-yellow-100 bg-opacity-40 p-5 font-light tracking-wide">
+        <b>TODO:</b>入力が重複しないようにチェック🚓
+      </div>
       <div className="text-right">
         <Button
           type="submit"
