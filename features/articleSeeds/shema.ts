@@ -11,7 +11,14 @@ export interface Article {
 export interface Sentence {
   id: string;
   text: "";
-  pinyins: Pinyin[];
+  pinyinsStr: string;
+  createdAt: number;
+}
+
+export interface Sentence_old {
+  id: string;
+  text: "";
+  pinyins: (Pinyin | undefined)[];
   createdAt: number;
 }
 

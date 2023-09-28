@@ -14,6 +14,7 @@ import {
   Sentence_Article_Relation,
   Sentence_Pinyins_Relation,
   Sentence_UniGrams_Relation,
+  Sentence_old,
   Sentence_raw,
 } from "./shema";
 
@@ -35,5 +36,6 @@ export type {
   Sentence_Article_Relation,
   Sentence_Pinyins_Relation,
   Sentence_UniGrams_Relation,
+  Sentence_old,
   Sentence_raw,
 };

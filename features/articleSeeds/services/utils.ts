@@ -1,5 +1,6 @@
 import { Pinyin } from "@/features/pinyin";
 import { buildPinyins } from "@/features/pinyin/services/buildPinyin";
+import { getPinyinStr } from "@/features/pinyin/services/utils";
 import { nanoid } from "nanoid";
 import {
   Article,
@@ -14,6 +15,7 @@ import {
   Sentence_Article_Relation,
   Sentence_Pinyins_Relation,
   Sentence_UniGrams_Relation,
+  Sentence_old,
   Sentence_raw,
 } from "..";
 
@@ -38,9 +40,20 @@ export const buildArticle = (
   };
 };
 
-export const buildSentence = (
+export const buildSentence = (old: Sentence_old): Sentence => {
+  return {
+    id: old.id,
+    text: old.text,
+    pinyinsStr: old.pinyins
+      .map((pinyin) => (pinyin ? getPinyinStr(pinyin) : "*"))
+      .join(" "),
+    createdAt: old.createdAt,
+  };
+};
+
+export const buildSentence_old = (
   relation: Sentence_Article_Relation,
-): Sentence => {
+): Sentence_old => {
   return {
     id: relation.id,
     text: "",
