@@ -1,3 +1,5 @@
+import { Pinyin } from "@/features/pinyin";
+import { buildPinyins } from "@/features/pinyin/services/buildPinyin";
 import { nanoid } from "nanoid";
 import {
   Article,
@@ -5,9 +7,12 @@ import {
   Article_old,
   Article_raw,
   Sentence,
+  SentenceMidashiPinyin_raw,
+  SentencePinyins_Temp,
   SentenceUniGram,
-  SentenceUniGram_row,
+  SentenceUniGram_raw,
   Sentence_Article_Relation,
+  Sentence_Pinyins_Relation,
   Sentence_UniGrams_Relation,
   Sentence_raw,
 } from "..";
@@ -102,11 +107,61 @@ export const buildSentenceTextRelations = (
   return result;
 };
 
-export const buildUniGram = (raw: SentenceUniGram_row): SentenceUniGram => {
+export const buildUniGram = (raw: SentenceUniGram_raw): SentenceUniGram => {
   return {
     id: nanoid(),
     form: raw.char,
     offset: raw.offset,
     sentenceId: raw.sentenceId,
   };
+};
+
+export const buildSentencePinyins_temp = (cur: SentenceMidashiPinyin_raw) => {
+  return {
+    offset: cur.offset,
+    pinyin: buildPinyins(cur.yomi),
+  };
+};
+
+export const buildSentencePinyinsRelations_temp = (
+  sentenceMidashiPinyins: SentenceMidashiPinyin_raw[],
+) => {
+  return sentenceMidashiPinyins.reduce(
+    (acc, cur) => {
+      const sentencePinyins = buildSentencePinyins_temp(cur);
+      const value = acc[cur.sentenceId]
+        ? [...acc[cur.sentenceId], sentencePinyins].sort(
+            (a, b) => a.offset - b.offset,
+          )
+        : [sentencePinyins];
+      return { ...acc, [cur.sentenceId]: value };
+    },
+    {} as {
+      [sentenceId: string]: SentencePinyins_Temp[];
+    },
+  );
+};
+
+export const buildSentencePinyinsRelations = (sentencePinyinsRelations: {
+  [sentenceId: string]: SentencePinyins_Temp[];
+}) => {
+  const result: Sentence_Pinyins_Relation = {};
+
+  for (const sentenceId of Object.keys(sentencePinyinsRelations)) {
+    const relation = sentencePinyinsRelations[sentenceId];
+
+    const sentencePinyins: Pinyin[] = [];
+    for (const item of relation) {
+      const pinyins = item.pinyin;
+      for (const pinyin of pinyins) {
+        if (!pinyin) {
+          continue;
+        }
+        sentencePinyins.push(pinyin);
+      }
+    }
+
+    result[sentenceId] = sentencePinyins;
+  }
+  return result;
 };

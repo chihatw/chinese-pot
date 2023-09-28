@@ -23,9 +23,6 @@ export interface SentenceUniGram {
   sentenceId: string;
 }
 
-// todo 後で変更する
-// article に sentenceIds を持たせる ✅
-// sentence は id, 文字列, createdAt ✅
 // 文字列は unigram 登録で全文検索対応させる
 // bigram を持たせれば通信を減らせる
 export interface Sentence_Article_Relation {
@@ -41,6 +38,10 @@ export interface Article_SentenceIds {
 
 export interface Sentence_UniGrams_Relation {
   [sentenceId: string]: SentenceUniGram[];
+}
+
+export interface Sentence_Pinyins_Relation {
+  [sentenceId: string]: Pinyin[];
 }
 
 export interface Article_raw {
@@ -67,9 +68,21 @@ export interface Article_old {
   createdAt: number;
 }
 
-export interface SentenceUniGram_row {
+export interface SentenceUniGram_raw {
   _id: string;
   char: string;
   sentenceId: string;
   offset: number;
+}
+
+export interface SentenceMidashiPinyin_raw {
+  _id: string;
+  yomi: string;
+  offset: number;
+  sentenceId: string;
+}
+
+export interface SentencePinyins_Temp {
+  offset: number;
+  pinyin: (Pinyin | undefined)[];
 }

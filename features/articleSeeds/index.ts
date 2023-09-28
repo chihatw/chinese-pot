@@ -7,18 +7,18 @@ import {
   Article_old,
   Article_raw,
   Sentence,
+  SentenceMidashiPinyin_raw,
+  SentencePinyins_Temp,
   SentenceUniGram,
-  SentenceUniGram_row,
+  SentenceUniGram_raw,
   Sentence_Article_Relation,
+  Sentence_Pinyins_Relation,
   Sentence_UniGrams_Relation,
   Sentence_raw,
 } from "./shema";
 
 const ARTICLES = ARTICLES_JSON as Article[];
-const SENTENCES = SENTENCES_JSON.map((i) => ({
-  ...i,
-  pinyins: (i as any).pinyins || [],
-})) as Sentence[];
+const SENTENCES = SENTENCES_JSON as Sentence[];
 
 export { ARTICLES, LangPotArticleList, SENTENCES };
 
@@ -28,9 +28,12 @@ export type {
   Article_old,
   Article_raw,
   Sentence,
+  SentenceMidashiPinyin_raw,
+  SentencePinyins_Temp,
   SentenceUniGram,
-  SentenceUniGram_row,
+  SentenceUniGram_raw,
   Sentence_Article_Relation,
+  Sentence_Pinyins_Relation,
   Sentence_UniGrams_Relation,
   Sentence_raw,
 };
