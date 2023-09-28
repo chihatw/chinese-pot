@@ -1,28 +1,26 @@
 import { Badge } from "@/components/ui/badge";
-import { EXTROVERTED_VOWELS, MINOR_FULL_VOWELS, VOWEL_PAIRS } from "../../..";
+import { VOWEL_PAIRS } from "../../..";
 import { pinyinColor } from "../../../services/pinyinColor";
 
 const MinorVowelsRow = ({ startAt }: { startAt: string }) => {
   return (
     <div className="flex flex-wrap">
-      {MINOR_FULL_VOWELS.filter((vowel) => !EXTROVERTED_VOWELS.includes(vowel))
-        .filter((vowel) => vowel.at(0) === startAt)
-        .map((vowel) => {
-          const pair = VOWEL_PAIRS[vowel];
+      {Object.keys(VOWEL_PAIRS)
+        .filter((key) => key.at(0) === startAt)
+        .map((key) => {
+          const value = VOWEL_PAIRS[key];
           return (
-            <div key={vowel} className="flex flex-nowrap">
-              <Badge variant="outline" className={pinyinColor(vowel)}>
-                {vowel}
+            <div key={key} className="flex flex-nowrap">
+              <Badge variant="outline" className={pinyinColor(key)}>
+                {key}
               </Badge>
-              {pair ? (
-                <Badge
-                  key={`${vowel}pair`}
-                  variant="outline"
-                  className={pinyinColor(pair)}
-                >
-                  {pair}
-                </Badge>
-              ) : null}
+              <Badge
+                key={value}
+                variant="outline"
+                className={pinyinColor(value)}
+              >
+                {value}
+              </Badge>
             </div>
           );
         })}

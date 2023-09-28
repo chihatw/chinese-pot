@@ -10,13 +10,17 @@ const DifferentTones = ({ hanzi }: { hanzi: Hanzi }) => {
     <div className="space-y-2">
       <div
         key={hanzi.id}
-        className="grid grid-cols-[80px,1fr] gap-7 rounded bg-white p-5"
+        className="relative grid grid-cols-[80px,1fr] gap-7 rounded bg-white p-5"
       >
+        <div className="absolute left-2 top-1 text-xs font-light text-gray-500">
+          四声兄弟
+        </div>
         <div className="flex flex-col items-center justify-center gap-2">
           <div>{hanzi.form}</div>
           <div className="flex">
             <PinyinBadge pinyin={hanzi.pinyin} />
           </div>
+          d
         </div>
         <div className="space-y-1">
           {Object.entries(differentTones).map(([tone, hanzis]) => (

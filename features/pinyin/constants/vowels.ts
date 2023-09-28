@@ -38,7 +38,7 @@ export const VOWEL_PAIRS: { [key: string]: string } = {
 };
 
 // 子音がなくても形が変化しない
-export const MAJOR_FULL_VOWELS = [
+export const MAJOR_VOWELS = [
   "a",
   "o",
   "e",
@@ -54,63 +54,12 @@ export const MAJOR_FULL_VOWELS = [
   "eng",
 ];
 
-// INTROVERTED_VOWELS + VOWEL_PAIRS
-export const HALF_VOWELS = [
-  "yi",
-  "wu",
-  "yu",
-  "wo",
-  "ye",
-  "ya",
-  "wa",
-  "wei",
-  "yue",
-  "you",
-  "yao",
-  "wai",
-  "yai",
-  "yin",
-  "wen",
-  "yun",
-  "wan",
-  "yan",
-  "yuan",
-  "ying",
-  "wang",
-  "yang",
-  "yong",
-  "weng",
-];
-
-// EXTROVERTED_VOWELS + VOWEL_PAIRS
-export const MINOR_FULL_VOWELS = [
-  "u",
-  "v",
-  "i",
-  "un",
-  "in",
-  "ui",
-  "uo",
-  "iu",
-  "ve",
-  "ie",
-  "ue",
-  "ua",
-  "ia",
-  "ing",
-  "uan",
-  "ian",
-  "iao",
-  "uai",
-  "uang",
-  "iang",
-  "iong",
-];
-
 export const VOWELS = [
-  ...MAJOR_FULL_VOWELS,
-  ...MINOR_FULL_VOWELS,
-  ...HALF_VOWELS,
+  ...MAJOR_VOWELS,
+  ...Object.keys(VOWEL_PAIRS),
+  ...Object.keys(VOWEL_PAIRS).map((key) => VOWEL_PAIRS[key]),
+  ...EXTROVERTED_VOWELS,
+  ...INTROVERTED_VOWELS,
 ];
 
 export const buildMajorFullVowels = () => {

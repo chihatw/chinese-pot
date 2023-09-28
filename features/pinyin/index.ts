@@ -13,23 +13,19 @@ import { VOWEL_FILTER } from "./constants/vowelfilter";
 
 import {
   EXTROVERTED_VOWELS,
-  HALF_VOWELS,
   INTROVERTED_VOWELS,
-  MAJOR_FULL_VOWELS,
-  MINOR_FULL_VOWELS,
+  MAJOR_VOWELS,
   VOWELS,
   VOWEL_PAIRS,
 } from "./constants/vowels";
-import { Pinyin, PinyinFilter, VowelType } from "./schema";
+import { Pinyin, PinyinFilter } from "./schema";
 
 export {
   CONSONANTS,
   CONSONANT_FILTER,
   EXTROVERTED_VOWELS,
-  HALF_VOWELS,
   INTROVERTED_VOWELS,
-  MAJOR_FULL_VOWELS,
-  MINOR_FULL_VOWELS,
+  MAJOR_VOWELS,
   ONE_CHAR_CONSONANTS,
   PinyinBadge,
   PinyinForm,
@@ -42,4 +38,4 @@ export {
   VOWEL_PAIRS,
 };
 
-export type { Pinyin, PinyinFilter, VowelType };
+export type { Pinyin, PinyinFilter };

@@ -12,18 +12,25 @@ import VowelCardList from "./VowelCardList";
 
 const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const [input, setInput] = useState("");
-  const [filter, setFilter] = useState<PinyinFilter>({
-    vowels: [],
-    consonants: [],
-    tone: "",
+  const [value, setValue] = useState<{
+    filter: PinyinFilter;
+    filteredHanzis: Hanzi[];
+  }>({
+    filter: {
+      vowels: [],
+      consonants: [],
+      tone: "",
+    },
+    filteredHanzis: [],
   });
 
   useEffect(() => {
     const filter = buildPinyinFilter(input);
-    setFilter(filter);
-  }, [input]);
-
-  const filteredHanzis = hanzis.filter((hanzi) => filterPinyin(hanzi, filter));
+    const filteredHanzis = hanzis.filter((hanzi) =>
+      filterPinyin(hanzi, filter),
+    );
+    setValue({ filteredHanzis, filter });
+  }, [input, hanzis]);
 
   return (
     <div className="space-y-4">
@@ -34,8 +41,8 @@ const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <FilterMonitor filter={filter} />
-      <VowelCardList hanzis={filteredHanzis} filter={filter} />
+      <FilterMonitor filter={value.filter} />
+      <VowelCardList hanzis={value.filteredHanzis} filter={value.filter} />
     </div>
   );
 };

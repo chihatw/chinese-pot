@@ -1,8 +1,7 @@
 import {
   CONSONANT_FILTER,
-  HALF_VOWELS,
-  MAJOR_FULL_VOWELS,
-  MINOR_FULL_VOWELS,
+  EXTROVERTED_VOWELS,
+  INTROVERTED_VOWELS,
   ONE_CHAR_CONSONANTS,
   Pinyin,
   PinyinFilter,
@@ -10,7 +9,7 @@ import {
   TWO_CHAR_CONSONANTS,
   VOWELS,
   VOWEL_FILTER,
-  VowelType,
+  VOWEL_PAIRS,
 } from "..";
 
 export const buildPinyin = (value: string): Pinyin | undefined => {
@@ -136,21 +135,23 @@ export const getVowels = (value: string) => {
   return VOWEL_FILTER[value as keyof typeof VOWEL_FILTER] || [];
 };
 
-export const isValidPinyin = ({
-  consonant,
-  vowel,
-  // vowelType,
-  tone,
-}: Pinyin) => {
-  // tone, 母音がないのは異常
+export const isValidPinyin = ({ consonant, vowel, tone }: Pinyin) => {
+  // tone, 母音がないのはダメ
   if (!tone || !vowel) return false;
 
-  const vowelType = getVowelType(vowel);
-  // 副母音で、子音がないのは異常
-  if (vowelType === "minor" && !consonant) return false;
+  // 子音がつかなくてはいけない母音
+  if (
+    [...Object.keys(VOWEL_PAIRS), ...EXTROVERTED_VOWELS].includes(vowel) &&
+    !consonant
+  )
+    return false;
 
-  // 半母音で、子音があるのは異常
-  if (vowelType === "half" && !!consonant) return false;
+  // 子音がついてはいけない母音
+  if (
+    [...Object.values(VOWEL_PAIRS), ...INTROVERTED_VOWELS].includes(vowel) &&
+    !!consonant
+  )
+    return false;
 
   return true;
 };
@@ -163,15 +164,6 @@ export const buildPinyins = (value: string) => {
     pinyins.push(pinyin);
   }
   return pinyins;
-};
-
-export const getVowelType: (vowel: string) => VowelType | undefined = (
-  vowel,
-) => {
-  if (MAJOR_FULL_VOWELS.includes(vowel)) return "major";
-  if (MINOR_FULL_VOWELS.includes(vowel)) return "minor";
-  if (HALF_VOWELS.includes(vowel)) return "half";
-  return undefined;
 };
 
 export const getConsonantLengths = (consonants: string[]) => {

@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   EXTROVERTED_VOWELS,
   INTROVERTED_VOWELS,
-  MAJOR_FULL_VOWELS,
+  MAJOR_VOWELS,
   VOWELS,
   VOWEL_PAIRS,
 } from "../../..";
@@ -16,7 +16,7 @@ const VowelList = () => {
     <div className="grid max-w-md gap-y-5">
       <div className="text-4xl font-bold">母音</div>
       <div className="space-y-2">
-        <div className="text-xl font-bold">{`硬母音 - ${MAJOR_FULL_VOWELS.length}`}</div>
+        <div className="text-xl font-bold">{`硬母音 - ${MAJOR_VOWELS.length}`}</div>
         <MajorVowelsRow startAt="a" />
         <MajorVowelsRow startAt="o" />
         <MajorVowelsRow startAt="e" />
