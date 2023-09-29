@@ -1,9 +1,9 @@
 "server only";
 
-import { LangPotArticleList } from "@/features/articleSeeds";
 import { HanziList } from "@/features/hanzi";
 import { PinyinList } from "@/features/pinyin";
 import BatchAddHanzisButton from "@/features/seeds/components/BatchAddHanzisButton";
+import { LangPotArticleList } from "@/features/sentenceSeeds";
 
 export default async function Home() {
   return (

@@ -1,6 +1,6 @@
-import LangPotArticleList from "./components/LangPotArticleList";
-import ARTICLES_JSON from "./json/articles.json";
-import SENTENCES_JSON from "./json/sentences.json";
+import LangPotArticleList from "./components/LangPotSentenceList";
+import ARTICLES_JSON from "./json/ARTICLES.json";
+import SENTENCES_JSON from "./json/SENTENCES.json";
 import {
   Article,
   Article_SentenceIds,
