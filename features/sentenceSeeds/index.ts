@@ -13,7 +13,8 @@ import {
 } from "./schema";
 
 import { Article } from "../article";
-import { Sentence, SentenceUnigram } from "../sentence";
+import { Sentence } from "../sentence";
+import { SentenceUnigram } from "../sentenceUnigram";
 import BatchAddArticlesButton from "./components/BatchAddArticlesButton";
 import BatchAddSentenceUnigramsButton from "./components/BatchAddSentenceUnigramsButton";
 import BatchAddSentencesButton from "./components/BatchAddSentencesButton";

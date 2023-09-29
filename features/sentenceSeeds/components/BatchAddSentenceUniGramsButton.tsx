@@ -10,9 +10,10 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 import { SENTENCE_UNIGRAMS } from "..";
+import { batchAddSentenceUnigramsAction } from "../services/actions";
 
-const i = 0;
-const set = 12000; // max 12000
+const i = 1;
+const set = 6000; // max 12000 HTTP request body が 1mb を超えるとエラー
 
 const BatchAddSentenceUnigramsButton = ({ count }: { count: number }) => {
   const { toast } = useToast(); // "use client" 必須
@@ -20,8 +21,8 @@ const BatchAddSentenceUnigramsButton = ({ count }: { count: number }) => {
   const length = set * (i + 1);
   const subSet = SENTENCE_UNIGRAMS.slice(start, length);
 
-  const handleSubmit = () => {
-    //
+  const handleSubmit = async () => {
+    await batchAddSentenceUnigramsAction(subSet);
     toast({ description: `added ${subSet.length} sentence unigrams` });
   };
 
@@ -34,7 +35,7 @@ const BatchAddSentenceUnigramsButton = ({ count }: { count: number }) => {
             <TooltipTrigger asChild>
               <Button
                 type="submit"
-                disabled={!!count}
+                disabled={count > 6000}
               >{`Batch Add Sentence Unigrams (${subSet.length})`}</Button>
             </TooltipTrigger>
             <TooltipContent className="rounded  p-2 shadow">

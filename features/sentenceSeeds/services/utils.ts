@@ -2,7 +2,8 @@ import { Article } from "@/features/article";
 import { Pinyin } from "@/features/pinyin";
 import { buildPinyins } from "@/features/pinyin/services/buildPinyin";
 import { getPinyinStr } from "@/features/pinyin/services/utils";
-import { Sentence, SentenceUnigram } from "@/features/sentence";
+import { Sentence } from "@/features/sentence";
+import { SentenceUnigram } from "@/features/sentenceUnigram";
 import { nanoid } from "nanoid";
 import {
   Article_old,

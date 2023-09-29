@@ -1,6 +1,6 @@
 import SimpleSentenceMonitor from "./components/SimpleSentenceMonitor";
-import { Sentence, SentenceUnigram } from "./schema";
+import { Sentence } from "./schema";
 
 export { SimpleSentenceMonitor };
 
-export type { Sentence, SentenceUnigram };
+export type { Sentence };

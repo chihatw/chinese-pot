@@ -2,8 +2,10 @@
 
 import { Article } from "@/features/article";
 import { batchAddArticles } from "@/features/article/services/firebase";
-import { Sentence, SentenceUnigram } from "@/features/sentence";
+import { Sentence } from "@/features/sentence";
 import { batchAddSentences } from "@/features/sentence/services/firebase";
+import { SentenceUnigram } from "@/features/sentenceUnigram";
+import { batchAddSentenceUnigrams } from "@/features/sentenceUnigram/services/firebase";
 import { revalidatePath } from "next/cache";
 
 export const batchAddArticlesAction = async (articles: Article[]) => {
@@ -19,6 +21,6 @@ export const batchAddSentencesAction = async (sentences: Sentence[]) => {
 export const batchAddSentenceUnigramsAction = async (
   unigrams: SentenceUnigram[],
 ) => {
-  // todo
+  await batchAddSentenceUnigrams(unigrams);
   revalidatePath("/");
 };

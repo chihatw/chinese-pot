@@ -8,13 +8,16 @@ import { getSentencesCount } from "@/features/sentence/services/firebase";
 
 import {
   BatchAddArticlesButton,
+  BatchAddSentenceUnigramsButton,
   BatchAddSentencesButton,
 } from "@/features/sentenceSeeds";
+import { getSentenceUnigramsCount } from "@/features/sentenceUnigram/services/firebase";
 
 export default async function Home() {
   const hanzisCount = await getHanzisCount();
   const articlesCount = await getArticleCount();
   const sentencesCount = await getSentencesCount();
+  const sentenceUnigramsCount = await getSentenceUnigramsCount();
   return (
     <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-8 py-28 sm:mx-auto sm:w-[min(500px,100%-120px)]">
       <div className="rounded bg-yellow-100 bg-opacity-40 p-5">
@@ -24,7 +27,7 @@ export default async function Home() {
         <BatchAddHanzisButton count={hanzisCount} />
         <BatchAddArticlesButton count={articlesCount} />
         <BatchAddSentencesButton count={sentencesCount} />
-        <BatchAddSentenceUnigramsButton count={0} />
+        <BatchAddSentenceUnigramsButton count={sentenceUnigramsCount} />
       </div>
       {/* <HanziList /> */}
       {/* <PinyinList /> */}
