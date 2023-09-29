@@ -12,6 +12,7 @@ export const getSentencesCount = async () => {
 
 export const getSentencesByIds = async (sentenceIds: string[]) => {
   console.log("get sentences by ids");
+  if (!sentenceIds.length) return [];
   const snapshot = await dbAdmin
     .collection(COLLECTION)
     .withConverter(sentenceConverter)
