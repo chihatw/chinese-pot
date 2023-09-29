@@ -11,7 +11,7 @@ const HanziList = async () => {
 
   return (
     <HanzisContextProvider hanzis={hanzisOmitMarks}>
-      <div className="mx-auto w-full max-w-md space-y-8">
+      <div className="space-y-8">
         <MarksMonitor marks={marks} />
         <FormFilterContainer hanzis={hanzisOmitMarks} />
         <PinyinFilterContainer hanzis={hanzisOmitMarks} />

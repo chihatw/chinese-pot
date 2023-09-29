@@ -3,7 +3,7 @@ import VowelList from "./VowelList";
 
 const PinyinList = () => {
   return (
-    <div className="mx-auto max-w-md space-y-10">
+    <div className="space-y-10">
       <ConsonantList />
       <VowelList />
     </div>

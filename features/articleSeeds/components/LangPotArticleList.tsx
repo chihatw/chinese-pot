@@ -15,7 +15,7 @@ const LangPotArticleList = () => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   return (
-    <div className="mx-auto w-full max-w-xl space-y-4 pt-8">
+    <div className="space-y-4 ">
       <div className="text-4xl font-bold">看世界資料庫</div>
 
       <div key={article.id} className="space-y-4 rounded bg-white p-5">
