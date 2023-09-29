@@ -6,7 +6,7 @@ import {
   SEEDS,
 } from "..";
 import BatchAddHanzisButton from "./BatchAddHanzisButton";
-const SeedsList = () => {
+const SeedsList = ({ count }: { count: number }) => {
   return (
     <div className="w-full max-w-md space-y-2">
       <div className="text-4xl font-extrabold">{`SeedsList - ${SEEDS.length}`}</div>
@@ -19,7 +19,7 @@ const SeedsList = () => {
           <div className=" text-xl ">單詞 單音 除重</div>
           <div className="text-right text-xl">{ONE_CHAR_ONE_YOMI.length}</div>
         </div>
-        <BatchAddHanzisButton />
+        <BatchAddHanzisButton count={count} />
       </div>
     </div>
   );

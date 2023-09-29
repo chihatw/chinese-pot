@@ -4,6 +4,7 @@ import { FirestoreDataConverter } from "firebase-admin/firestore";
 const COLLECTION = "todos";
 
 export const getTodosAdmin = async () => {
+  console.log("get todos");
   const snapshot = await dbAdmin
     .collection(COLLECTION)
     .withConverter(todoConverter)
@@ -12,6 +13,7 @@ export const getTodosAdmin = async () => {
 };
 
 export const addTodo = async (todo: Todo) => {
+  console.log("add todo");
   await dbAdmin
     .collection(COLLECTION)
     .withConverter(todoConverter)
@@ -20,6 +22,7 @@ export const addTodo = async (todo: Todo) => {
 };
 
 export const removeTodo = async (id: string) => {
+  console.log("remove todo");
   await dbAdmin.collection(COLLECTION).doc(id).delete();
 };
 

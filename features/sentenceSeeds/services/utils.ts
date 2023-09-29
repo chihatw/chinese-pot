@@ -1,20 +1,16 @@
+import { Article } from "@/features/article";
 import { Pinyin } from "@/features/pinyin";
 import { buildPinyins } from "@/features/pinyin/services/buildPinyin";
 import { getPinyinStr } from "@/features/pinyin/services/utils";
+import { Sentence, SentenceUnigram } from "@/features/sentence";
 import { nanoid } from "nanoid";
 import {
-  Article,
-  Article_SentenceIds,
   Article_old,
   Article_raw,
-  Sentence,
   SentenceMidashiPinyin_raw,
   SentencePinyins_Temp,
-  SentenceUniGram,
-  SentenceUniGram_raw,
+  SentenceUnigram_raw,
   Sentence_Article_Relation,
-  Sentence_Pinyins_Relation,
-  Sentence_UniGrams_Relation,
   Sentence_old,
   Sentence_raw,
 } from "..";
@@ -29,7 +25,7 @@ export const buildArticle_old = (raw: Article_raw): Article_old => {
 
 export const buildArticle = (
   old: Article_old,
-  as: Article_SentenceIds,
+  as: { [key: string]: string[] },
 ): Article => {
   const sentenceIds = as[old.id] || [];
   return {
@@ -75,52 +71,60 @@ export const buildSentenceArticleRelation = (
 
 export const buildArticleSentenceIds = (
   sentences: Sentence_Article_Relation[],
-): Article_SentenceIds => {
-  return sentences.reduce((acc, cur) => {
-    const value = acc[cur.articleId]
-      ? [...acc[cur.articleId], cur.id].sort((a, b) => {
-          const sentenceA = sentences.find((s) => s.id === a)!;
-          const sentenceB = sentences.find((s) => s.id === b)!;
-          return sentenceA.index - sentenceB.index;
-        })
-      : [cur.id];
-
-    return { ...acc, [cur.articleId]: value };
-  }, {} as Article_SentenceIds);
-};
-
-export const buildSentenceUniGramRelations = (
-  unigrams: SentenceUniGram[],
-): Sentence_UniGrams_Relation => {
-  return unigrams.reduce((acc, cur) => {
-    const value = acc[cur.sentenceId]
-      ? [...acc[cur.sentenceId], cur].sort((a, b) => {
-          const unigramA = unigrams.find((u) => u.id === a.id)!;
-          const unigramB = unigrams.find((u) => u.id === b.id)!;
-          return unigramA.offset - unigramB.offset;
-        })
-      : [cur];
-    return { ...acc, [cur.sentenceId]: value };
-  }, {} as Sentence_UniGrams_Relation);
-};
-
-export const buildSentenceTextRelations = (
-  relation: Sentence_UniGrams_Relation,
 ) => {
+  return sentences.reduce(
+    (acc, cur) => {
+      const value = acc[cur.articleId]
+        ? [...acc[cur.articleId], cur.id].sort((a, b) => {
+            const sentenceA = sentences.find((s) => s.id === a)!;
+            const sentenceB = sentences.find((s) => s.id === b)!;
+            return sentenceA.index - sentenceB.index;
+          })
+        : [cur.id];
+
+      return { ...acc, [cur.articleId]: value };
+    },
+    {} as { [key: string]: string[] },
+  );
+};
+
+/**
+ * Sentence Unigram を SentenceId 毎にまとめる
+ */
+export const buildSentenceUnigramRelations = (unigrams: SentenceUnigram[]) => {
+  return unigrams.reduce(
+    (acc, cur) => {
+      const value = acc[cur.sentenceId]
+        ? [...acc[cur.sentenceId], cur].sort((a, b) => {
+            const unigramA = unigrams.find((u) => u.id === a.id)!;
+            const unigramB = unigrams.find((u) => u.id === b.id)!;
+            return unigramA.offset - unigramB.offset;
+          })
+        : [cur];
+      return { ...acc, [cur.sentenceId]: value };
+    },
+    {} as { [key: string]: SentenceUnigram[] },
+  );
+};
+
+export const buildSentenceTextRelations = (relation: {
+  [key: string]: SentenceUnigram[];
+}) => {
   const sentenceIds = Object.keys(relation);
 
   const result: { [sentenceId: string]: string } = {};
 
   for (const sentenceId of sentenceIds) {
     result[sentenceId] = relation[sentenceId]
-      .map((uniGram) => uniGram.form)
+      .map((unigram) => unigram.form)
       .join("");
   }
 
   return result;
 };
 
-export const buildUniGram = (raw: SentenceUniGram_raw): SentenceUniGram => {
+// lang-pot.sentence_midashi_zhs.json の char を form に変更
+export const buildUnigram = (raw: SentenceUnigram_raw): SentenceUnigram => {
   return {
     id: nanoid(),
     form: raw.char,
@@ -158,7 +162,7 @@ export const buildSentencePinyinsRelations_temp = (
 export const buildSentencePinyinsRelations = (sentencePinyinsRelations: {
   [sentenceId: string]: SentencePinyins_Temp[];
 }) => {
-  const result: Sentence_Pinyins_Relation = {};
+  const result: { [key: string]: Pinyin[] } = {};
 
   for (const sentenceId of Object.keys(sentencePinyinsRelations)) {
     const relation = sentencePinyinsRelations[sentenceId];

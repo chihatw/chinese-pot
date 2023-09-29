@@ -6,7 +6,13 @@ import { Hanzi, HanziMeta } from "..";
 const COLLECTION = "hanzis";
 const COLLECTION_META = "hanzisMeta";
 
+export const getHanzisCount = async () => {
+  console.log("get hanzis count");
+  const snapshot = await dbAdmin.collection(COLLECTION).count().get();
+  return snapshot.data().count;
+};
 export const getHanzis = async () => {
+  console.log("get hanzis");
   const snapshot = await dbAdmin
     .collection(COLLECTION)
     .withConverter(hanziConverter)
@@ -15,12 +21,14 @@ export const getHanzis = async () => {
 };
 
 export const addHanzi = async (hanzi: Hanzi) => {
+  console.log("set hanzi");
   await dbAdmin
     .collection(COLLECTION)
     .withConverter(hanziConverter)
     .doc(hanzi.id)
     .set(hanzi);
 
+  console.log("set hanzi meta");
   await dbAdmin
     .collection(COLLECTION_META)
     .withConverter(hanziMetaConverter)
@@ -54,6 +62,7 @@ export const batchAddHanzis = async (hanzis: Hanzi[]) => {
       },
     );
   }
+  console.log("batch add hanzis");
   await batch.commit();
 };
 
