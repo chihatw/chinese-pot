@@ -1,53 +1,35 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { ARTICLES } from "..";
 import { batchAddArticlesAction } from "../services/actions";
 
-const i = 0;
-const set = 2000; // max 2000
-
-const BatchAddArticlesButton = ({ count }: { count: number }) => {
-  const { toast } = useToast(); // "use client" 必須
-
-  const start = set * i;
-  const length = set * (i + 1);
-  const subSet = ARTICLES.slice(start, length);
+const BatchAddArticlesButton = () => {
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
-    await batchAddArticlesAction(subSet);
+    setIsLoading(true);
+    await batchAddArticlesAction(ARTICLES);
+    setIsLoading(false);
     toast({
-      description: `added ${subSet.length} articles`,
+      description: `added ${ARTICLES.length} articles`,
     });
   };
 
   return (
-    <div>
-      <div className="text-sm">{`count: ${count}`}</div>
-      <form action={handleSubmit}>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="submit"
-                disabled={!!count}
-              >{`Add Articles (${subSet.length})`}</Button>
-            </TooltipTrigger>
-            <TooltipContent className="rounded  p-2  shadow">
-              <p>{`total: ${ARTICLES.length}`}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </form>
-    </div>
+    <form action={handleSubmit}>
+      <Button type="submit" disabled={isLoading}>
+        <div className="flex items-center gap-2">
+          {`Add Articles (${ARTICLES.length})`}
+          {isLoading ? <Loader2 className="animate-spin" /> : null}
+        </div>
+      </Button>
+    </form>
   );
 };
 

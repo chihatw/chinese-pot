@@ -22,7 +22,7 @@ const SignInForm = () => {
   const [progress, setProgress] = useState(0);
 
   const form = useForm<SignInSchema>({
-    resolver: zodResolver(SignInSchema), // note zod 3.22.0 occor error
+    resolver: zodResolver(SignInSchema),
     defaultValues: { email: "", password: "" },
   });
 

@@ -2,10 +2,17 @@
 
 import { SimpleSentenceMonitor } from "@/features/sentence";
 import { getSentencesByIds } from "@/features/sentence/services/firebase";
-import { getArticle } from "../services/firebase";
+import { serverClient } from "@/trpc/serverClient";
 
+/**
+ * - trpc を通す練習。
+ *
+ * - firestoreで 型付けをしているので、実際は直接 getArticle すればよい。
+ *
+ * - たぶん、server side のキャッシュは zustand や react query を導入するのではなく、ユーザー操作と無関係に、設計で重複取得をやめるべき
+ */
 const ArticleSentences = async ({ articleId }: { articleId: string }) => {
-  const article = await getArticle(articleId);
+  const article = await serverClient.getArticle(articleId);
   if (!article) return null;
 
   const sentences = await getSentencesByIds(article.sentenceIds);

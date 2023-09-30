@@ -1,4 +1,3 @@
-import { Sentence } from "@/features/sentence";
 import { getSentencesByIds } from "@/features/sentence/services/firebase";
 import { dbAdmin } from "@/firebase/admin";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
@@ -12,29 +11,27 @@ export const getSentenceUnigramsCount = async () => {
   return snapshot.data().count;
 };
 
-export const getSentenceByform = async (
-  form: string,
-): Promise<{ total: number; sentences: Sentence[] }> => {
-  console.log("get sentence count by form");
+export const getSentencesByOneForm = async (form: string) => {
+  // 引数チェック
+  if (!form) return [];
+  const sentenceIds = await getSentenceIdsByForm(form);
+  const sentences = await getSentencesByIds(sentenceIds);
+  return sentences;
+};
+
+const getSentenceIdsByForm = async (form: string) => {
+  // 引数チェック
+  if (!form) return [];
+
+  console.log("get sentenceUnigrams by form");
   const snapshot = await dbAdmin
     .collection(COLLECTION)
     .withConverter(SentenceUnigramConvertor)
     .where("form", "==", form)
     .get();
-
-  const sentenceIds = snapshot.docs
-    .map((doc) => doc.data())
-    .reduce((acc, cur) => {
-      // すでに既出の場合、重複追加はしない
-      if (acc.includes(cur.sentenceId)) {
-        return acc;
-      }
-      // sentnceId で配列を作成
-      return [...acc, cur.sentenceId];
-    }, [] as string[]);
-
-  const sentences = await getSentencesByIds(sentenceIds.slice(0, 30));
-  return { sentences, total: sentenceIds.length };
+  return snapshot.docs
+    .map((doc) => doc.data().sentenceId)
+    .filter((item, index, self) => self.indexOf(item) === index);
 };
 
 export const batchAddSentenceUnigrams = async (unigrams: SentenceUnigram[]) => {

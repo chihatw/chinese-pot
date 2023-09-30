@@ -1,5 +1,6 @@
 import { Sentence } from "@/features/sentence";
 import { dbAdmin } from "@/firebase/admin";
+import { DOCUMENTID_COUNT_MAX } from "@/firebase/constants";
 import { FieldPath, FirestoreDataConverter } from "firebase-admin/firestore";
 
 const COLLECTION = "sentences";
@@ -11,17 +12,33 @@ export const getSentencesCount = async () => {
 };
 
 export const getSentencesByIds = async (sentenceIds: string[]) => {
-  console.log("get sentences by ids");
+  // 引数がない
   if (!sentenceIds.length) return [];
-  const snapshot = await dbAdmin
-    .collection(COLLECTION)
-    .withConverter(sentenceConverter)
-    .where(FieldPath.documentId(), "in", sentenceIds)
-    .get();
-  return snapshot.docs.map((doc) => doc.data());
+
+  // 重複削除
+  sentenceIds = sentenceIds.filter(
+    (item, index, self) => self.indexOf(item) === index,
+  );
+
+  let result: Sentence[] = [];
+
+  for (let i = 0; i < sentenceIds.length; i += DOCUMENTID_COUNT_MAX) {
+    // DOCUMENTID_COUNT_MAX 毎にクエリを実行
+    const subSet = sentenceIds.slice(i, i + DOCUMENTID_COUNT_MAX);
+    console.log("get sentences by ids");
+    const snapshot = await dbAdmin
+      .collection(COLLECTION)
+      .withConverter(sentenceConverter)
+      .where(FieldPath.documentId(), "in", subSet)
+      .get();
+    const sentences = snapshot.docs.map((doc) => doc.data());
+    result = [...result, ...sentences];
+  }
+  return result;
 };
 
 export const batchAddSentences = async (sentences: Sentence[]) => {
+  console.log("batch add sentences");
   const batch = dbAdmin.batch();
   for (const sentence of sentences) {
     batch.set(
@@ -32,8 +49,7 @@ export const batchAddSentences = async (sentences: Sentence[]) => {
       sentence,
     );
   }
-  console.log("batch add sentences");
-  await batch.commit();
+  batch.commit();
 };
 
 const sentenceConverter: FirestoreDataConverter<Sentence> = {

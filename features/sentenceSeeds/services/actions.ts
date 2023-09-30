@@ -4,6 +4,7 @@ import { Article } from "@/features/article";
 import { batchAddArticles } from "@/features/article/services/firebase";
 import { Sentence } from "@/features/sentence";
 import { batchAddSentences } from "@/features/sentence/services/firebase";
+
 import { SentenceUnigram } from "@/features/sentenceUnigram";
 import { batchAddSentenceUnigrams } from "@/features/sentenceUnigram/services/firebase";
 import { revalidatePath } from "next/cache";
@@ -20,7 +21,10 @@ export const batchAddSentencesAction = async (sentences: Sentence[]) => {
 
 export const batchAddSentenceUnigramsAction = async (
   unigrams: SentenceUnigram[],
+  isLast: boolean,
 ) => {
   await batchAddSentenceUnigrams(unigrams);
-  revalidatePath("/");
+  if (isLast) {
+    revalidatePath("/");
+  }
 };

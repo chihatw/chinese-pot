@@ -6,3 +6,5 @@ export const ERROR_CODES = {
   "auth/too-many-requests": "auth/too-many-requests",
   "auth/email-already-in-use": "auth/email-already-in-use",
 };
+
+export const DOCUMENTID_COUNT_MAX = 30;
