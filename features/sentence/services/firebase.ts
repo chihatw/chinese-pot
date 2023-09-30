@@ -49,7 +49,7 @@ export const batchAddSentences = async (sentences: Sentence[]) => {
       sentence,
     );
   }
-  batch.commit();
+  await batch.commit();
 };
 
 const sentenceConverter: FirestoreDataConverter<Sentence> = {

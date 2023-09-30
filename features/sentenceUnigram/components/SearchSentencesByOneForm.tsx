@@ -15,9 +15,8 @@ import { FORM_SEARCH_KEY } from "../constants";
  *
  * trpc: 通信頻度が増える。
  */
-const SentenceSearchByOneform = ({
+const SearchSentencesByOneForm = ({
   form,
-
   sentences,
 }: {
   form: string;
@@ -82,4 +81,4 @@ const SentenceSearchByOneform = ({
   );
 };
 
-export default SentenceSearchByOneform;
+export default SearchSentencesByOneForm;

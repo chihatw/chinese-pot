@@ -10,7 +10,7 @@ import {
   BatchAddSentenceUnigramsButton,
   BatchAddSentencesButton,
 } from "@/features/sentenceSeeds";
-import { SentenceSearchByOneform } from "@/features/sentenceUnigram";
+import { SearchSentencesByOneForm } from "@/features/sentenceUnigram";
 import { FORM_SEARCH_KEY } from "@/features/sentenceUnigram/constants";
 import {
   getSentenceUnigramsCount,
@@ -34,7 +34,7 @@ export default async function Home({
       <div className="rounded bg-yellow-100 bg-opacity-40 p-5">
         <span className="pr-2">🔥</span>Unigram Search
       </div>
-      <SentenceSearchByOneform form={form} sentences={sentences} />
+      <SearchSentencesByOneForm form={form} sentences={sentences} />
       <div className="space-y-1">
         {!hanzisCount ? <BatchAddHanzisButton /> : null}
         {!articlesCount ? <BatchAddArticlesButton /> : null}
