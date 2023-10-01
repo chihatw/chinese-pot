@@ -1,6 +1,7 @@
-import SearchSentencesByOneForm from "./components/SearchSentencesByOneform";
+import SearchSentencesByForms from "./components/SearchSentencesByForms";
+import SearchSentencesByOneForm from "./components/SearchSentencesByOneForm";
 import { SentenceUnigram } from "./schema";
 
-export { SearchSentencesByOneForm };
+export { SearchSentencesByForms, SearchSentencesByOneForm };
 
 export type { SentenceUnigram };
