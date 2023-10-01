@@ -25,62 +25,6 @@ export const getSentencesByOneForm = async (form: string) => {
   return sentences;
 };
 
-export const getSentencesByForms = async (forms: string) => {
-  // 空文字は省く
-  forms = forms.trim();
-
-  // 検索項目がなければ、中止
-  if (!forms) return [];
-
-  const sentenceIds = await getSentenceIdsByForms(forms);
-  const sentences = await getSentencesByIds(sentenceIds);
-  return sentences;
-};
-
-const getSentenceIdsByForms = async (forms: string): Promise<string[]> => {
-  if (!forms.length) return [];
-
-  // 1文字目の検索（条件: form）
-  const head = forms.at(0)!;
-  const sentenceUnigrams = await getSentenceUnigramsByForm(head);
-  if (forms.length === 1)
-    return sentenceUnigrams.map((unigram) => unigram.sentenceId);
-
-  // 2文字目以降の検索（条件: sentenceId, offset, form）
-  let targetUnigrams: SentenceUnigram[] = [...sentenceUnigrams];
-  for (let i = 1; i < forms.length; i++) {
-    const form = forms.at(i)!;
-    let tempUnigrams: SentenceUnigram[] = [];
-    for (const unigram of targetUnigrams) {
-      const offsetUnigram = await getOffsetUnigram(
-        unigram.sentenceId,
-        unigram.offset + i,
-      );
-      // 条件に合うものは temp に入れる
-      if (offsetUnigram && offsetUnigram.form === form) {
-        tempUnigrams.push(unigram);
-      }
-    }
-    // 条件に合ったものを target に移す
-    targetUnigrams = [...tempUnigrams];
-    // temp は空に
-    tempUnigrams = [];
-  }
-
-  return targetUnigrams.map((unigram) => unigram.sentenceId);
-};
-
-const getOffsetUnigram = async (sentenceId: string, offset: number) => {
-  console.log(`get sentenceUnigram by id:${sentenceId} offset:${offset}`);
-  const snapshot = await dbAdmin
-    .collection(COLLECTION)
-    .withConverter(SentenceUnigramConvertor)
-    .where("sentenceId", "==", sentenceId)
-    .where("offset", "==", offset)
-    .get();
-  return snapshot.docs.map((doc) => doc.data())[0];
-};
-
 const getSentenceUnigramsByForm = async (form: string) => {
   console.log(`get sentenceUnigrams by ${form}`);
   const snapshot = await dbAdmin

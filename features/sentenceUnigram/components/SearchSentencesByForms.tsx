@@ -1,5 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
 import { Sentence } from "@/features/sentence";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -7,21 +8,23 @@ import { useEffect, useState } from "react";
 import { FORM_SEARCH_KEY } from "../constants";
 
 const SearchSentencesByForms = ({
-  form,
+  total,
+  forms,
   sentences,
 }: {
-  form: string;
+  total: number;
+  forms: string;
   sentences: Sentence[];
 }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [input, setInput] = useState(form);
+  const [input, setInput] = useState(forms);
 
   useEffect(() => {
     // 入力から英字を削除
-    const _form = input.replace(/[a-zA-Z\+]/gi, "") || "";
+    const _form = input.trim().replace(/[a-zA-Z]/gi, "") || "";
     const newPath = buildNewSearchParamsPath(
       FORM_SEARCH_KEY,
       _form,
@@ -37,7 +40,7 @@ const SearchSentencesByForms = ({
 
   return (
     <div className="space-y-4">
-      <div className="text-4xl font-bold">Search By Forms</div>
+      <div className="text-4xl font-bold">搜尋句子</div>
 
       <Input
         className="bg-white"
@@ -46,19 +49,26 @@ const SearchSentencesByForms = ({
       />
       <div className="flex items-end gap-2">
         <div className=" grid min-h-[40px] min-w-[40px] place-items-center rounded bg-white/40 p-2">
-          {form}
+          {forms}
         </div>
       </div>
       <div className="space-y-2">
-        <div>{`${sentences.length}`}</div>
+        <div className="flex items-center gap-2">
+          <span>{total}</span>
+          {total > SEARCH_SENTENCES_MAX ? (
+            <span className="text-xs text-black/40">
+              結果が多すぎます。文字列を増やしてください
+            </span>
+          ) : null}
+        </div>
         {sentences.map((sentence) => (
           <div key={sentence.id} className="rounded bg-white p-2 ">
-            {sentence.text.split(form).map((unit, index, self) => (
+            {sentence.text.split(forms).map((unit, index, self) => (
               <span key={index}>
                 <span>{unit}</span>
                 {index < self.length - 1 ? (
                   <span key={index} className={"text-destructive"}>
-                    {form}
+                    {forms}
                   </span>
                 ) : null}
               </span>

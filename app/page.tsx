@@ -3,7 +3,10 @@
 import { getArticleCount } from "@/features/article/services/firebase";
 import { getHanzisCount } from "@/features/hanzi/services/firestore";
 import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
-import { getInvertedIndexesCount } from "@/features/invertedIndex/services/firebase";
+import {
+  getInvertedIndexesCount,
+  getSentencesByForms,
+} from "@/features/invertedIndex/services/firebase";
 import { BuildInvetedIndexesButton } from "@/features/invertedIndexSeed";
 
 import { getSentencesCount } from "@/features/sentence/services/firebase";
@@ -12,11 +15,9 @@ import {
   BatchAddSentenceUnigramsButton,
   BatchAddSentencesButton,
 } from "@/features/sentenceSeeds";
+import { SearchSentencesByForms } from "@/features/sentenceUnigram";
 import { FORM_SEARCH_KEY } from "@/features/sentenceUnigram/constants";
-import {
-  getSentenceUnigramsCount,
-  getSentencesByForms,
-} from "@/features/sentenceUnigram/services/firebase";
+import { getSentenceUnigramsCount } from "@/features/sentenceUnigram/services/firebase";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +26,7 @@ export default async function Home({
 }: {
   searchParams: { [FORM_SEARCH_KEY]?: string };
 }) {
-  const form = searchParams[FORM_SEARCH_KEY] || "";
+  const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
 
   const hanzisCount = await getHanzisCount();
   const articlesCount = await getArticleCount();
@@ -33,7 +34,7 @@ export default async function Home({
   const sentenceUnigramsCount = await getSentenceUnigramsCount();
   const invertedIndexesCount = await getInvertedIndexesCount();
 
-  const sentences = await getSentencesByForms(form);
+  const { total, sentences } = await getSentencesByForms(forms);
   return (
     <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-8 py-28 sm:mx-auto sm:w-[min(500px,100%-120px)]">
       <div className="rounded bg-yellow-100 bg-opacity-40 p-5">
@@ -68,7 +69,11 @@ export default async function Home({
         </pre>
       </div>
 
-      {/* <SearchSentencesByForms form={form} sentences={sentences} /> */}
+      <SearchSentencesByForms
+        forms={forms}
+        sentences={sentences}
+        total={total}
+      />
 
       {/* <HanziList /> */}
       {/* <PinyinList /> */}

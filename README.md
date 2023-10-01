@@ -72,3 +72,19 @@ import { getAuth, connectAuthEmulator } from "firebase/auth";
 const auth = getAuth();
 connectAuthEmulator(auth, "http://127.0.0.1:9099");
 ```
+# 重複の削除
+[Remove Duplicates From an Array in JavaScript](https://code.tutsplus.com/remove-duplicates-in-javascript--cms-106696a#toc-6ghz-remove-duplicates-from-an-array-of-objects)
+
+```js
+const uniq_array = Array.from(new Set(original_array));
+```
+
+# 重複の抽出
+- [Simplest code for array intersection in javascript](https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript)
+- [es6](https://caniuse.com/es6)
+```js
+function intersect(a, b) {
+  var setB = new Set(b);
+  return [...new Set(a)].filter(x => setB.has(x));
+}
+```
