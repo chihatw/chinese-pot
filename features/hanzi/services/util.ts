@@ -160,3 +160,20 @@ export const getDifferentConsonants = (db: Hanzi[], hanzi: Hanzi) => {
     {} as { [key: string]: Hanzi[] },
   );
 };
+
+export const buildToneMark = (tone?: string) => {
+  switch (tone) {
+    case "1":
+      return "‾";
+    case "2":
+      return "ˊ";
+    case "3":
+      return "ˇ";
+    case "4":
+      return "ˋ";
+    case "0":
+      return "•";
+    default:
+      return "";
+  }
+};

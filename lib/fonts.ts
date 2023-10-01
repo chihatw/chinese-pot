@@ -1,5 +1,6 @@
 import {
   JetBrains_Mono as FontMono,
+  Noto_Serif_TC as FontPinyin,
   // Roboto as FontSans,
   Noto_Sans_HK as FontSans,
   Zen_Maru_Gothic,
@@ -19,4 +20,9 @@ export const fontMono = FontMono({
 export const fontZenMaruGothic = Zen_Maru_Gothic({
   subsets: ["latin"],
   weight: ["400", "300"],
+});
+
+export const fontPinyin = FontPinyin({
+  subsets: ["latin"],
+  weight: ["400"],
 });

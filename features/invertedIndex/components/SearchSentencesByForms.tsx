@@ -1,11 +1,11 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
-import { Sentence } from "@/features/sentence";
+import { Sentence, SentenceLine } from "@/features/sentence";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FORM_SEARCH_KEY } from "../constants";
+import { FORM_SEARCH_KEY } from "../../sentenceUnigram/constants";
 
 const SearchSentencesByForms = ({
   total,
@@ -62,18 +62,11 @@ const SearchSentencesByForms = ({
           ) : null}
         </div>
         {sentences.map((sentence) => (
-          <div key={sentence.id} className="rounded bg-white p-2 ">
-            {sentence.text.split(forms).map((unit, index, self) => (
-              <span key={index}>
-                <span>{unit}</span>
-                {index < self.length - 1 ? (
-                  <span key={index} className={"text-destructive"}>
-                    {forms}
-                  </span>
-                ) : null}
-              </span>
-            ))}
-          </div>
+          <SentenceLine
+            key={sentence.id}
+            highlight={forms}
+            sentence={sentence}
+          />
         ))}
       </div>
     </div>
