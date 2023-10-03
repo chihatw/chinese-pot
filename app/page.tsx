@@ -1,10 +1,12 @@
 "server only";
 
 import { getArticleCount } from "@/features/article/services/firebase";
-import { HanziList } from "@/features/hanzi";
 import { getHanzis, getHanzisCount } from "@/features/hanzi/services/firestore";
 import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
-import { SearchSentencesByForms } from "@/features/invertedIndex";
+import {
+  SearchResultList,
+  SearchSentencesByForms,
+} from "@/features/invertedIndex";
 import {
   getInvertedIndexesCount,
   getSentencesByForms,
@@ -76,13 +78,10 @@ export default async function Home({
         </pre>
       </div>
 
-      <SearchSentencesByForms
-        forms={forms}
-        total={total}
-        sentences={sentences}
-      />
+      <SearchSentencesByForms forms={forms} />
+      <SearchResultList forms={forms} total={total} sentences={sentences} />
 
-      <HanziList hanzis={hanzis} />
+      {/* <HanziList hanzis={hanzis} /> */}
       {/* <PinyinList /> */}
       {/* <RandomArticleSentences /> */}
     </main>

@@ -1,5 +1,6 @@
+import SearchResultList from "./components/SearchResultList";
 import SearchSentencesByForms from "./components/SearchSentencesByForms";
 import { InvertedIndex } from "./schema";
 
-export { SearchSentencesByForms };
+export { SearchResultList, SearchSentencesByForms };
 export type { InvertedIndex };
