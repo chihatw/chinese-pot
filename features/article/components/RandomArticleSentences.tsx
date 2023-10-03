@@ -1,7 +1,8 @@
+"server only";
 import { ARTICLES } from "@/features/sentenceSeeds";
 import { ArticleSentences } from "..";
 
-const RandomArticleSentences = () => {
+const RandomArticleSentences = async () => {
   const gotIndex = Math.floor(Math.random() * 200);
   const articleId = ARTICLES.map((a) => a.id).at(gotIndex);
   if (!articleId) return null;

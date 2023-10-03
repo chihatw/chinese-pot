@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FORM_SEARCH_KEY } from "../../sentenceUnigram/constants";
+import { FORM_SEARCH_KEY } from "..";
 
 const SearchSentencesByForms = ({ forms }: { forms: string }) => {
   const router = useRouter();

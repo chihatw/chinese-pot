@@ -5,8 +5,8 @@ import { batchAddArticles } from "@/features/article/services/firebase";
 import { Sentence } from "@/features/sentence";
 import { batchAddSentences } from "@/features/sentence/services/firebase";
 
-import { SentenceUnigram } from "@/features/sentenceUnigram";
-import { batchAddSentenceUnigrams } from "@/features/sentenceUnigram/services/firebase";
+import { SentenceUnigram } from "@/features/sentenceUnigram_deprecated";
+import { batchAddSentenceUnigrams } from "@/features/sentenceUnigram_deprecated/services/firebase";
 import { revalidatePath } from "next/cache";
 
 export const batchAddArticlesAction = async (articles: Article[]) => {

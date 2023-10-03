@@ -12,7 +12,7 @@ import { serverClient } from "@/trpc/serverClient";
  * - たぶん、server side のキャッシュは zustand や react query を導入するのではなく、ユーザー操作と無関係に、設計で重複取得をやめるべき
  */
 const ArticleSentences = async ({ articleId }: { articleId: string }) => {
-  const article = await serverClient.getArticle(articleId);
+  const article = await serverClient.getArticle_deprecated(articleId);
   if (!article) return null;
 
   const sentences = await getSentencesByIds(article.sentenceIds);

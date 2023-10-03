@@ -1,4 +1,4 @@
-import { SentenceUnigram } from "@/features/sentenceUnigram";
+import { SentenceUnigram } from "@/features/sentenceUnigram_deprecated";
 import { InvertedIndexes_old } from "../schema";
 
 export const buildInvertedIndexes = (

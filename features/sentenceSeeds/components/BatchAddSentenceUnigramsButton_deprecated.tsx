@@ -1,12 +1,12 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import { SENTENCE_UNIGRAM_COUNT_MAX } from "@/features/sentenceUnigram/constants";
+import { SENTENCE_UNIGRAM_COUNT_MAX } from "@/features/sentenceUnigram_deprecated/constants";
 import { SENTENCE_UNIGRAMS } from "..";
 import ServerActionPendingButton from "../../../components/ServerActionPendingButton";
 import { batchAddSentenceUnigramsAction } from "../services/actions";
 
-const BatchAddSentenceUnigramsButton = () => {
+const BatchAddSentenceUnigramsButton_deprecated = () => {
   const sentenceUnigrams = SENTENCE_UNIGRAMS;
 
   const { toast } = useToast(); // "use client" 必須
@@ -37,4 +37,4 @@ const BatchAddSentenceUnigramsButton = () => {
   );
 };
 
-export default BatchAddSentenceUnigramsButton;
+export default BatchAddSentenceUnigramsButton_deprecated;

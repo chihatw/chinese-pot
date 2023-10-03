@@ -1,9 +1,11 @@
 "server only";
 
+import { RandomArticleSentences } from "@/features/article";
 import { getArticleCount } from "@/features/article/services/firebase";
-import { getHanzis, getHanzisCount } from "@/features/hanzi/services/firestore";
+import { getHanzisCount } from "@/features/hanzi/services/firestore";
 import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
 import {
+  FORM_SEARCH_KEY,
   SearchResultList,
   SearchSentencesByForms,
 } from "@/features/invertedIndex";
@@ -16,12 +18,9 @@ import { BuildInvetedIndexesButton } from "@/features/invertedIndexSeed";
 import { getSentencesCount } from "@/features/sentence/services/firebase";
 import {
   BatchAddArticlesButton,
-  BatchAddSentenceUnigramsButton,
   BatchAddSentencesButton,
 } from "@/features/sentenceSeeds";
 
-import { FORM_SEARCH_KEY } from "@/features/sentenceUnigram/constants";
-import { getSentenceUnigramsCount } from "@/features/sentenceUnigram/services/firebase";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
@@ -32,14 +31,11 @@ export default async function Home({
 }: {
   searchParams: { [FORM_SEARCH_KEY]?: string };
 }) {
-  const hanzis = await getHanzis();
-
   const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
 
   const hanzisCount = await getHanzisCount();
   const articlesCount = await getArticleCount();
   const sentencesCount = await getSentencesCount();
-  const sentenceUnigramsCount = await getSentenceUnigramsCount();
   const invertedIndexesCount = await getInvertedIndexesCount();
 
   const { total, sentences } = await getSentencesByForms(forms);
@@ -54,7 +50,6 @@ export default async function Home({
         {!hanzisCount ? <BatchAddHanzisButton /> : null}
         {!articlesCount ? <BatchAddArticlesButton /> : null}
         {!sentencesCount ? <BatchAddSentencesButton /> : null}
-        {!sentenceUnigramsCount ? <BatchAddSentenceUnigramsButton /> : null}
         {!invertedIndexesCount ? <BuildInvetedIndexesButton /> : null}
       </div>
       <div>
@@ -70,7 +65,6 @@ export default async function Home({
               articlesCount,
               sentencesCount,
               invertedIndexesCount,
-              sentenceUnigramsCount,
             },
             null,
             4,
@@ -83,7 +77,7 @@ export default async function Home({
 
       {/* <HanziList hanzis={hanzis} /> */}
       {/* <PinyinList /> */}
-      {/* <RandomArticleSentences /> */}
+      <RandomArticleSentences />
     </main>
   );
 }

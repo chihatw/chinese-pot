@@ -1,20 +1,21 @@
 "server only";
 import { getArticle } from "@/features/article/services/firebase";
-import { getSentencesByOneForm } from "@/features/sentenceUnigram/services/firebase";
+import { getSentencesByOneForm_deprecated } from "@/features/sentenceUnigram_deprecated/services/firebase";
 import { z } from "zod";
 import { publicProcedure, router } from "./trpc";
 export const appRouter = router({
-  getSentencesByOneForm: publicProcedure
+  getSentencesByOneForm_deprecated: publicProcedure
     .input(z.string())
     .query(async ({ input }) => {
       if (!input) return [];
-      // todo cache
-      return await getSentencesByOneForm(input);
+      return await getSentencesByOneForm_deprecated(input);
     }),
-  getArticle: publicProcedure.input(z.string()).query(async ({ input }) => {
-    if (!input) return;
-    return await getArticle(input);
-  }),
+  getArticle_deprecated: publicProcedure
+    .input(z.string())
+    .query(async ({ input }) => {
+      if (!input) return;
+      return await getArticle(input);
+    }),
 });
 
 export type AppRouter = typeof appRouter;

@@ -14,9 +14,9 @@ import {
 
 import { Article } from "../article";
 import { Sentence } from "../sentence";
-import { SentenceUnigram } from "../sentenceUnigram";
+import { SentenceUnigram } from "../sentenceUnigram_deprecated";
 import BatchAddArticlesButton from "./components/BatchAddArticlesButton";
-import BatchAddSentenceUnigramsButton from "./components/BatchAddSentenceUnigramsButton";
+import BatchAddSentenceUnigramsButton_deprecated from "./components/BatchAddSentenceUnigramsButton_deprecated";
 import BatchAddSentencesButton from "./components/BatchAddSentencesButton";
 
 const ARTICLES = ARTICLES_JSON as Article[];
@@ -26,7 +26,7 @@ const SENTENCE_UNIGRAMS = SENTENCE_UNIGRAMS_JSON as SentenceUnigram[];
 export {
   ARTICLES,
   BatchAddArticlesButton,
-  BatchAddSentenceUnigramsButton,
+  BatchAddSentenceUnigramsButton_deprecated,
   BatchAddSentencesButton,
   SENTENCES,
   SENTENCE_UNIGRAMS,

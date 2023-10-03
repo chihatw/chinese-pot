@@ -5,17 +5,17 @@ import { SentenceUnigram } from "..";
 
 const COLLECTION = "sentenceUnigrams";
 
-export const getSentenceUnigramsCount = async () => {
+export const getSentenceUnigramsCount_deprecated = async () => {
   console.log("get sentence unigrams count");
   const snapshot = await dbAdmin.collection(COLLECTION).count().get();
   return snapshot.data().count;
 };
 
-export const getSentencesByOneForm = async (form: string) => {
+export const getSentencesByOneForm_deprecated = async (form: string) => {
   // 引数チェック
   if (!form) return [];
 
-  const sentenceUnigrams = await getSentenceUnigramsByForm(form);
+  const sentenceUnigrams = await getSentenceUnigramsByForm_deprecated(form);
 
   const sentenceIds = sentenceUnigrams
     .map((unigram) => unigram.sentenceId)
@@ -25,7 +25,7 @@ export const getSentencesByOneForm = async (form: string) => {
   return sentences;
 };
 
-const getSentenceUnigramsByForm = async (form: string) => {
+const getSentenceUnigramsByForm_deprecated = async (form: string) => {
   console.log(`get sentenceUnigrams by ${form}`);
   const snapshot = await dbAdmin
     .collection(COLLECTION)
