@@ -3,25 +3,31 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Hanzi } from "@/features/hanzi";
+import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Sentence } from "../..";
 import { SENTENCE_FORM_KEY } from "../../constants";
 import FormMonitor from "./FormMonitor";
 import Note from "./Note";
+import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
 
 const SentenceForm = ({
   forms,
   hanzis,
+  sentences,
 }: {
   forms: string;
   hanzis: Hanzi[];
+  sentences: { [form: string]: Sentence };
 }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [input, setInput] = useState(forms);
+  const debouncedInput = useDebouce(input, 300);
   const [selectedHanziIds, setSelectedHanziIds] = useState(
     forms.split("").map((form) => {
       // hanzis から form で厳選
@@ -42,7 +48,7 @@ const SentenceForm = ({
   }, [forms, hanzis]);
 
   useEffect(() => {
-    const forms = input.trim().replace(/[a-zA-Z]/gi, "") || "";
+    const forms = debouncedInput.trim().replace(/[a-zA-Z]/gi, "") || "";
 
     const newPath = buildNewSearchParamsPath(
       SENTENCE_FORM_KEY,
@@ -52,12 +58,15 @@ const SentenceForm = ({
     );
 
     const original = new URLSearchParams(Array.from(searchParams.entries()));
-    const originalPath = `${pathname}${original.toString()}`;
+    let originalPath = pathname;
+    if (!!original.toString()) {
+      originalPath += `?${original.toString()}`;
+    }
     if (newPath === originalPath) return;
 
     // formが違う場合は、ページを更新して、データを再fetch
     router.push(newPath);
-  }, [input, pathname, searchParams, router]);
+  }, [debouncedInput, pathname, searchParams, router]);
 
   return (
     <div>
@@ -79,9 +88,14 @@ const SentenceForm = ({
                 hanzis={hanzis.filter((h) => h.form === form)}
                 selectedHanziId={selectedHanziIds[index]}
                 setSelectedHanziIds={setSelectedHanziIds}
+                sentence={sentences[form]}
               />
             ))}
         </div>
+        <SelectedHanzisMonitor
+          hanzis={hanzis}
+          selectedHanziIds={selectedHanziIds}
+        />
         <Button disabled={selectedHanziIds.some((id) => !id)}>submit</Button>
       </div>
       <Note />

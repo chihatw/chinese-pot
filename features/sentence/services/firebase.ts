@@ -37,6 +37,41 @@ export const getSentencesByIds = async (sentenceIds: string[]) => {
   return result;
 };
 
+export const getLatestSentenceByIds = async (sentenceIds: string[]) => {
+  // 引数がない
+  if (!sentenceIds.length) return undefined;
+
+  // 重複削除
+  const sentenceIds_uniq = [...new Set(sentenceIds)];
+
+  let result: Sentence | undefined = undefined;
+
+  for (let i = 0; i < sentenceIds_uniq.length; i += DOCUMENTID_COUNT_MAX) {
+    // DOCUMENTID_COUNT_MAX 毎にクエリを実行
+    const subSet = sentenceIds_uniq.slice(i, i + DOCUMENTID_COUNT_MAX);
+    console.log("get sentences by ids");
+    const snapshot = await dbAdmin
+      .collection(COLLECTION)
+      .withConverter(sentenceConverter)
+      .where(FieldPath.documentId(), "in", subSet)
+      .get();
+    const sentences: Sentence[] = snapshot.docs.map((doc) => doc.data());
+    const sentence: Sentence | undefined = sentences.length
+      ? sentences.sort((a, b) => b.createdAt - a.createdAt).at(0)
+      : undefined;
+    if (!!sentence) {
+      if (!result) {
+        result = sentence;
+        continue;
+      }
+      if (result.createdAt < sentence.createdAt) {
+        result = sentence;
+      }
+    }
+  }
+  return result;
+};
+
 export const batchAddSentences = async (sentences: Sentence[]) => {
   console.log("batch add sentences");
   const batch = dbAdmin.batch();

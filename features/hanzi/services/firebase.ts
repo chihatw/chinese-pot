@@ -1,7 +1,7 @@
 import { Pinyin } from "@/features/pinyin";
 import { dbAdmin } from "@/firebase/admin";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
-import { Hanzi, HanziMeta } from "..";
+import { Hanzi } from "..";
 
 const COLLECTION = "hanzis";
 const COLLECTION_META = "hanzisMeta";
@@ -37,17 +37,6 @@ export const addHanzi = async (hanzi: Hanzi) => {
     .withConverter(converter)
     .doc(hanzi.id)
     .set(hanzi);
-
-  console.log("set hanzi meta");
-  await dbAdmin
-    .collection(COLLECTION_META)
-    .withConverter(metaConverter)
-    .doc(hanzi.id)
-    .set({
-      id: hanzi.id,
-      createdAt: new Date().getTime(),
-      updatedAt: new Date().getTime(),
-    });
 };
 
 export const batchAddHanzis = async (hanzis: Hanzi[]) => {
@@ -56,17 +45,6 @@ export const batchAddHanzis = async (hanzis: Hanzi[]) => {
     batch.set(
       dbAdmin.collection(COLLECTION).withConverter(converter).doc(hanzi.id),
       hanzi,
-    );
-    batch.set(
-      dbAdmin
-        .collection(COLLECTION_META)
-        .withConverter(metaConverter)
-        .doc(hanzi.id),
-      {
-        id: hanzi.id,
-        createdAt: new Date().getTime(),
-        updatedAt: new Date().getTime(),
-      },
     );
   }
   console.log("batch add hanzis");
@@ -95,20 +73,5 @@ const converter: FirestoreDataConverter<Hanzi> = {
       vowel: pinyin.vowel,
       consonant: pinyin.consonant,
     };
-  },
-};
-
-const metaConverter: FirestoreDataConverter<HanziMeta> = {
-  fromFirestore(snapshot) {
-    const data = snapshot.data();
-    return {
-      id: snapshot.id,
-      createdAt: data.createdAt,
-      updatedAt: data.createdAt,
-    };
-  },
-  toFirestore(hanziMeta) {
-    const { id, ...other } = hanziMeta;
-    return other;
   },
 };

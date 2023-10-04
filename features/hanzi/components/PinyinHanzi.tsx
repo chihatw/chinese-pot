@@ -3,14 +3,16 @@ import { fontPinyin } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { buildToneMark } from "../services/util";
 
-const SentenceHanzi = ({
+const PinyinHanzi = ({
+  form,
+  textSize = "text-lg",
   pinyinStr,
   isHighlight,
-  form,
 }: {
+  form: string;
+  textSize?: string;
   pinyinStr: string;
   isHighlight?: boolean;
-  form: string;
 }) => {
   const pinyin = buildPinyin(pinyinStr);
   const mark = buildToneMark(pinyin?.tone);
@@ -32,7 +34,7 @@ const SentenceHanzi = ({
       <div
         className={cn(
           isHighlight ? "text-destructive" : "text-inherit",
-          "text-xl",
+          textSize,
         )}
       >
         {form}
@@ -41,4 +43,4 @@ const SentenceHanzi = ({
   );
 };
 
-export default SentenceHanzi;
+export default PinyinHanzi;

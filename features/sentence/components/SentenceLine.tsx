@@ -1,19 +1,21 @@
-import { SentenceHanzi } from "@/features/hanzi";
+import { PinyinHanzi } from "@/features/hanzi";
 import { Sentence } from "..";
 import { buildSentenceChars } from "../services/utils";
 
 const SentenceLine = ({
   sentence,
   highlight,
+  textSize,
 }: {
   sentence: Sentence;
   highlight: string;
+  textSize?: string;
 }) => {
   const sentenceChars = buildSentenceChars(sentence, highlight);
   return (
-    <div className="flex flex-wrap gap-1 rounded bg-white p-2">
+    <div className="flex flex-wrap gap-1 ">
       {sentenceChars.map((char, index) => (
-        <SentenceHanzi key={index} {...char} />
+        <PinyinHanzi key={index} {...char} textSize={textSize} />
       ))}
     </div>
   );

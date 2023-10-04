@@ -1,6 +1,7 @@
 "server only";
 import LinkButton from "@/components/LinkButton";
 import { getHanzisByForms } from "@/features/hanzi/services/firebase";
+import { getLastSentenceByForms } from "@/features/invertedIndex/services/firebase";
 import { SentenceForm } from "@/features/sentence";
 import { SENTENCE_FORM_KEY } from "@/features/sentence/constants";
 
@@ -15,10 +16,12 @@ const SentenceFormPage = async ({
   // forms に含まれる Hanzi を一度で取得
   const hanzis = forms_uniq.length ? await getHanzisByForms(forms_uniq) : [];
 
+  const sentences = await getLastSentenceByForms(forms_uniq);
+
   return (
     <div className="mx-auto w-full max-w-md space-y-10 pt-10">
       <LinkButton href="/">Back to Home</LinkButton>
-      <SentenceForm forms={forms} hanzis={hanzis} />
+      <SentenceForm forms={forms} hanzis={hanzis} sentences={sentences} />
     </div>
   );
 };

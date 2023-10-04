@@ -1,10 +1,10 @@
 import HanziForm from "./components/HanziForm";
 import HanziList from "./components/HanziList";
-import SentenceHanzi from "./components/SentenceHanzi";
-import { Hanzi, HanziMeta } from "./schema";
+import PinyinHanzi from "./components/PinyinHanzi";
+import { Hanzi } from "./schema";
 
 HanziList;
 
-export { HanziForm, HanziList, SentenceHanzi };
+export { HanziForm, HanziList, PinyinHanzi };
 
-export type { Hanzi, HanziMeta };
+export type { Hanzi };

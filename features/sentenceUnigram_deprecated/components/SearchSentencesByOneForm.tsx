@@ -1,11 +1,13 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { FORM_SEARCH_KEY } from "@/features/invertedIndex";
 import { Sentence } from "@/features/sentence";
+import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FORM_SEARCH_KEY } from "../constants";
+
 /**
  * 入力を search params に反映させて、サーバーサイド で fetch する。
  *
@@ -27,23 +29,27 @@ const SearchSentencesByOneForm = ({
   const searchParams = useSearchParams();
 
   const [input, setInput] = useState("");
+  const debouncesInput = useDebouce(input, 300);
   // ここに trpc を使えば、ページ更新せずに データを fetch することも可能
 
   useEffect(() => {
     // 入力から英字を削除
-    const _form = input.replace(/[a-zA-Z\+]/gi, "") || "";
+    const form = debouncesInput.replace(/[a-zA-Z\+]/gi, "") || "";
     const newPath = buildNewSearchParamsPath(
       FORM_SEARCH_KEY,
-      _form,
+      form,
       pathname,
       searchParams,
     );
+
+    let originalPath = pathname;
     const original = new URLSearchParams(Array.from(searchParams.entries()));
-    const originalPath = `${pathname}${original.toString()}`;
+    originalPath += `?${original.toString()}`;
+
     if (newPath === originalPath) return;
     // formが違う場合は、ページを更新して、データを再fetch
     router.push(newPath);
-  }, [input, searchParams, pathname, router]);
+  }, [debouncesInput, searchParams, pathname, router]);
 
   return (
     <div className="space-y-4">

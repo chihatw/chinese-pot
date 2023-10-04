@@ -1,4 +1,8 @@
-import { getSentencesByIds } from "@/features/sentence/services/firebase";
+import { Sentence } from "@/features/sentence";
+import {
+  getLatestSentenceByIds,
+  getSentencesByIds,
+} from "@/features/sentence/services/firebase";
 import { dbAdmin } from "@/firebase/admin";
 import { getIntersection } from "@/utils/utils";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
@@ -29,6 +33,7 @@ export const getInvertedIndexesCount = async () => {
   return snapshot.data().count;
 };
 
+// forms の並びで厳選するので、重複ありの forms を受け取る
 export const getSentencesByForms = async (
   forms: string,
 ): Promise<SearchResult> => {
@@ -87,6 +92,21 @@ const getSentenceIdsByForm = async (form: string) => {
     .where("form", "==", form)
     .get();
   return snapshot.docs.at(0)?.data().sentenceIds;
+};
+
+export const getLastSentenceByForms = async (forms_uniq: string[]) => {
+  const formSentenceIdsRelations =
+    await getFormSentenceIdsRelations(forms_uniq);
+
+  const result: { [form: string]: Sentence } = {};
+  for (const form of Object.keys(formSentenceIdsRelations)) {
+    const sentenceIds = formSentenceIdsRelations[form];
+    const sentence = await getLatestSentenceByIds(sentenceIds);
+    if (!!sentence) {
+      result[form] = sentence;
+    }
+  }
+  return result;
 };
 
 const invertedIndexConverter: FirestoreDataConverter<InvertedIndex> = {

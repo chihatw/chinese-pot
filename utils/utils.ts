@@ -13,6 +13,12 @@ export const buildNewSearchParamsPath = (
   } else {
     temp.delete(searchKey);
   }
+  for (const [key, value] of temp.entries()) {
+    // note: searchParamas の value からスペースを省く
+    if (!value.trim()) {
+      temp.delete(key);
+    }
+  }
   const search = temp.toString();
   const query = search ? `?${search}` : "";
   const newPath = `${pathname}${query}`;

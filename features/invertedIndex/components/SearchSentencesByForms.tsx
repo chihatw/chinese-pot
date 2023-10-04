@@ -1,5 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,22 +12,27 @@ const SearchSentencesByForms = ({ forms }: { forms: string }) => {
   const searchParams = useSearchParams();
 
   const [input, setInput] = useState(forms);
+  const debouncedInput = useDebouce(input, 300);
 
   useEffect(() => {
     // 入力から英字を削除
-    const _form = input.trim().replace(/[a-zA-Z]/gi, "") || "";
+    const form = debouncedInput.trim().replace(/[a-zA-Z]/gi, "") || "";
     const newPath = buildNewSearchParamsPath(
       FORM_SEARCH_KEY,
-      _form,
+      form,
       pathname,
       searchParams,
     );
+
+    let originalPath = pathname;
     const original = new URLSearchParams(Array.from(searchParams.entries()));
-    const originalPath = `${pathname}${original.toString()}`;
+    if (original.toString()) {
+      originalPath += `?${original.toString()}`;
+    }
     if (newPath === originalPath) return;
     // formが違う場合は、ページを更新して、データを再fetch
     router.push(newPath);
-  }, [input, searchParams, pathname, router]);
+  }, [debouncedInput, searchParams, pathname, router]);
 
   return (
     <div className="space-y-4">
