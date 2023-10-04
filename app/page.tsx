@@ -1,8 +1,9 @@
 "server only";
 
+import LinkButton from "@/components/LinkButton";
 import { RandomArticleSentences } from "@/features/article";
 import { getArticleCount } from "@/features/article/services/firebase";
-import { getHanzisCount } from "@/features/hanzi/services/firestore";
+import { getHanzisCount } from "@/features/hanzi/services/firebase";
 import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
 import {
   FORM_SEARCH_KEY,
@@ -71,7 +72,7 @@ export default async function Home({
           )}
         </pre>
       </div>
-
+      <LinkButton href="/sentenceForm">Sentence Form</LinkButton>
       <SearchSentencesByForms forms={forms} />
       <SearchResultList forms={forms} total={total} sentences={sentences} />
 
