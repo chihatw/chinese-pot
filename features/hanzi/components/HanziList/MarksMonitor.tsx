@@ -1,6 +1,6 @@
-import { Hanzi } from "../..";
+import { Hanzi_old } from "../..";
 
-const MarksMonitor = ({ marks }: { marks: Hanzi[] }) => {
+const MarksMonitor = ({ marks }: { marks: Hanzi_old[] }) => {
   return (
     <div>
       <div className="text-right text-sm font-extralight">

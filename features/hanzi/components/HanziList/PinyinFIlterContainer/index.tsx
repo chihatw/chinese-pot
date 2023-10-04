@@ -5,16 +5,16 @@ import { PinyinFilter } from "@/features/pinyin";
 import { buildPinyinFilter } from "@/features/pinyin/services/buildPinyin";
 import { fontSans } from "@/lib/fonts";
 import { useEffect, useState } from "react";
-import { Hanzi } from "../../..";
+import { Hanzi_old } from "../../..";
 import { filterPinyin } from "../../../services/util";
 import FilterMonitor from "./FilterMonitor";
 import VowelCardList from "./VowelCardList";
 
-const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
+const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
   const [input, setInput] = useState("");
   const [value, setValue] = useState<{
     filter: PinyinFilter;
-    filteredHanzis: Hanzi[];
+    filteredHanzis: Hanzi_old[];
   }>({
     filter: {
       vowels: [],

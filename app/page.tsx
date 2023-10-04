@@ -1,8 +1,8 @@
 "server only";
 
 import LinkButton from "@/components/LinkButton";
-import { RandomArticleSentences } from "@/features/article";
 import { getArticleCount } from "@/features/article/services/firebase";
+import HanziCount from "@/features/hanzi/components/HanziCount";
 import { getHanzisCount } from "@/features/hanzi/services/firebase";
 import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
 import {
@@ -72,13 +72,14 @@ export default async function Home({
           )}
         </pre>
       </div>
+      <HanziCount />
       <LinkButton href="/sentenceForm">Sentence Form</LinkButton>
       <SearchSentencesByForms forms={forms} />
       <SearchResultList forms={forms} total={total} sentences={sentences} />
 
       {/* <HanziList hanzis={hanzis} /> */}
       {/* <PinyinList /> */}
-      <RandomArticleSentences />
+      {/* <RandomArticleSentences /> */}
     </main>
   );
 }

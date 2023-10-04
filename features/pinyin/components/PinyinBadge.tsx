@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 import { Pinyin } from "..";
 import { isValidPinyin } from "../services/buildPinyin";
 import { pinyinColor } from "../services/pinyinColor";
+import { getPinyinStr } from "../services/utils";
 
-const PinyinBadge = ({ pinyin }: { pinyin: Pinyin | undefined }) => {
-  if (!pinyin || (!pinyin.consonant && !pinyin.vowel && !pinyin.consonant))
-    return null;
+const PinyinBadge = ({ pinyin }: { pinyin: Pinyin }) => {
+  if (!getPinyinStr(pinyin)) return null;
 
   return (
     <div

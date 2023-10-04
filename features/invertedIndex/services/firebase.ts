@@ -101,6 +101,7 @@ export const getLastSentenceByForms = async (forms_uniq: string[]) => {
   const result: { [form: string]: Sentence } = {};
   for (const form of Object.keys(formSentenceIdsRelations)) {
     const sentenceIds = formSentenceIdsRelations[form];
+
     const sentence = await getLatestSentenceByIds(sentenceIds);
     if (!!sentence) {
       result[form] = sentence;

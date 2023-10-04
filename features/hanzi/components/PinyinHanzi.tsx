@@ -15,7 +15,7 @@ const PinyinHanzi = ({
   isHighlight?: boolean;
 }) => {
   const pinyin = buildPinyin(pinyinStr);
-  const mark = buildToneMark(pinyin?.tone);
+  const mark = buildToneMark(pinyin.tone);
 
   return (
     <div className="relative flex flex-col items-center gap-y-0">

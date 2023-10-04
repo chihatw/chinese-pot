@@ -49,7 +49,7 @@ export const getLatestSentenceByIds = async (sentenceIds: string[]) => {
   for (let i = 0; i < sentenceIds_uniq.length; i += DOCUMENTID_COUNT_MAX) {
     // DOCUMENTID_COUNT_MAX 毎にクエリを実行
     const subSet = sentenceIds_uniq.slice(i, i + DOCUMENTID_COUNT_MAX);
-    console.log("get sentences by ids");
+    console.log("get sentences by ids for latest");
     const snapshot = await dbAdmin
       .collection(COLLECTION)
       .withConverter(sentenceConverter)

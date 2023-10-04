@@ -1,6 +1,6 @@
 import { Pinyin, PinyinBadge } from "..";
 
-const PinyinLine = ({ pinyins }: { pinyins: (Pinyin | undefined)[] }) => {
+const PinyinLine = ({ pinyins }: { pinyins: Pinyin[] }) => {
   return (
     <div className="flex flex-wrap gap-x-1 px-2">
       {pinyins.map((pinyin, index) => (

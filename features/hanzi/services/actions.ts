@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
-import { Hanzi } from "..";
+import { Hanzi_old } from "..";
 import { addHanzi } from "./firebase";
 
-export const addHanziAction = async (value: Hanzi) => {
+export const addHanziAction = async (value: Hanzi_old) => {
   await addHanzi(value);
   revalidatePath("/");
 };

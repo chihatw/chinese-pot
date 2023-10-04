@@ -1,7 +1,7 @@
 "use client";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Hanzi, PinyinHanzi } from "@/features/hanzi";
+import { Hanzi_old, PinyinHanzi } from "@/features/hanzi";
 import { Dispatch, SetStateAction } from "react";
 import { Sentence, SentenceLine } from "../..";
 
@@ -15,7 +15,7 @@ const FormMonitor = ({
 }: {
   index: number;
   form: string;
-  hanzis: Hanzi[];
+  hanzis: Hanzi_old[];
   selectedHanziId: string;
   setSelectedHanziIds: Dispatch<SetStateAction<string[]>>;
   sentence?: Sentence;

@@ -12,7 +12,7 @@ import {
   VOWEL_PAIRS,
 } from "..";
 
-export const buildPinyin = (value: string): Pinyin | undefined => {
+export const buildPinyin = (value: string): Pinyin => {
   // 最後尾が TONE かどうかチェック
   const tail = value.at(-1) || "";
   let tone = "";
@@ -157,7 +157,7 @@ export const isValidPinyin = ({ consonant, vowel, tone }: Pinyin) => {
 };
 
 export const buildPinyins = (value: string) => {
-  const pinyins: (Pinyin | undefined)[] = [];
+  const pinyins: Pinyin[] = [];
   const units = value.split("\u0020").filter(Boolean);
   for (const unit of units) {
     const pinyin = buildPinyin(unit);

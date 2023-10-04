@@ -7,7 +7,7 @@ import { buildPinyins } from "../services/buildPinyin";
 const PinyinForm = () => {
   const [value, setValue] = useState<{
     pinyinStr: string;
-    pinyins: (Pinyin | undefined)[];
+    pinyins: Pinyin[];
   }>({ pinyinStr: "", pinyins: [] });
 
   useEffect(() => {

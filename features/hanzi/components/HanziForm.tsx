@@ -7,17 +7,21 @@ import { useEffect, useState } from "react";
 
 import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
 
-import { Hanzi } from "..";
+import { Hanzi_old } from "..";
 import { addHanziAction } from "../services/actions";
 import { createNewHanzi, isValidHanziFormData } from "../services/util";
 
 const HanziForm = () => {
   const [value, setValue] = useState<
-    Pick<Hanzi, "form"> & {
+    Pick<Hanzi_old, "form"> & {
       pinyinStr: string;
-      pinyin: Pinyin | undefined;
+      pinyin: Pinyin;
     }
-  >({ pinyinStr: "", pinyin: undefined, form: "" });
+  >({
+    pinyinStr: "",
+    pinyin: { consonant: "", vowel: "", tone: "" },
+    form: "",
+  });
 
   useEffect(() => {
     const pinyin = buildPinyin(value.pinyinStr);
@@ -31,7 +35,11 @@ const HanziForm = () => {
     });
 
     addHanziAction(newHanzi);
-    setValue({ form: "", pinyin: undefined, pinyinStr: "" });
+    setValue({
+      form: "",
+      pinyin: { consonant: "", vowel: "", tone: "" },
+      pinyinStr: "",
+    });
   };
 
   return (
@@ -66,7 +74,7 @@ const HanziForm = () => {
           className="focus-visible:bg-main-600"
           disabled={!isValidHanziFormData(value.form, value.pinyin)}
         >
-          Create New Hanzi
+          Create New Hanzi_old
         </Button>
       </div>
     </form>

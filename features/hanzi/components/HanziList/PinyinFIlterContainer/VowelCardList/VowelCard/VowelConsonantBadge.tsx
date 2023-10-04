@@ -7,10 +7,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
-import { Hanzi } from "../../../../..";
+import { Hanzi_old } from "../../../../..";
 import { getCorrectVowel, getToneCounts } from "../../../../../services/util";
 
-const VowelConsonantBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
+const VowelConsonantBadge = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
   const hanzi = hanzis[0];
   const vowel = getCorrectVowel(hanzi.pinyin.vowel, hanzi.pinyin.consonant);
   const toneCounts = getToneCounts(hanzis);
@@ -53,7 +53,7 @@ const VowelConsonantBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
 
 export default VowelConsonantBadge;
 
-const Content = ({ hanzis }: { hanzis: Hanzi[] }) => {
+const Content = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
   const toneCounts = getToneCounts(hanzis);
   return (
     <div className="space-y-2">

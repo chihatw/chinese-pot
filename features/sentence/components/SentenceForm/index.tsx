@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Hanzi } from "@/features/hanzi";
+import { Hanzi_old } from "@/features/hanzi";
 import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -19,7 +19,7 @@ const SentenceForm = ({
   sentences,
 }: {
   forms: string;
-  hanzis: Hanzi[];
+  hanzis: Hanzi_old[];
   sentences: { [form: string]: Sentence };
 }) => {
   const router = useRouter();

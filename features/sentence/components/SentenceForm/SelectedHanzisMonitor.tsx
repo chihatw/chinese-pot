@@ -1,11 +1,11 @@
-import { Hanzi, PinyinHanzi } from "@/features/hanzi";
+import { Hanzi_old, PinyinHanzi } from "@/features/hanzi";
 
 const SelectedHanzisMonitor = ({
   selectedHanziIds,
   hanzis,
 }: {
   selectedHanziIds: string[];
-  hanzis: Hanzi[];
+  hanzis: Hanzi_old[];
 }) => {
   return (
     <div className="flex flex-wrap items-end gap-2 px-2">

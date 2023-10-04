@@ -12,8 +12,7 @@ const SentenceFormPage = async ({
 }) => {
   const forms = searchParams[SENTENCE_FORM_KEY]?.trim() || "";
   const forms_uniq = [...new Set(forms.split("").filter(Boolean))];
-
-  // forms に含まれる Hanzi を一度で取得
+  // forms に含まれる Hanzi_old を一度で取得
   const hanzis = forms_uniq.length ? await getHanzisByForms(forms_uniq) : [];
 
   const sentences = await getLastSentenceByForms(forms_uniq);

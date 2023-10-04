@@ -1,4 +1,4 @@
-import { Hanzi } from "../hanzi";
+import { Hanzi_old } from "../hanzi";
 import SeedsList from "./components/SeedsList";
 import HANZISJSON from "./hanzis.json";
 import SEEDJSON from "./lang-pot.midashi_zhs.json";
@@ -15,7 +15,7 @@ const ONE_CHAR_MULTI_YOMI = SEEDS.filter(
 
 const ONE_CHAR_ONE_YOMI = ONEYOMI as unknown as SimpleSeed[];
 
-const HANZIS = HANZISJSON as unknown as Omit<Hanzi, "id">[];
+const HANZIS = HANZISJSON as unknown as Omit<Hanzi_old, "id">[];
 
 export {
   HANZIS,

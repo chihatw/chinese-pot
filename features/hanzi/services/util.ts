@@ -1,7 +1,7 @@
 import { Pinyin, PinyinFilter, VOWEL_PAIRS } from "@/features/pinyin";
 import { isValidPinyin } from "@/features/pinyin/services/buildPinyin";
 import { nanoid } from "nanoid";
-import { Hanzi } from "..";
+import { Hanzi_old } from "..";
 
 export const isValidHanziFormData = (
   form: string,
@@ -14,8 +14,8 @@ export const isValidHanziFormData = (
   return true;
 };
 
-export const createNewHanzi = (value: Omit<Hanzi, "id">) => {
-  const newHanzi: Hanzi = {
+export const createNewHanzi = (value: Omit<Hanzi_old, "id">) => {
+  const newHanzi: Hanzi_old = {
     id: nanoid(8),
     form: value.form,
     pinyin: value.pinyin!,
@@ -23,7 +23,7 @@ export const createNewHanzi = (value: Omit<Hanzi, "id">) => {
   return newHanzi;
 };
 
-export const getConsonantCounts = (hanzis: Hanzi[]) => {
+export const getConsonantCounts = (hanzis: Hanzi_old[]) => {
   return hanzis.reduce(
     (acc, cur) => ({
       ...acc,
@@ -33,7 +33,7 @@ export const getConsonantCounts = (hanzis: Hanzi[]) => {
   );
 };
 
-export const getVowelCounts = (hanzis: Hanzi[]) => {
+export const getVowelCounts = (hanzis: Hanzi_old[]) => {
   return hanzis.reduce(
     (acc, cur) => {
       let vowel = cur.pinyin.vowel;
@@ -54,7 +54,7 @@ export const getVowelCounts = (hanzis: Hanzi[]) => {
   );
 };
 
-export const getToneCounts = (hanzis: Hanzi[]) => {
+export const getToneCounts = (hanzis: Hanzi_old[]) => {
   return hanzis.reduce(
     (acc, cur) => {
       return {
@@ -83,7 +83,7 @@ export const getCorrectVowel = (vowel: string, consonant: string) => {
   return vowel;
 };
 
-export const getHanzisByVowel = (hanzis: Hanzi[], vowel: string) => {
+export const getHanzisByVowel = (hanzis: Hanzi_old[], vowel: string) => {
   return hanzis.filter((hanzi) => {
     const target: string[] = [vowel];
     const pair = VOWEL_PAIRS[vowel];
@@ -92,7 +92,7 @@ export const getHanzisByVowel = (hanzis: Hanzi[], vowel: string) => {
   });
 };
 
-export const filterPinyin = (hanzi: Hanzi, filter: PinyinFilter) => {
+export const filterPinyin = (hanzi: Hanzi_old, filter: PinyinFilter) => {
   const pinyin = hanzi.pinyin;
 
   if (!!filter.consonants.length) {
@@ -110,14 +110,14 @@ export const filterPinyin = (hanzi: Hanzi, filter: PinyinFilter) => {
   return true;
 };
 
-export const buildFormUniqHanzis = (hanzis: Hanzi[]) => {
+export const buildFormUniqHanzis = (hanzis: Hanzi_old[]) => {
   return hanzis
     .map((i) => i.form)
     .filter((item, index, self) => self.indexOf(item) === index)
     .map((form) => hanzis.find((hanzi) => hanzi.form === form)!);
 };
 
-export const getDifferentTones = (db: Hanzi[], hanzi: Hanzi) => {
+export const getDifferentTones = (db: Hanzi_old[], hanzi: Hanzi_old) => {
   return db
     .filter(
       (item) =>
@@ -132,11 +132,11 @@ export const getDifferentTones = (db: Hanzi[], hanzi: Hanzi) => {
           ? [...acc[cur.pinyin.tone], cur]
           : [cur],
       }),
-      {} as { [key: string]: Hanzi[] },
+      {} as { [key: string]: Hanzi_old[] },
     );
 };
 
-export const getDifferentConsonants = (db: Hanzi[], hanzi: Hanzi) => {
+export const getDifferentConsonants = (db: Hanzi_old[], hanzi: Hanzi_old) => {
   // 弱母音
   const pair_key = Object.keys(VOWEL_PAIRS)
     .find((key) => VOWEL_PAIRS[key] === hanzi.pinyin.vowel)
@@ -157,7 +157,7 @@ export const getDifferentConsonants = (db: Hanzi[], hanzi: Hanzi) => {
         ? [...acc[cur.pinyin.consonant], cur]
         : [cur],
     }),
-    {} as { [key: string]: Hanzi[] },
+    {} as { [key: string]: Hanzi_old[] },
   );
 };
 

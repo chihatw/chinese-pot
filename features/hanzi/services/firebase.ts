@@ -1,7 +1,7 @@
 import { Pinyin } from "@/features/pinyin";
 import { dbAdmin } from "@/firebase/admin";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
-import { Hanzi } from "..";
+import { Hanzi_old } from "..";
 
 const COLLECTION = "hanzis";
 const COLLECTION_META = "hanzisMeta";
@@ -30,7 +30,7 @@ export const getHanzisByForms = async (forms: string[]) => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
-export const addHanzi = async (hanzi: Hanzi) => {
+export const addHanzi = async (hanzi: Hanzi_old) => {
   console.log("set hanzi");
   await dbAdmin
     .collection(COLLECTION)
@@ -39,7 +39,7 @@ export const addHanzi = async (hanzi: Hanzi) => {
     .set(hanzi);
 };
 
-export const batchAddHanzis = async (hanzis: Hanzi[]) => {
+export const batchAddHanzis = async (hanzis: Hanzi_old[]) => {
   const batch = dbAdmin.batch();
   for (const hanzi of hanzis) {
     batch.set(
@@ -51,7 +51,7 @@ export const batchAddHanzis = async (hanzis: Hanzi[]) => {
   await batch.commit();
 };
 
-const converter: FirestoreDataConverter<Hanzi> = {
+const converter: FirestoreDataConverter<Hanzi_old> = {
   fromFirestore(snapshot) {
     const data = snapshot.data();
     return {
