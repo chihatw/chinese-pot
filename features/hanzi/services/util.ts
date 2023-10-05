@@ -161,7 +161,7 @@ export const getDifferentConsonants = (db: Hanzi[], hanzi: Hanzi) => {
   );
 };
 
-export const buildToneMark = (tone?: string) => {
+export function buildToneMark(tone?: string) {
   switch (tone) {
     case "1":
       return "‾";
@@ -176,7 +176,7 @@ export const buildToneMark = (tone?: string) => {
     default:
       return "";
   }
-};
+}
 
 export const buildSentenceHanzis = () => {
   const sentences = SENTENCES;
