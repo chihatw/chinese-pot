@@ -26,6 +26,17 @@ export const getSentencesCount = async () => {
   return snapshot.data().count;
 };
 
+export const getLastTemSentences = async () => {
+  console.log("get last 10 sentences");
+  const snapshot = await dbAdmin
+    .collection(COLLECTION)
+    .withConverter(sentenceConverter)
+    .orderBy("createdAt", "desc")
+    .limit(10)
+    .get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 export const getSentencesByIds = async (sentenceIds: string[]) => {
   // 引数がない
   if (!sentenceIds.length) return [];
@@ -37,8 +48,10 @@ export const getSentencesByIds = async (sentenceIds: string[]) => {
 
   for (let i = 0; i < sentenceIds.length; i += DOCUMENTID_COUNT_MAX) {
     // DOCUMENTID_COUNT_MAX 毎にクエリを実行
-    const subSet = sentenceIds.slice(i, i + DOCUMENTID_COUNT_MAX);
-    console.log("get sentences by ids");
+    const subSet = sentenceIds
+      .slice(i, i + DOCUMENTID_COUNT_MAX)
+      .filter(Boolean);
+    if (!subSet.length) continue;
     const snapshot = await dbAdmin
       .collection(COLLECTION)
       .withConverter(sentenceConverter)
@@ -61,7 +74,11 @@ export const getLatestSentenceByIds = async (sentenceIds: string[]) => {
 
   for (let i = 0; i < sentenceIds_uniq.length; i += DOCUMENTID_COUNT_MAX) {
     // DOCUMENTID_COUNT_MAX 毎にクエリを実行
-    const subSet = sentenceIds_uniq.slice(i, i + DOCUMENTID_COUNT_MAX);
+    const subSet = sentenceIds_uniq
+      .slice(i, i + DOCUMENTID_COUNT_MAX)
+      .filter(Boolean);
+    if (!subSet.length) continue;
+
     console.log("get sentences by ids for latest");
     const snapshot = await dbAdmin
       .collection(COLLECTION)
@@ -157,7 +174,6 @@ export const getLastSentenceByForms = async (forms_uniq: string[]) => {
   return result;
 };
 
-// todo
 export const addSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
   // invertedIndexes
   const forms = [...new Set(sentence.text.split(""))];
@@ -196,12 +212,17 @@ export const addSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
   }
 
   for (const hanzi of hanzis) {
-    batch.update(
-      dbAdmin.collection("hanzis").withConverter(hanziConverter).doc(hanzi.id),
-      hanzi,
-    );
+    // note converter が機能せず、id や pinyin がそのまま 登録されるので、手動で変換
+    batch.update(dbAdmin.collection("hanzis").doc(hanzi.id), {
+      consonant: hanzi.pinyin.consonant,
+      count: hanzi.count,
+      form: hanzi.form,
+      latestSentenceId: hanzi.latestSentenceId,
+      tone: hanzi.pinyin.tone,
+      vowel: hanzi.pinyin.vowel,
+    });
   }
-  // todo sentence
+
   batch.set(
     dbAdmin
       .collection("sentences")
@@ -210,6 +231,51 @@ export const addSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
     sentence,
   );
   batch.commit();
+};
+
+export const removeSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
+  // invertedIndexes
+  const forms = [...new Set(sentence.text.split(""))];
+  const invertedIndexes = await getInvertedIndexesByForms(forms);
+
+  const batch = dbAdmin.batch();
+
+  for (const form of forms) {
+    const invertedIndex = invertedIndexes.find((i) => i.form === form);
+    if (!invertedIndex) throw new Error("invertedIndex cannot find");
+    batch.update(
+      dbAdmin
+        .collection("invertedIndexes")
+        .withConverter(invertedIndexConverter)
+        .doc(invertedIndex.id),
+      {
+        count: FieldValue.increment(-1),
+        sentenceIds: FieldValue.arrayRemove(sentence.id),
+      },
+    );
+  }
+
+  for (const hanzi of hanzis) {
+    batch.update(
+      dbAdmin.collection("hanzis").withConverter(hanziConverter).doc(hanzi.id),
+      {
+        count: FieldValue.increment(-1),
+        latestSentenceId: "",
+      },
+    );
+  }
+
+  batch.delete(
+    dbAdmin
+      .collection("sentences")
+      .withConverter(sentenceConverter)
+      .doc(sentence.id),
+  );
+  try {
+    batch.commit();
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const sentenceConverter: FirestoreDataConverter<Sentence> = {

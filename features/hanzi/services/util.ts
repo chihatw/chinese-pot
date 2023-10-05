@@ -230,15 +230,15 @@ const getLatestSentence = (sentenceIds: string[]) => {
     .at(0)!;
 };
 
-export const buildHanziId = (form: string, pinyin: Pinyin) => {
+export function buildHanziId(form: string, pinyin: Pinyin) {
   let id = form.charCodeAt(0).toString(16).padStart(5, "0");
   id += pinyin.consonant || EMPTY_PINYIN_MARK;
   id += pinyin.vowel || EMPTY_PINYIN_MARK;
   id += pinyin.tone || EMPTY_PINYIN_MARK;
   return id;
-};
+}
 
-export const buildHanziFromId = (hanziId: string) => {
+export function buildHanziFromId(hanziId: string) {
   const charCode_16 = hanziId.slice(0, 5).replace(/^0+/, "");
   const charCode = parseInt(charCode_16, 16);
   const char = String.fromCharCode(charCode);
@@ -254,7 +254,7 @@ export const buildHanziFromId = (hanziId: string) => {
     latestSentenceId: "",
   };
   return hanzi;
-};
+}
 
 export const buildHanzis = () => {
   const hanzis: Hanzi[] = [];

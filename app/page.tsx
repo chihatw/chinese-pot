@@ -1,15 +1,20 @@
 "server only";
 
-import LinkButton from "@/components/LinkButton";
 import { getArticleCount } from "@/features/article/services/firebase";
-import { HANZIS, HanziList } from "@/features/hanzi";
 import { getHanzisCount } from "@/features/hanzi/services/firebase";
 import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
-import { FORM_SEARCH_KEY } from "@/features/invertedIndex";
+import {
+  FORM_SEARCH_KEY,
+  SearchResultList,
+  SearchSentencesByForms,
+} from "@/features/invertedIndex";
 import { getInvertedIndexesCount } from "@/features/invertedIndex/services/firebase";
 import { BuildInvetedIndexesButton } from "@/features/invertedIndexSeed";
 
-import { getSentencesCount } from "@/features/sentence/services/firebase";
+import {
+  getSentencesByForms,
+  getSentencesCount,
+} from "@/features/sentence/services/firebase";
 import {
   BatchAddArticlesButton,
   BatchAddSentencesButton,
@@ -25,14 +30,14 @@ export default async function Home({
 }: {
   searchParams: { [FORM_SEARCH_KEY]?: string };
 }) {
-  // const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
+  const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
 
   const hanzisCount = await getHanzisCount();
   const articlesCount = await getArticleCount();
   const sentencesCount = await getSentencesCount();
   const invertedIndexesCount = await getInvertedIndexesCount();
 
-  // const { total, sentences } = await getSentencesByForms(forms);
+  const { total, sentences } = await getSentencesByForms(forms);
   return (
     <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-8 py-28 sm:mx-auto sm:w-[min(500px,100%-120px)]">
       <div className="rounded bg-yellow-100 bg-opacity-40 p-5">
@@ -65,11 +70,11 @@ export default async function Home({
           )}
         </pre>
       </div>
-      <LinkButton href="/sentenceForm">Sentence Form</LinkButton>
-      {/* <SearchSentencesByForms forms={forms} /> */}
-      {/* <SearchResultList forms={forms} total={total} sentences={sentences} /> */}
 
-      <HanziList hanzis={HANZIS} />
+      <SearchSentencesByForms forms={forms} />
+      <SearchResultList forms={forms} total={total} sentences={sentences} />
+
+      {/* <HanziList hanzis={HANZIS} /> */}
       {/* <PinyinList /> */}
       {/* <RandomArticleSentences /> */}
     </main>

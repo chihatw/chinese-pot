@@ -1,5 +1,4 @@
 "server only";
-import LinkButton from "@/components/LinkButton";
 import { getHanzisByForms } from "@/features/hanzi/services/firebase";
 import { SentenceForm } from "@/features/sentence";
 import { SENTENCE_FORM_KEY } from "@/features/sentence/constants";
@@ -21,8 +20,7 @@ const SentenceFormPage = async ({
   const sentences = await getSentencesByIds(latestSentenceIds);
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-10 pt-10">
-      <LinkButton href="/">Back to Home</LinkButton>
+    <div className="mx-auto w-full max-w-md  pt-10">
       <SentenceForm forms={forms} hanzis={hanzis} sentences={sentences} />
     </div>
   );

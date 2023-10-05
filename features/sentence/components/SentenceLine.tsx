@@ -8,10 +8,10 @@ const SentenceLine = ({
   textSize,
 }: {
   sentence: Sentence;
-  highlight: string;
+  highlight?: string;
   textSize?: string;
 }) => {
-  const sentenceChars = buildSentenceChars(sentence, highlight);
+  const sentenceChars = buildSentenceChars(sentence, highlight || "");
   return (
     <div className="flex flex-wrap gap-1 ">
       {sentenceChars.map((char, index) => (
