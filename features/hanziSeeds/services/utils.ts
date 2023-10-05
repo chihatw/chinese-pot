@@ -15,11 +15,3 @@ export const buildHanzi = (seed: SimpleSeed) => {
 
   return hanzi;
 };
-
-export const buildHanziId = (hanzi: Omit<Hanzi_old, "id">) => {
-  let id = hanzi.form.charCodeAt(0).toString(16).padStart(5, "0");
-  id += hanzi.pinyin.consonant || "_";
-  id += hanzi.pinyin.vowel || "_";
-  id += hanzi.pinyin.tone || "_";
-  return id;
-};

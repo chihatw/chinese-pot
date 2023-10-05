@@ -2,7 +2,7 @@
 
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { useToast } from "@/components/ui/use-toast";
-import { HANZIS } from "..";
+import { HANZIS } from "@/features/hanzi";
 import { batchAddHanzisAction } from "../services/actions";
 
 const BatchAddHanzisButton = () => {

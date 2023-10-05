@@ -1,7 +1,13 @@
 import { Pinyin, PinyinFilter, VOWEL_PAIRS } from "@/features/pinyin";
-import { isValidPinyin } from "@/features/pinyin/services/buildPinyin";
+import {
+  buildPinyin,
+  isValidPinyin,
+} from "@/features/pinyin/services/buildPinyin";
+import { SENTENCES } from "@/features/sentenceSeeds";
 import { nanoid } from "nanoid";
-import { Hanzi_old } from "..";
+import { HANZI_SENTENCE_RELATIONS, Hanzi_old } from "..";
+import { EMPTY_PINYIN_MARK } from "../constants";
+import { Hanzi } from "../schema";
 
 export const isValidHanziFormData = (
   form: string,
@@ -176,4 +182,104 @@ export const buildToneMark = (tone?: string) => {
     default:
       return "";
   }
+};
+
+export const buildSentenceHanzis = () => {
+  const sentences = SENTENCES;
+
+  const result: {
+    sentenceId: string;
+    hanziId: string;
+  }[] = [];
+
+  for (const sentence of sentences) {
+    const chars = sentence.text.split("");
+    const pinyinStrs = sentence.pinyinsStr.split(" ");
+    if (chars.length === pinyinStrs.length) {
+      for (let i = 0; i < chars.length; i++) {
+        const form = chars[i];
+        const pinyinStr = pinyinStrs[i];
+        const hanzi = {
+          form,
+          pinyin: buildPinyin(pinyinStr),
+        };
+        const hanziId = buildHanziId(hanzi.form, hanzi.pinyin);
+        result.push({
+          sentenceId: sentence.id,
+          hanziId,
+        });
+      }
+    } else {
+      console.log(`something wrong: ${JSON.stringify(sentence)}`);
+    }
+  }
+  return result;
+};
+
+export const buildHanziSentenceRelations = () => {
+  const sentenceId_hanziIds = buildSentenceHanzis();
+
+  return sentenceId_hanziIds.reduce(
+    (acc, cur) => {
+      acc[cur.hanziId] = acc[cur.hanziId]
+        ? [...acc[cur.hanziId], cur.sentenceId] // 重複そのまま
+        : [cur.sentenceId];
+      return acc;
+    },
+    {} as { [key: string]: string[] },
+  );
+};
+
+const getLatestSentence = (sentenceIds: string[]) => {
+  return SENTENCES.filter((s) => sentenceIds.includes(s.id))
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .at(0)!;
+};
+
+export const buildHanzis = () => {
+  const hanzis: Hanzi[] = [];
+  const relations = HANZI_SENTENCE_RELATIONS;
+
+  for (const hanziId of Object.keys(relations)) {
+    const sentenceIds = relations[hanziId];
+    const sentence = getLatestSentence(sentenceIds);
+
+    const { form, pinyin } = buildHanziFromId(hanziId);
+
+    const hanzi: Hanzi = {
+      id: hanziId,
+      form,
+      pinyin,
+      count: sentenceIds.length,
+      latestSentenceId: sentence.id,
+    };
+    hanzis.push(hanzi);
+  }
+  return hanzis;
+};
+
+export const buildHanziId = (form: string, pinyin: Pinyin) => {
+  let id = form.charCodeAt(0).toString(16).padStart(5, "0");
+  id += pinyin.consonant || EMPTY_PINYIN_MARK;
+  id += pinyin.vowel || EMPTY_PINYIN_MARK;
+  id += pinyin.tone || EMPTY_PINYIN_MARK;
+  return id;
+};
+
+export const buildHanziFromId = (hanziId: string) => {
+  const charCode_16 = hanziId.slice(0, 5).replace(/^0+/, "");
+  const charCode = parseInt(charCode_16, 16);
+  const char = String.fromCharCode(charCode);
+
+  const regexPattern = new RegExp(EMPTY_PINYIN_MARK, "g");
+
+  const pinyinStr = hanziId.substring(5).replace(regexPattern, "");
+  const hanzi: Hanzi = {
+    id: hanziId,
+    form: char,
+    pinyin: buildPinyin(pinyinStr),
+    count: 0,
+    latestSentenceId: "",
+  };
+  return hanzi;
 };

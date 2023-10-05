@@ -7,3 +7,11 @@ export interface Hanzi_old {
   form: string;
   pinyin: Pinyin;
 }
+
+export interface Hanzi {
+  id: string;
+  form: string;
+  pinyin: Pinyin;
+  count: number;
+  latestSentenceId: string;
+}

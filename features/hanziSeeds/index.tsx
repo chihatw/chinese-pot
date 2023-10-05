@@ -1,6 +1,6 @@
 import { Hanzi_old } from "../hanzi";
 import SeedsList from "./components/SeedsList";
-import HANZISJSON from "./hanzis.json";
+import HANZIS_JSON from "./hanzis.json";
 import SEEDJSON from "./lang-pot.midashi_zhs.json";
 import ONEYOMI from "./one_yomi.json";
 import { Seed, SimpleSeed } from "./schema";
@@ -15,10 +15,10 @@ const ONE_CHAR_MULTI_YOMI = SEEDS.filter(
 
 const ONE_CHAR_ONE_YOMI = ONEYOMI as unknown as SimpleSeed[];
 
-const HANZIS = HANZISJSON as unknown as Omit<Hanzi_old, "id">[];
+const HANZIS_OLD = HANZIS_JSON as unknown as Omit<Hanzi_old, "id">[];
 
 export {
-  HANZIS,
+  HANZIS_OLD,
   MULTI_CHAR_SEEDS,
   ONE_CHAR_MULTI_YOMI,
   ONE_CHAR_ONE_YOMI,
