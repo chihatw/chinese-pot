@@ -3,8 +3,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { PinyinFilter } from "@/features/pinyin";
 import React, { useState } from "react";
-import { Hanzi_old } from "../../../..";
-import { getHanzisByVowel, getVowelCounts } from "../../../../services/util";
+import { Hanzi, getHanzisByVowel, getVowelCounts } from "../../../..";
+
 import FormsMonitor from "../../FormsMonitor";
 import VowelCard from "./VowelCard";
 
@@ -12,7 +12,7 @@ export const VowelCardList = React.memo(function Arrow_function_occurs_error({
   hanzis,
   filter,
 }: {
-  hanzis: Hanzi_old[];
+  hanzis: Hanzi[];
   filter: PinyinFilter;
 }) {
   const vowelCounts = getVowelCounts(hanzis);

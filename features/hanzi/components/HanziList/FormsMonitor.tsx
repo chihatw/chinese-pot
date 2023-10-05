@@ -6,11 +6,11 @@ import {
 } from "@/components/ui/hover-card";
 import { PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
-import { Hanzi_old } from "../..";
+import { Hanzi } from "../..";
 import { buildFormUniqHanzis } from "../../services/util";
 import { useHanzis } from "./HanzisContextProvider";
 
-const FormsMonitor = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
+const FormsMonitor = ({ hanzis }: { hanzis: Hanzi[] }) => {
   hanzis = buildFormUniqHanzis(hanzis);
 
   if (hanzis.length > 50) return null;
@@ -25,7 +25,7 @@ const FormsMonitor = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
 
 export default FormsMonitor;
 
-const FormPane = ({ hanzi }: { hanzi: Hanzi_old }) => {
+const FormPane = ({ hanzi }: { hanzi: Hanzi }) => {
   const { hanzis } = useHanzis();
   const sameForms = hanzis.filter((_hanzi) => _hanzi.form === hanzi.form);
   return (

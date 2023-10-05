@@ -7,13 +7,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { PinyinBadge, VOWEL_PAIRS } from "@/features/pinyin";
 
-import { Hanzi_old } from "../../../../..";
+import { Hanzi } from "../../../../..";
 import {
   getConsonantCounts,
   getCorrectVowel,
 } from "../../../../../services/util";
 
-const VowelToneBadge = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
+const VowelToneBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const hanzi = hanzis.at(0)!;
   // 母音が弱母音の語頭形の場合は、語中形に直す
   const pair_key = Object.keys(VOWEL_PAIRS).find(
@@ -47,7 +47,7 @@ const VowelToneBadge = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
 
 export default VowelToneBadge;
 
-const Content = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
+const Content = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const consonantCounts = getConsonantCounts(hanzis);
   return (
     <div className="max-h-[300px] space-y-2 overflow-y-scroll ">

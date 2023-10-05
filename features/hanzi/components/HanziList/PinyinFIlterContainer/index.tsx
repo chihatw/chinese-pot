@@ -1,20 +1,21 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+
+import { filterPinyin } from "@/features/hanzi/services/util";
 import { PinyinFilter } from "@/features/pinyin";
 import { buildPinyinFilter } from "@/features/pinyin/services/buildPinyin";
 import { fontSans } from "@/lib/fonts";
 import { useEffect, useState } from "react";
-import { Hanzi_old } from "../../..";
-import { filterPinyin } from "../../../services/util";
+import { Hanzi } from "../../..";
 import FilterMonitor from "./FilterMonitor";
 import VowelCardList from "./VowelCardList";
 
-const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
+const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const [input, setInput] = useState("");
   const [value, setValue] = useState<{
     filter: PinyinFilter;
-    filteredHanzis: Hanzi_old[];
+    filteredHanzis: Hanzi[];
   }>({
     filter: {
       vowels: [],
@@ -26,6 +27,7 @@ const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
 
   useEffect(() => {
     const filter = buildPinyinFilter(input);
+    // console.log({ filter });
     const filteredHanzis = hanzis.filter((hanzi) =>
       filterPinyin(hanzi, filter),
     );

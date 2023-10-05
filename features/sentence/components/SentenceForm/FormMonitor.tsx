@@ -1,24 +1,26 @@
 "use client";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Hanzi_old, PinyinHanzi } from "@/features/hanzi";
+import { PinyinHanzi } from "@/features/hanzi";
+import { Hanzi } from "@/features/hanzi/schema";
 import { Dispatch, SetStateAction } from "react";
 import { Sentence, SentenceLine } from "../..";
+import { buildHanzisFromSentence } from "../../services/utils";
 
 const FormMonitor = ({
   index,
   form,
   hanzis,
-  sentence,
+  sentences,
   selectedHanziId,
   setSelectedHanziIds,
 }: {
   index: number;
   form: string;
-  hanzis: Hanzi_old[];
+  hanzis: Hanzi[];
   selectedHanziId: string;
   setSelectedHanziIds: Dispatch<SetStateAction<string[]>>;
-  sentence?: Sentence;
+  sentences: Sentence[];
 }) => {
   const handleValueChange = (value: string) => {
     setSelectedHanziIds((prev) => {
@@ -34,6 +36,14 @@ const FormMonitor = ({
           {hanzis.map((hanzi) => {
             const pinyinSrt =
               hanzi.pinyin.consonant + hanzi.pinyin.vowel + hanzi.pinyin.tone;
+
+            const sentence = sentences
+              .filter((s) => {
+                const hanzis = buildHanzisFromSentence(s);
+                hanzis.map((h) => h.id).includes(hanzi.id);
+                return hanzis.map((h) => h.id).includes(hanzi.id);
+              })
+              .at(0);
             return (
               <div key={hanzi.id} className="flex items-center gap-2 ">
                 <div className="grid grid-cols-[auto,36px] items-center gap-2 rounded bg-white px-4 py-2">

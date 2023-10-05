@@ -1,9 +1,9 @@
-import { Hanzi_old } from "@/features/hanzi";
+import { Hanzi } from "@/features/hanzi";
 import { getDifferentConsonants } from "@/features/hanzi/services/util";
 import { PinyinBadge } from "@/features/pinyin";
 import { useHanzis } from "../HanzisContextProvider";
 
-const DifferentConsonants = ({ hanzi }: { hanzi: Hanzi_old }) => {
+const DifferentConsonants = ({ hanzi }: { hanzi: Hanzi }) => {
   const { hanzis: db } = useHanzis();
   const differentConsonants = getDifferentConsonants(db, hanzi);
 

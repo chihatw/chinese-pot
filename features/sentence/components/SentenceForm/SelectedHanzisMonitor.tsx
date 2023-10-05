@@ -1,11 +1,12 @@
-import { Hanzi_old, PinyinHanzi } from "@/features/hanzi";
+import { Hanzi, PinyinHanzi } from "@/features/hanzi";
+import { getPinyinStr } from "@/features/pinyin/services/utils";
 
 const SelectedHanzisMonitor = ({
   selectedHanziIds,
   hanzis,
 }: {
   selectedHanziIds: string[];
-  hanzis: Hanzi_old[];
+  hanzis: Hanzi[];
 }) => {
   return (
     <div className="flex flex-wrap items-end gap-2 px-2">
@@ -19,9 +20,7 @@ const SelectedHanzisMonitor = ({
           <div key={hanziId}>
             <PinyinHanzi
               form={hanzi.form}
-              pinyinStr={
-                hanzi.pinyin.consonant + hanzi.pinyin.vowel + hanzi.pinyin.tone
-              }
+              pinyinStr={getPinyinStr(hanzi.pinyin)}
             />
           </div>
         );

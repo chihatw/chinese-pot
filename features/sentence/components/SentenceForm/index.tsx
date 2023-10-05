@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Hanzi_old } from "@/features/hanzi";
+
+import { Hanzi } from "@/features/hanzi";
 import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -19,8 +20,8 @@ const SentenceForm = ({
   sentences,
 }: {
   forms: string;
-  hanzis: Hanzi_old[];
-  sentences: { [form: string]: Sentence };
+  hanzis: Hanzi[];
+  sentences: Sentence[];
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -80,17 +81,20 @@ const SentenceForm = ({
         <div className="space-y-4">
           {(input.trim().replace(/[a-zA-Z]/gi, "") || "")
             .split("")
-            .map((form, index) => (
-              <FormMonitor
-                key={index}
-                index={index}
-                form={form}
-                hanzis={hanzis.filter((h) => h.form === form)}
-                selectedHanziId={selectedHanziIds[index]}
-                setSelectedHanziIds={setSelectedHanziIds}
-                sentence={sentences[form]}
-              />
-            ))}
+            .map((form, index) => {
+              const filteredHanzis = hanzis.filter((h) => h.form === form);
+              return (
+                <FormMonitor
+                  key={index}
+                  index={index}
+                  form={form}
+                  sentences={sentences}
+                  hanzis={filteredHanzis}
+                  selectedHanziId={selectedHanziIds[index]}
+                  setSelectedHanziIds={setSelectedHanziIds}
+                />
+              );
+            })}
         </div>
         <SelectedHanzisMonitor
           hanzis={hanzis}

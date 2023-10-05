@@ -1,3 +1,6 @@
+import { Hanzi, buildHanziId } from "@/features/hanzi";
+
+import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
 import { Sentence } from "..";
 
 type SentenceChar = {
@@ -34,4 +37,21 @@ const buildIsHighlights = (text: string, highlight: string) => {
       // Boolean で置換する
       .map((i) => i == "t")
   );
+};
+
+export const buildHanzisFromSentence = (sentence: Sentence): Hanzi[] => {
+  const forms = sentence.text.split("");
+  const pinyinStrs = sentence.pinyinsStr.split(" ");
+  if (forms.length !== pinyinStrs.length)
+    throw new Error(`invalid sentence: ${JSON.stringify(sentence, null, 2)}`);
+  return forms.map((form, index) => {
+    const pinyin = buildPinyin(pinyinStrs[index]);
+    return {
+      id: buildHanziId(form, pinyin),
+      form,
+      pinyin: buildPinyin(pinyinStrs[index]),
+      count: 0,
+      latestSentenceId: "",
+    };
+  });
 };

@@ -4,10 +4,8 @@ import {
   isValidPinyin,
 } from "@/features/pinyin/services/buildPinyin";
 import { SENTENCES } from "@/features/sentenceSeeds";
-import { nanoid } from "nanoid";
-import { HANZI_SENTENCE_RELATIONS, Hanzi_old } from "..";
+import { HANZI_SENTENCE_RELATIONS, Hanzi } from "..";
 import { EMPTY_PINYIN_MARK } from "../constants";
-import { Hanzi } from "../schema";
 
 export const isValidHanziFormData = (
   form: string,
@@ -20,16 +18,7 @@ export const isValidHanziFormData = (
   return true;
 };
 
-export const createNewHanzi = (value: Omit<Hanzi_old, "id">) => {
-  const newHanzi: Hanzi_old = {
-    id: nanoid(8),
-    form: value.form,
-    pinyin: value.pinyin!,
-  };
-  return newHanzi;
-};
-
-export const getConsonantCounts = (hanzis: Hanzi_old[]) => {
+export function getConsonantCounts(hanzis: Hanzi[]) {
   return hanzis.reduce(
     (acc, cur) => ({
       ...acc,
@@ -37,9 +26,9 @@ export const getConsonantCounts = (hanzis: Hanzi_old[]) => {
     }),
     {} as { [key: string]: number },
   );
-};
+}
 
-export const getVowelCounts = (hanzis: Hanzi_old[]) => {
+export function getVowelCounts(hanzis: Hanzi[]) {
   return hanzis.reduce(
     (acc, cur) => {
       let vowel = cur.pinyin.vowel;
@@ -58,9 +47,9 @@ export const getVowelCounts = (hanzis: Hanzi_old[]) => {
     },
     {} as { [key: string]: number },
   );
-};
+}
 
-export const getToneCounts = (hanzis: Hanzi_old[]) => {
+export function getToneCounts(hanzis: Hanzi[]) {
   return hanzis.reduce(
     (acc, cur) => {
       return {
@@ -70,9 +59,9 @@ export const getToneCounts = (hanzis: Hanzi_old[]) => {
     },
     {} as { [key: string]: number },
   );
-};
+}
 
-export const getCorrectVowel = (vowel: string, consonant: string) => {
+export function getCorrectVowel(vowel: string, consonant: string) {
   const pair_value = VOWEL_PAIRS[vowel];
   const pair_key = Object.keys(VOWEL_PAIRS).find(
     (key) => VOWEL_PAIRS[key] === vowel,
@@ -87,18 +76,18 @@ export const getCorrectVowel = (vowel: string, consonant: string) => {
   }
 
   return vowel;
-};
+}
 
-export const getHanzisByVowel = (hanzis: Hanzi_old[], vowel: string) => {
+export function getHanzisByVowel(hanzis: Hanzi[], vowel: string) {
   return hanzis.filter((hanzi) => {
     const target: string[] = [vowel];
     const pair = VOWEL_PAIRS[vowel];
     !!pair && target.push(pair);
     return target.includes(hanzi.pinyin.vowel);
   });
-};
+}
 
-export const filterPinyin = (hanzi: Hanzi_old, filter: PinyinFilter) => {
+export function filterPinyin(hanzi: Hanzi, filter: PinyinFilter) {
   const pinyin = hanzi.pinyin;
 
   if (!!filter.consonants.length) {
@@ -114,16 +103,16 @@ export const filterPinyin = (hanzi: Hanzi_old, filter: PinyinFilter) => {
   }
 
   return true;
-};
+}
 
-export const buildFormUniqHanzis = (hanzis: Hanzi_old[]) => {
+export function buildFormUniqHanzis(hanzis: Hanzi[]) {
   return hanzis
     .map((i) => i.form)
     .filter((item, index, self) => self.indexOf(item) === index)
     .map((form) => hanzis.find((hanzi) => hanzi.form === form)!);
-};
+}
 
-export const getDifferentTones = (db: Hanzi_old[], hanzi: Hanzi_old) => {
+export const getDifferentTones = (db: Hanzi[], hanzi: Hanzi) => {
   return db
     .filter(
       (item) =>
@@ -138,24 +127,29 @@ export const getDifferentTones = (db: Hanzi_old[], hanzi: Hanzi_old) => {
           ? [...acc[cur.pinyin.tone], cur]
           : [cur],
       }),
-      {} as { [key: string]: Hanzi_old[] },
+      {} as { [key: string]: Hanzi[] },
     );
 };
 
-export const getDifferentConsonants = (db: Hanzi_old[], hanzi: Hanzi_old) => {
-  // 弱母音
-  const pair_key = Object.keys(VOWEL_PAIRS)
-    .find((key) => VOWEL_PAIRS[key] === hanzi.pinyin.vowel)
-    ?.at(0);
+export const getDifferentConsonants = (db: Hanzi[], hanzi: Hanzi) => {
+  // hanzi が語頭と語中で形の変わる母音の語中の形の場合、語頭の形を取得する
+  const pair_key = Object.keys(VOWEL_PAIRS).find(
+    (key) => VOWEL_PAIRS[key] === hanzi.pinyin.vowel,
+  );
+
+  // 同様に、hanzi が語頭と語中で形の変わる母音の語頭の形の場合、語中の形も取得する
   const pair_value = VOWEL_PAIRS[hanzi.pinyin.vowel];
 
-  let differentConsonants = db.filter(
+  // hanzi のリストから母音が同じものを厳選する
+  // ただし、語頭形がある場合、語中形がある場合は、それも母音に含める
+  const differentConsonants = db.filter(
     (item) =>
       [hanzi.pinyin.vowel, pair_key, pair_value].includes(item.pinyin.vowel) &&
       item.pinyin.tone === hanzi.pinyin.tone &&
       item.form !== hanzi.form,
   );
 
+  // 抽出された hanzi を子音ごとにまとめる
   return differentConsonants.reduce(
     (acc, cur) => ({
       ...acc,
@@ -163,7 +157,7 @@ export const getDifferentConsonants = (db: Hanzi_old[], hanzi: Hanzi_old) => {
         ? [...acc[cur.pinyin.consonant], cur]
         : [cur],
     }),
-    {} as { [key: string]: Hanzi_old[] },
+    {} as { [key: string]: Hanzi[] },
   );
 };
 
@@ -236,28 +230,6 @@ const getLatestSentence = (sentenceIds: string[]) => {
     .at(0)!;
 };
 
-export const buildHanzis = () => {
-  const hanzis: Hanzi[] = [];
-  const relations = HANZI_SENTENCE_RELATIONS;
-
-  for (const hanziId of Object.keys(relations)) {
-    const sentenceIds = relations[hanziId];
-    const sentence = getLatestSentence(sentenceIds);
-
-    const { form, pinyin } = buildHanziFromId(hanziId);
-
-    const hanzi: Hanzi = {
-      id: hanziId,
-      form,
-      pinyin,
-      count: sentenceIds.length,
-      latestSentenceId: sentence.id,
-    };
-    hanzis.push(hanzi);
-  }
-  return hanzis;
-};
-
 export const buildHanziId = (form: string, pinyin: Pinyin) => {
   let id = form.charCodeAt(0).toString(16).padStart(5, "0");
   id += pinyin.consonant || EMPTY_PINYIN_MARK;
@@ -282,4 +254,26 @@ export const buildHanziFromId = (hanziId: string) => {
     latestSentenceId: "",
   };
   return hanzi;
+};
+
+export const buildHanzis = () => {
+  const hanzis: Hanzi[] = [];
+  const relations = HANZI_SENTENCE_RELATIONS;
+
+  for (const hanziId of Object.keys(relations)) {
+    const sentenceIds = relations[hanziId];
+    const sentence = getLatestSentence(sentenceIds);
+
+    const { form, pinyin } = buildHanziFromId(hanziId);
+
+    const hanzi: Hanzi = {
+      id: hanziId,
+      form,
+      pinyin,
+      count: sentenceIds.length,
+      latestSentenceId: sentence.id,
+    };
+    hanzis.push(hanzi);
+  }
+  return hanzis;
 };

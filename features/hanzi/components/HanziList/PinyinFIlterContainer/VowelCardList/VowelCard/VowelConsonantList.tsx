@@ -1,8 +1,8 @@
-import { Hanzi_old } from "../../../../..";
+import { Hanzi } from "@/features/hanzi";
 import { getConsonantCounts } from "../../../../../services/util";
 import VowelConsonantBadge from "./VowelConsonantBadge";
 
-const VowelConsonantList = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
+const VowelConsonantList = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const consonantCounts = getConsonantCounts(hanzis);
   return (
     <div className="flex flex-wrap gap-2">

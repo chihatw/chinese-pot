@@ -1,12 +1,12 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Hanzi_old } from "@/features/hanzi";
+import { Hanzi } from "@/features/hanzi";
 import { fontSans } from "@/lib/fonts";
 import { useState } from "react";
 import DifferentConsonants from "./DifferentConsonants";
 import DifferentTones from "./DifferentTones";
 
-const FormFilterContainer = ({ hanzis }: { hanzis: Hanzi_old[] }) => {
+const FormFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const [input, setInput] = useState("");
 
   const filteredHanzis = hanzis.filter((hanzi) => hanzi.form === input);

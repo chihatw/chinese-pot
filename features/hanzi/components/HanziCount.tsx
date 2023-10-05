@@ -4,11 +4,11 @@ import { buildHanzis } from "../services/util";
 const HanziCount = () => {
   const hanzis = buildHanzis();
 
-  const result = true ? hanzis : {};
+  const result = false ? hanzis : {};
 
   return (
-    <div>
-      <div className="text-4xl font-bold">Hanzi_old Count</div>
+    <div className="space-y-10">
+      <div className="text-4xl font-bold">Hanzi Count</div>
       <ExportJSONButton jsonText={JSON.stringify(result)} />
     </div>
   );

@@ -12,6 +12,8 @@ const HANZI_TYPE = {
   id: "string",
   form: "string",
   pinyin: "Pinyin",
+  count: "number",
+  latestSentenceId: "string",
 };
 
 const INVERTED_INDEX = {
@@ -23,7 +25,7 @@ const INVERTED_INDEX = {
 
 const TYPES = {
   Sentence: SENTENCE_TYPE,
-  Hanzi_old: HANZI_TYPE,
+  Hanzi: HANZI_TYPE,
   "Inverted Index": INVERTED_INDEX,
 };
 

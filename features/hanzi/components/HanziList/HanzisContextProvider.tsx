@@ -1,8 +1,8 @@
 "use client";
 import { ReactNode, createContext, useContext } from "react";
-import { Hanzi_old } from "../..";
+import { Hanzi } from "../..";
 
-type HanzisContext = { hanzis: Hanzi_old[] };
+type HanzisContext = { hanzis: Hanzi[] };
 
 const HanzisContext = createContext<HanzisContext | null>(null);
 
@@ -17,7 +17,7 @@ const HanzisContextProvider = ({
   hanzis,
 }: {
   children: ReactNode;
-  hanzis: Hanzi_old[];
+  hanzis: Hanzi[];
 }) => {
   return (
     <HanzisContext.Provider value={{ hanzis }}>

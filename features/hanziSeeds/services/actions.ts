@@ -1,6 +1,6 @@
 "use server";
 
-import { Hanzi } from "@/features/hanzi/schema";
+import { Hanzi } from "@/features/hanzi";
 import { batchAddHanzis } from "@/features/hanzi/services/firebase";
 import { revalidatePath } from "next/cache";
 
