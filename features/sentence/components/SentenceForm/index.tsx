@@ -15,7 +15,6 @@ import { SENTENCE_FORM_KEY } from "../../constants";
 import { addSentenceAction } from "../../services/actions";
 import { buildSentenceFromHanzis, updateHanzis } from "../../services/utils";
 import FormMonitor from "./FormMonitor";
-import Note from "./Note";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
 
 const SentenceForm = ({
@@ -129,7 +128,6 @@ const SentenceForm = ({
           </Button>
         </form>
       </div>
-      <Note />
     </div>
   );
 };

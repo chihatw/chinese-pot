@@ -20,8 +20,18 @@ export const getArticle = async (articleId: string) => {
   return snapshot.data();
 };
 
+export const getRecentArticles = async (limit: number) => {
+  console.log("get recent articles");
+  const snapshot = await dbAdmin
+    .collection(COLLECTION)
+    .withConverter(articleConverter)
+    .orderBy("createdAt", "desc")
+    .limit(limit)
+    .get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 export const batchAddArticles = async (articles: Article[]) => {
-  console.log("batch add articles");
   const batch = dbAdmin.batch();
   for (const article of articles) {
     batch.set(
@@ -33,6 +43,30 @@ export const batchAddArticles = async (articles: Article[]) => {
     );
   }
   await batch.commit();
+};
+
+export const addArticle = async (article: Article) => {
+  await dbAdmin
+    .collection(COLLECTION)
+    .withConverter(articleConverter)
+    .doc(article.id)
+    .set(article);
+};
+
+export const updateArticle = async (
+  id: string,
+  title: string,
+  createdAt: number,
+) => {
+  await dbAdmin
+    .collection(COLLECTION)
+    .withConverter(articleConverter)
+    .doc(id)
+    .update({ title, createdAt });
+};
+
+export const deleteArticle = async (id: string) => {
+  await dbAdmin.collection(COLLECTION).doc(id).delete();
 };
 
 const articleConverter: FirestoreDataConverter<Article> = {

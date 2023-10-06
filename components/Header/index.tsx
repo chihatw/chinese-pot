@@ -9,6 +9,7 @@ import LoginIcon from "./LoginIcon";
 import LogoutIcon from "./LogoutIcon";
 
 const items: { url: string; label: string }[] = [
+  { url: "/article/list", label: "Article List" },
   { url: "/sentence/list", label: "Sentence List" },
   { url: "/sentence/form", label: "Sentence Form" },
   { url: "/hanzi/list", label: "Hanzi List" },
@@ -22,7 +23,7 @@ const Header = () => {
     <nav className="grid h-12 shadow duration-100">
       <div className="container flex w-full items-center justify-between gap-16">
         <HomeIcon />
-        <div className="flex grow gap-6">
+        <div className="flex grow justify-between">
           {items.map((item, index) => (
             <LinkButton
               key={index}
