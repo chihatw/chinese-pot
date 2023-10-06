@@ -1,11 +1,15 @@
 import { Hanzi } from "@/features/hanzi";
 import { getDifferentTones } from "@/features/hanzi/services/util";
 import { PinyinBadge } from "@/features/pinyin";
-import { useHanzis } from "../HanzisContextProvider";
 
-const DifferentTones = ({ hanzi }: { hanzi: Hanzi }) => {
-  const { hanzis: db } = useHanzis();
-  const differentTones = getDifferentTones(db, hanzi);
+const DifferentTones = ({
+  hanzi,
+  hanzis,
+}: {
+  hanzi: Hanzi;
+  hanzis: Hanzi[];
+}) => {
+  const differentTones = getDifferentTones(hanzis, hanzi);
   return (
     <div className="space-y-2">
       <div

@@ -23,8 +23,8 @@ const FormFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
       <div className="space-y-4">
         {filteredHanzis.map((hanzi) => (
           <div key={hanzi.id} className="space-y-2">
-            <DifferentTones hanzi={hanzi} />
-            <DifferentConsonants hanzi={hanzi} />
+            <DifferentTones hanzi={hanzi} hanzis={hanzis} />
+            <DifferentConsonants hanzi={hanzi} hanzis={hanzis} />
           </div>
         ))}
       </div>

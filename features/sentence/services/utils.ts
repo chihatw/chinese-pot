@@ -1,5 +1,11 @@
-import { Hanzi, buildHanziId } from "@/features/hanzi";
+import {
+  Hanzi,
+  buildHanziId,
+  getHanzisByVowel,
+  getVowelCounts,
+} from "@/features/hanzi";
 
+import { CONSONANTS } from "@/features/pinyin";
 import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
 import { getPinyinStr } from "@/features/pinyin/services/utils";
 import { Sentence } from "..";
@@ -75,4 +81,33 @@ export function updateHanzis(hanzis: Hanzi[], sentenceId: string): Hanzi[] {
     count: h.count + 1,
     latestSentenceId: sentenceId,
   }));
+}
+
+export function buildHanzisGroupedByConsonantVowel(hanzis: Hanzi[]) {
+  const items: { vowel: string; consonant: string; hanzis: Hanzi[] }[] = [];
+
+  // hanzis を母音ごとに集計（語頭形は語中形に含める）
+  const vowelCounts = getVowelCounts(hanzis);
+  for (const vowel of Object.keys(vowelCounts)) {
+    // 語頭形は語中形に含めて抽出
+    const vowelHanzis = getHanzisByVowel(hanzis, vowel);
+
+    // 子音がない場合、無子音のグループとして分類
+    const filtered = vowelHanzis.filter((h) => !h.pinyin.consonant);
+    if (!!filtered.length) {
+      items.push({ vowel, consonant: "", hanzis: filtered });
+    }
+
+    // 子音がある場合、子音によって分類
+    for (const consonant of CONSONANTS) {
+      const filtered = vowelHanzis.filter(
+        (h) => h.pinyin.consonant === consonant,
+      );
+
+      if (!!filtered.length) {
+        items.push({ vowel, consonant, hanzis: filtered });
+      }
+    }
+  }
+  return items;
 }

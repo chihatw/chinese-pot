@@ -1,6 +1,6 @@
 import { PinyinBadge, PinyinFilter } from "@/features/pinyin";
 
-const FilterMonitor = ({ filter }: { filter: PinyinFilter }) => {
+const PinyinFilterMonitor = ({ filter }: { filter: PinyinFilter }) => {
   return (
     <div className="flex flex-wrap gap-1">
       {filter.consonants.map((consonant) => (
@@ -16,4 +16,4 @@ const FilterMonitor = ({ filter }: { filter: PinyinFilter }) => {
   );
 };
 
-export default FilterMonitor;
+export default PinyinFilterMonitor;

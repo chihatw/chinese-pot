@@ -8,16 +8,15 @@ import { PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
 import { Hanzi } from "../..";
 import { buildFormUniqHanzis } from "../../services/util";
-import { useHanzis } from "./HanzisContextProvider";
 
 const FormsMonitor = ({ hanzis }: { hanzis: Hanzi[] }) => {
-  hanzis = buildFormUniqHanzis(hanzis);
+  const hanzis_uniq = buildFormUniqHanzis(hanzis);
 
   if (hanzis.length > 50) return null;
   return (
     <div className="grid grid-cols-[repeat(auto-fit,2rem)] gap-1">
-      {hanzis.map((hanzi) => (
-        <FormPane key={hanzi.id} hanzi={hanzi} />
+      {hanzis_uniq.map((hanzi) => (
+        <FormPane key={hanzi.id} hanzi={hanzi} hanzis={hanzis} />
       ))}
     </div>
   );
@@ -25,8 +24,7 @@ const FormsMonitor = ({ hanzis }: { hanzis: Hanzi[] }) => {
 
 export default FormsMonitor;
 
-const FormPane = ({ hanzi }: { hanzi: Hanzi }) => {
-  const { hanzis } = useHanzis();
+const FormPane = ({ hanzi, hanzis }: { hanzi: Hanzi; hanzis: Hanzi[] }) => {
   const sameForms = hanzis.filter((_hanzi) => _hanzi.form === hanzi.form);
   return (
     <HoverCard>

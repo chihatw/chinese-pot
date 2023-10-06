@@ -18,8 +18,8 @@ export const VowelCardList = React.memo(function Arrow_function_occurs_error({
   const vowelCounts = getVowelCounts(hanzis);
   const [open, setOpen] = useState(false);
   return (
-    <>
-      <div className="pr-2">
+    <div>
+      <div className=" pr-2">
         <FormsMonitor hanzis={hanzis} />
         <div className="text-right font-light">{`total: ${hanzis.length}`}</div>
         <div className="flex items-center justify-end space-x-2">
@@ -49,7 +49,7 @@ export const VowelCardList = React.memo(function Arrow_function_occurs_error({
             ))}
         </>
       ) : null}
-    </>
+    </div>
   );
 });
 

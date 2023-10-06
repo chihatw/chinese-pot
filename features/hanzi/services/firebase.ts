@@ -62,8 +62,15 @@ export const batchAddHanzis = async (hanzis: Hanzi[]) => {
       hanzi,
     );
   }
-  console.log("batch add hanzis");
   await batch.commit();
+};
+
+export const addHanzi = async (hanzi: Hanzi) => {
+  await dbAdmin
+    .collection(COLLECTION)
+    .withConverter(hanziConverter)
+    .doc(hanzi.id)
+    .set(hanzi);
 };
 
 export const hanziConverter: FirestoreDataConverter<Hanzi> = {

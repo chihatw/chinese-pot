@@ -8,8 +8,8 @@ import { buildPinyinFilter } from "@/features/pinyin/services/buildPinyin";
 import useDebouce from "@/hooks/useDebounce";
 import { fontSans } from "@/lib/fonts";
 import { useEffect, useState } from "react";
-import { Hanzi } from "../../..";
-import FilterMonitor from "./FilterMonitor";
+import { Hanzi, PinyinFilterMonitor } from "../../..";
+
 import VowelCardList from "./VowelCardList";
 
 const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
@@ -45,7 +45,7 @@ const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <FilterMonitor filter={value.filter} />
+      <PinyinFilterMonitor filter={value.filter} />
       <VowelCardList hanzis={value.filteredHanzis} filter={value.filter} />
     </div>
   );

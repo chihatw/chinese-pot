@@ -18,12 +18,21 @@ import {
   VOWELS,
   VOWEL_PAIRS,
 } from "./constants/vowels";
-import { Pinyin, PinyinFilter } from "./schema";
+import {
+  INITIAL_PINYIN,
+  INITIAL_PINYIN_FILTERL,
+  Pinyin,
+  PinyinFilter,
+} from "./schema";
+import { buildPinyin, buildPinyinFilter } from "./services/buildPinyin";
+import { getPinyinStr } from "./services/utils";
 
 export {
   CONSONANTS,
   CONSONANT_FILTER,
   EXTROVERTED_VOWELS,
+  INITIAL_PINYIN,
+  INITIAL_PINYIN_FILTERL,
   INTROVERTED_VOWELS,
   MAJOR_VOWELS,
   ONE_CHAR_CONSONANTS,
@@ -36,6 +45,9 @@ export {
   VOWELS,
   VOWEL_FILTER,
   VOWEL_PAIRS,
+  buildPinyin,
+  buildPinyinFilter,
+  getPinyinStr,
 };
 
 export type { Pinyin, PinyinFilter };
