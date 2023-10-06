@@ -90,40 +90,45 @@ const SentenceForm = ({
   return (
     <div>
       <div className="text-4xl font-bold">SentenceForm</div>
-      <form action={handleSubmit}>
-        <div className="grid gap-4 pt-4">
-          <Input
-            className="bg-white"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <div className="space-y-4">
-            {(input.trim().replace(/[a-zA-Z]/gi, "") || "")
-              .split("")
-              .map((form, index) => {
-                const filteredHanzis = hanzis.filter((h) => h.form === form);
-                return (
-                  <FormMonitor
-                    key={index}
-                    index={index}
-                    form={form}
-                    sentences={sentences}
-                    hanzis={filteredHanzis}
-                    selectedHanziId={selectedHanziIds[index]}
-                    setSelectedHanziIds={setSelectedHanziIds}
-                  />
-                );
-              })}
-          </div>
-          <SelectedHanzisMonitor
-            hanzis={hanzis}
-            selectedHanziIds={selectedHanziIds}
-          />
-          <Button disabled={selectedHanziIds.some((id) => !id)} type="submit">
+
+      <div className="grid gap-4 pt-4">
+        <Input
+          className="bg-white"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <div className="space-y-4">
+          {(input.trim().replace(/[a-zA-Z]/gi, "") || "")
+            .split("")
+            .map((form, index) => {
+              const filteredHanzis = hanzis.filter((h) => h.form === form);
+              return (
+                <FormMonitor
+                  key={index}
+                  index={index}
+                  form={form}
+                  sentences={sentences}
+                  hanzis={filteredHanzis}
+                  selectedHanziId={selectedHanziIds[index]}
+                  setSelectedHanziIds={setSelectedHanziIds}
+                />
+              );
+            })}
+        </div>
+        <SelectedHanzisMonitor
+          hanzis={hanzis}
+          selectedHanziIds={selectedHanziIds}
+        />
+        <form action={handleSubmit}>
+          <Button
+            disabled={selectedHanziIds.some((id) => !id)}
+            type="submit"
+            className="w-full"
+          >
             submit
           </Button>
-        </div>
-      </form>
+        </form>
+      </div>
       <Note />
     </div>
   );

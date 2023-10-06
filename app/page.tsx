@@ -74,7 +74,6 @@ export default async function Home({
       <SearchSentencesByForms forms={forms} />
       <SearchResultList forms={forms} total={total} sentences={sentences} />
 
-      {/* <HanziList hanzis={HANZIS} /> */}
       {/* <PinyinList /> */}
       {/* <RandomArticleSentences /> */}
     </main>

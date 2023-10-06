@@ -41,14 +41,14 @@ export const buildPinyinFilter = (value: string): PinyinFilter => {
   const tone = getTone(value);
 
   // value から tone を削除
-  value = !!tone ? value.slice(0, value.length - 1) : value;
-  let consonants = getConsonants(value);
+  const valueOmittedTone = !!tone ? value.slice(0, value.length - 1) : value;
+  let consonants = getConsonants(valueOmittedTone);
 
   if (!!tone && consonants.length === 2) {
     consonants = consonants.filter((con) => con.length === 1);
   }
 
-  let vowels = getVowelsByConsonants(value, consonants);
+  let vowels = getVowelsByConsonants(valueOmittedTone, consonants);
 
   if (!!tone && vowels.length > 1) {
     const shortest = getShortestVowel(vowels);
@@ -118,13 +118,32 @@ const getConsonant = (value: string) => {
   return "";
 };
 
-export const getConsonants = (value: string) => {
-  let consonants: string[] = [];
-  const headTwo = value.slice(0, 2);
-  consonants = CONSONANT_FILTER[headTwo as keyof typeof CONSONANT_FILTER] || [];
-  if (!!consonants.length) return consonants;
-  const headOne = value.slice(0, 1);
-  return CONSONANT_FILTER[headOne as keyof typeof CONSONANT_FILTER] || [];
+const getConsonants = (valueOmittedTone: string) => {
+  // 空文字列の場合
+  if (!valueOmittedTone) return [];
+
+  // 頭 2文字が子音なら、それを返して、終了
+  const headTwo = valueOmittedTone.slice(0, 2);
+  const twoChar_consonants =
+    CONSONANT_FILTER[headTwo as keyof typeof CONSONANT_FILTER] || [];
+  if (!!twoChar_consonants.length) return twoChar_consonants;
+
+  // 頭 1文字が含まれる子音を抽出
+  const headOne = valueOmittedTone.slice(0, 1);
+  const consonants =
+    CONSONANT_FILTER[headOne as keyof typeof CONSONANT_FILTER] || [];
+
+  // 与えられた文字が１文字のみの場合（つまり、子音が入力されていない状態）は
+  // 抽出された候補を全て返す
+  if (valueOmittedTone.length === 1) {
+    return consonants;
+  }
+
+  // 与えられた文字が2文字以上の場合
+  // 上の 2文字子音のチェックで、false の判定を受けているということは、
+  // 2文字子音の可能性はない
+
+  return consonants.filter((c) => c.length === 1);
 };
 
 const getVowel = (value: string): string => {

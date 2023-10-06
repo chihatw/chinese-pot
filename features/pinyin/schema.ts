@@ -3,7 +3,6 @@ export interface Pinyin {
   consonant: string;
   tone: string;
 }
-
 export interface PinyinFilter {
   vowels: string[];
   consonants: string[];

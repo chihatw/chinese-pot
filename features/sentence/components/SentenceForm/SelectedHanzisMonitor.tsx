@@ -14,7 +14,12 @@ const SelectedHanzisMonitor = ({
         const hanzi = hanzis.find((h) => h.id === hanziId);
         if (!hanzi)
           return (
-            <div className="text-4xl font-extralight text-gray-500 ">_</div>
+            <div
+              key={hanziId}
+              className="text-4xl font-extralight text-gray-500 "
+            >
+              _
+            </div>
           );
         return (
           <div key={hanziId}>
