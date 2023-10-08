@@ -1,7 +1,8 @@
 "server only";
 
 import { getArticle } from "@/features/article";
-import { SentenceLine, getSentencesByIds } from "@/features/sentence";
+import { getSentencesByIds } from "@/features/sentence";
+import SentenceTable from "@/features/sentence/components/SentenceTable";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -24,17 +25,7 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </Link>
       </div>
-      <div className="space-y-2">
-        {sentences.map((sentence, index) => (
-          <div
-            key={sentence.id}
-            className="grid grid-cols-[20px,1fr] items-center"
-          >
-            <div>{index + 1}</div>
-            <SentenceLine sentence={sentence} />
-          </div>
-        ))}
-      </div>
+      <SentenceTable sentences={sentences} />
     </div>
   );
 };

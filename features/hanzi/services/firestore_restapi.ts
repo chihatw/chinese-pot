@@ -1,7 +1,7 @@
 import { PinyinFilter, buildPinyin } from "@/features/pinyin";
 
 import { BuildStructuredQueryProps, WhereProps } from "@/firebase";
-import { FetchRequestURL, getFetchRequestBody } from "@/firebase/restapi";
+import { FetchRequestURL, buildFetchRequestOption } from "@/firebase/restapi";
 import { Hanzi } from "../schema";
 
 const COLLECTION = "hanzis";
@@ -9,7 +9,7 @@ const COLLECTION = "hanzis";
 export const getHanzisCount = async (): Promise<number> => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({
+    buildFetchRequestOption({
       collectionId: COLLECTION,
       selectFields: [],
     }),
@@ -26,7 +26,7 @@ export const getHanzisCount = async (): Promise<number> => {
 export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({
+    buildFetchRequestOption({
       collectionId: COLLECTION,
       where: ["form", "IN", forms],
     }),
@@ -61,7 +61,7 @@ export const getHanzisByPinyinFilter = async (
 
   q.where = where;
 
-  const res = await fetch(FetchRequestURL, getFetchRequestBody(q));
+  const res = await fetch(FetchRequestURL, buildFetchRequestOption(q));
 
   const json = await res.json();
   if (json.error) {

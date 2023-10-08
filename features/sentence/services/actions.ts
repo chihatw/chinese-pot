@@ -1,7 +1,9 @@
 "use server";
 
 import { Hanzi } from "@/features/hanzi";
-import { revalidatePath } from "next/cache";
+
+import { REVALIDATE_TAGS } from "@/firebase/constants";
+import { revalidateTag } from "next/cache";
 import { Sentence } from "..";
 import { addSentence, removeSentence } from "./firebase";
 
@@ -10,7 +12,7 @@ export const addSentenceAction = async (
   hanzis: Hanzi[],
 ) => {
   await addSentence(sentence, hanzis);
-  revalidatePath("/sentence/form");
+  revalidateTag(REVALIDATE_TAGS.senences); // note revalidatePath にすると、現在表示されていないページは更新されない
 };
 
 export const removeSentenceAction = async (
@@ -18,5 +20,5 @@ export const removeSentenceAction = async (
   hanzis: Hanzi[],
 ) => {
   await removeSentence(sentence, hanzis);
-  revalidatePath("/sentence/list");
+  revalidateTag(REVALIDATE_TAGS.senences);
 };

@@ -1,4 +1,4 @@
-import { FetchRequestURL, getFetchRequestBody } from "@/firebase/restapi";
+import { FetchRequestURL, buildFetchRequestOption } from "@/firebase/restapi";
 import { InvertedIndex } from "../schema";
 
 const COLLECTION = "invertedIndexes";
@@ -6,7 +6,7 @@ const COLLECTION = "invertedIndexes";
 export const getInvertedIndexesCount = async () => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({ collectionId: COLLECTION, selectFields: [] }),
+    buildFetchRequestOption({ collectionId: COLLECTION, selectFields: [] }),
   );
   const json = await res.json();
   if (json.error) {
@@ -21,7 +21,7 @@ export const getInvertedIndexByForm = async (
 ): Promise<InvertedIndex | undefined> => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({
+    buildFetchRequestOption({
       collectionId: COLLECTION,
       where: ["form", "EQUAL", form],
     }),
@@ -42,7 +42,7 @@ export const getInvertedIndexesByForms = async (
 ): Promise<InvertedIndex[]> => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({
+    buildFetchRequestOption({
       collectionId: COLLECTION,
       where: ["form", "IN", forms],
     }),

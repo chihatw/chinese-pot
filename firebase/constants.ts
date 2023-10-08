@@ -10,3 +10,8 @@ export const ERROR_CODES = {
 export const DOCUMENTID_COUNT_MAX = 10;
 
 export const PROJECT_ID = "chinese-pot";
+
+// noto index を通すと、 not found になる
+export const REVALIDATE_TAGS = {
+  senences: "sentences",
+};

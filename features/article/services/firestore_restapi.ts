@@ -1,7 +1,7 @@
 import {
   FetchRequestURL,
+  buildFetchRequestOption,
   getDocumentURL,
-  getFetchRequestBody,
 } from "@/firebase/restapi";
 import { Article } from "../schema";
 
@@ -10,7 +10,7 @@ const COLLECTION = "articles";
 export const getArticleCount = async () => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({ collectionId: COLLECTION, selectFields: [] }),
+    buildFetchRequestOption({ collectionId: COLLECTION, selectFields: [] }),
   );
 
   const json = await res.json();
@@ -34,7 +34,7 @@ export const getArticle = async (id: string) => {
 export const getRecentArticles = async (limit: number): Promise<Article[]> => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({
+    buildFetchRequestOption({
       collectionId: COLLECTION,
       orderBy: ["createdAt", "desc"],
       limit,

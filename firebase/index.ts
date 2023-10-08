@@ -1,4 +1,3 @@
-import { PROJECT_ID } from "./constants";
 import {
   BuildStructuredQueryProps,
   FieldFilter,
@@ -7,8 +6,6 @@ import {
   WhereProps,
   WhereValue,
 } from "./schema";
-
-export { PROJECT_ID };
 
 export type {
   BuildStructuredQueryProps,

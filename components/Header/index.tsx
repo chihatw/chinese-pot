@@ -10,7 +10,7 @@ import LogoutIcon from "./LogoutIcon";
 
 const items: { url: string; label: string }[] = [
   { url: "/article/list", label: "Article List" },
-  { url: "/sentence/list", label: "Sentence List" },
+  { url: "/sentence/recent", label: "Recent Sentences" },
   { url: "/sentence/form", label: "Sentence Form" },
   { url: "/hanzi/list", label: "Hanzi List" },
 ];

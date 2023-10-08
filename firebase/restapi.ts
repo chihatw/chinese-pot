@@ -21,22 +21,24 @@ export const FetchRequestURL = (() => {
 })();
 
 // index を通して export するとエラー
-export function getFetchRequestBody({
+export function buildFetchRequestOption({
   collectionId,
   orderBy,
   selectFields,
   where,
   limit,
+  tags,
 }: {
   collectionId: string;
   orderBy?: [string, "asc" | "desc"];
   selectFields?: string[];
   where?: WhereProps | WhereProps[];
   limit?: number;
+  tags?: string[];
 }) {
-  return {
+  const option: { method: string; body: string; next?: { tags: string[] } } = {
     method: "post",
-    body: getSerializedStructuredQuery({
+    body: buildFetchRequestOptionBody({
       collectionId,
       orderBy,
       selectFields,
@@ -44,9 +46,13 @@ export function getFetchRequestBody({
       limit,
     }),
   };
+  if (!!tags) {
+    option.next = { tags };
+  }
+  return option;
 }
 
-function getSerializedStructuredQuery({
+function buildFetchRequestOptionBody({
   collectionId,
   orderBy,
   selectFields,

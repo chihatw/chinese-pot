@@ -1,8 +1,12 @@
 import { getInvertedIndexByForm } from "@/features/invertedIndex";
 import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
 import { SearchResult } from "@/features/invertedIndex/schema";
-import { DOCUMENTID_COUNT_MAX, PROJECT_ID } from "@/firebase/constants";
-import { FetchRequestURL, getFetchRequestBody } from "@/firebase/restapi";
+import {
+  DOCUMENTID_COUNT_MAX,
+  PROJECT_ID,
+  REVALIDATE_TAGS,
+} from "@/firebase/constants";
+import { FetchRequestURL, buildFetchRequestOption } from "@/firebase/restapi";
 import { getIntersection } from "@/utils/utils";
 import { Sentence } from "../schema";
 
@@ -11,7 +15,7 @@ const COLLECTION = "sentences";
 export const getSentencesCount = async () => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({ collectionId: COLLECTION, selectFields: [] }),
+    buildFetchRequestOption({ collectionId: COLLECTION, selectFields: [] }),
   );
   const json = await res.json();
   if (json.error) {
@@ -24,10 +28,11 @@ export const getSentencesCount = async () => {
 export const getLastTenSentences = async (): Promise<Sentence[]> => {
   const res = await fetch(
     FetchRequestURL,
-    getFetchRequestBody({
+    buildFetchRequestOption({
       collectionId: COLLECTION,
       orderBy: ["createdAt", "desc"],
       limit: 10,
+      tags: [REVALIDATE_TAGS.senences],
     }),
   );
 
@@ -62,7 +67,7 @@ export const getSentencesByIds = async (
 
     const res = await fetch(
       FetchRequestURL,
-      getFetchRequestBody({
+      buildFetchRequestOption({
         collectionId: COLLECTION,
         where: [
           "__name__",
