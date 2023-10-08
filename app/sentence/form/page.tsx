@@ -1,8 +1,8 @@
 "server only";
-import { getHanzisByForms } from "@/features/hanzi/services/firebase";
-import { SentenceForm } from "@/features/sentence";
+
+import { getHanzisByForms } from "@/features/hanzi";
+import { SentenceForm, getSentencesByIds } from "@/features/sentence";
 import { SENTENCE_FORM_KEY } from "@/features/sentence/constants";
-import { getSentencesByIds } from "@/features/sentence/services/firebase";
 
 const SentenceFormPage = async ({
   searchParams,
@@ -14,9 +14,7 @@ const SentenceFormPage = async ({
 
   // forms に含まれる Hanzi を取得
   const hanzis = forms_uniq.length ? await getHanzisByForms(forms_uniq) : [];
-
   const latestSentenceIds = [...new Set(hanzis.map((h) => h.latestSentenceId))];
-
   const sentences = await getSentencesByIds(latestSentenceIds);
 
   return (

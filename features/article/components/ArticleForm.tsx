@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import { Article } from "..";
+import { Article } from "../schema";
 import { addArticleAction, updateArticleAction } from "../services/actions";
 
 const ArticleForm = ({ article }: { article?: Article }) => {

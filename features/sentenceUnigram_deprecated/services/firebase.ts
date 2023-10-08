@@ -1,7 +1,7 @@
-import { getSentencesByIds } from "@/features/sentence/services/firebase";
+import { getSentencesByIds } from "@/features/sentence";
 import { dbAdmin } from "@/firebase/admin";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
-import { SentenceUnigram } from "..";
+import { SentenceUnigram } from "../schema";
 
 const COLLECTION = "sentenceUnigrams";
 

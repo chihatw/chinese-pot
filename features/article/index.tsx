@@ -4,7 +4,12 @@ import ArticleSentences from "./components/ArticleSentences";
 import CreateArticleButton from "./components/CreateArticleButton";
 import RandomArticleSentences from "./components/RandomArticleSentences";
 import { Article } from "./schema";
-import { getArticle } from "./services/firebase";
+
+import {
+  getArticle,
+  getArticleCount,
+  getRecentArticles,
+} from "./services/firestore_restapi";
 
 export {
   ArticleForm,
@@ -13,6 +18,8 @@ export {
   CreateArticleButton,
   RandomArticleSentences,
   getArticle,
+  getArticleCount,
+  getRecentArticles,
 };
 
 export type { Article };

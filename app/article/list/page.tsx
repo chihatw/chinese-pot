@@ -1,13 +1,11 @@
 "server only";
 
-import { ArticleList } from "@/features/article";
-import { getRecentArticles } from "@/features/article/services/firebase";
+import { ArticleList, getRecentArticles } from "@/features/article";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
 const ArticleListPage = async () => {
   const articles = await getRecentArticles(3);
-
   return (
     <div className="mx-auto w-full max-w-lg  space-y-10 pt-10">
       <div className="text-4xl font-extrabold">Article List</div>

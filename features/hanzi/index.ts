@@ -12,7 +12,11 @@ import HANZIS_JSON from "./json/hanzis.json";
 import HanziList from "./components/HanziList";
 import PinyinFilterMonitor from "./components/HanziList/PinyinFilterContainer/PinyinFilterMonitor";
 import PinyinHanzi from "./components/PinyinHanzi";
-import { getHanzisByPinyinFilter_client } from "./services/firebase_client";
+import {
+  getHanzisByForms,
+  getHanzisByPinyinFilter,
+  getHanzisCount,
+} from "./services/firestore_restapi";
 
 const HANZI_SENTENCE_RELATIONS = HANZI_SENTENCE_RELATIONS_JSON as {
   [key: string]: string[];
@@ -28,8 +32,10 @@ export {
   PinyinHanzi,
   buildHanziFromId,
   buildHanziId,
-  getHanzisByPinyinFilter_client,
+  getHanzisByForms,
+  getHanzisByPinyinFilter,
   getHanzisByVowel,
+  getHanzisCount,
   getVowelCounts,
 };
 

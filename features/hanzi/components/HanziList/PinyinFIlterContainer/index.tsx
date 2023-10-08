@@ -2,14 +2,15 @@
 
 import { Input } from "@/components/ui/input";
 
-import { getHanzisByPinyinFilter_client } from "@/features/hanzi/services/firebase_client";
+import { getHanzisByPinyinFilter } from "@/features/hanzi/services/firestore_restapi";
 import { PinyinFilter } from "@/features/pinyin";
 import { buildPinyinFilter } from "@/features/pinyin/services/buildPinyin";
 import useDebouce from "@/hooks/useDebounce";
 import { fontSans } from "@/lib/fonts";
 import { useEffect, useState } from "react";
-import { Hanzi, PinyinFilterMonitor } from "../../..";
 
+import { Hanzi } from "@/features/hanzi";
+import PinyinFilterMonitor from "./PinyinFilterMonitor";
 import VowelCardList from "./VowelCardList";
 
 const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
@@ -30,7 +31,7 @@ const PinyinFilterContainer = ({ hanzis }: { hanzis: Hanzi[] }) => {
   useEffect(() => {
     const fetchData = async () => {
       const filter = buildPinyinFilter(debouncedInput);
-      const hanzis = await getHanzisByPinyinFilter_client(filter);
+      const hanzis = await getHanzisByPinyinFilter(filter);
       setValue({ filteredHanzis: hanzis, filter });
     };
     fetchData();

@@ -10,12 +10,23 @@ import { buildNewSearchParamsPath } from "@/utils/utils";
 import { nanoid } from "nanoid";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Sentence } from "../..";
 import { SENTENCE_FORM_KEY } from "../../constants";
+import { Sentence } from "../../schema";
 import { addSentenceAction } from "../../services/actions";
 import { buildSentenceFromHanzis, updateHanzis } from "../../services/utils";
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
+
+const getSelectedHanziIds = (forms: string, hanzis: Hanzi[]) => {
+  return forms.split("").map((form) => {
+    // hanzis から form で厳選
+    const items = hanzis
+      .filter((h) => h.form === form)
+      .sort((a, b) => b.count - a.count);
+    // １つ目の hanzi の id を代入
+    return items.at(0)?.id || "";
+  });
+};
 
 const SentenceForm = ({
   forms,
@@ -34,21 +45,11 @@ const SentenceForm = ({
   const [input, setInput] = useState(forms);
   const debouncedInput = useDebouce(input, 300);
   const [selectedHanziIds, setSelectedHanziIds] = useState(
-    forms.split("").map((form) => {
-      // hanzis から form で厳選
-      const items = hanzis.filter((h) => h.form === form);
-      // １つ目の hanzi の id を代入
-      return items.at(0)?.id || "";
-    }),
+    getSelectedHanziIds(forms, hanzis),
   );
 
   useEffect(() => {
-    const selectedHanziIds = forms.split("").map((form) => {
-      // hanzis から form で厳選
-      const items = hanzis.filter((h) => h.form === form);
-      // １つ目の hanzi の id を代入
-      return items.at(0)?.id || "";
-    });
+    const selectedHanziIds = getSelectedHanziIds(forms, hanzis);
     setSelectedHanziIds(selectedHanziIds);
   }, [forms, hanzis]);
 
@@ -100,7 +101,9 @@ const SentenceForm = ({
           {(input.trim().replace(/[a-zA-Z]/gi, "") || "")
             .split("")
             .map((form, index) => {
-              const filteredHanzis = hanzis.filter((h) => h.form === form);
+              const filteredHanzis = hanzis
+                .filter((h) => h.form === form)
+                .sort((a, b) => b.count - a.count);
               return (
                 <FormMonitor
                   key={index}

@@ -7,4 +7,6 @@ export const ERROR_CODES = {
   "auth/email-already-in-use": "auth/email-already-in-use",
 };
 
-export const DOCUMENTID_COUNT_MAX = 30;
+export const DOCUMENTID_COUNT_MAX = 10;
+
+export const PROJECT_ID = "chinese-pot";

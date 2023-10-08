@@ -1,5 +1,6 @@
 "server only";
-import { getArticle } from "@/features/article/services/firebase";
+
+import { getArticle } from "@/features/article/services/firestore_restapi";
 import { getSentencesByOneForm_deprecated } from "@/features/sentenceUnigram_deprecated/services/firebase";
 import { z } from "zod";
 import { publicProcedure, router } from "./trpc";

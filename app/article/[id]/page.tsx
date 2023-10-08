@@ -1,8 +1,7 @@
 "server only";
 
-import { getArticle } from "@/features/article/services/firebase";
-import { SentenceLine } from "@/features/sentence";
-import { getSentencesByIds } from "@/features/sentence/services/firebase";
+import { getArticle } from "@/features/article";
+import { SentenceLine, getSentencesByIds } from "@/features/sentence";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

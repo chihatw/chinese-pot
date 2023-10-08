@@ -2,12 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Hanzi,
-  PinyinHanzi,
-  buildHanziId,
-  getHanzisByPinyinFilter_client,
-} from "@/features/hanzi";
+import { Hanzi, PinyinHanzi, buildHanziId } from "@/features/hanzi";
 
 import {
   INITIAL_PINYIN,
@@ -26,6 +21,8 @@ import { cn } from "@/lib/utils";
 
 import { useToast } from "@/components/ui/use-toast";
 import { addHanziAction } from "@/features/hanzi/services/addHanziAction";
+
+import { getHanzisByPinyinFilter } from "@/features/hanzi/services/firestore_restapi";
 import { useEffect, useState } from "react";
 import HanziList from "./HanziList";
 
@@ -56,7 +53,7 @@ const HanziFormDialogContent = ({ form }: { form: string }) => {
       return;
     }
     const fetchData = async () => {
-      const hanzis = await getHanzisByPinyinFilter_client(value.filter);
+      const hanzis = await getHanzisByPinyinFilter(value.filter);
       setHanzis(hanzis);
     };
     fetchData();

@@ -1,9 +1,9 @@
 "server only";
 import SentenceTable from "@/features/sentence/components/SentenceTable";
-import { getLastTemSentences } from "@/features/sentence/services/firebase";
+import { getLastTenSentences } from "@/features/sentence/services/firestore_restapi";
 
 const SentenceList = async () => {
-  const sentences = await getLastTemSentences();
+  const sentences = await getLastTenSentences();
 
   return (
     <div className="mx-auto w-full max-w-md pt-10">

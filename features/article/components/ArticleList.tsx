@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Article } from "..";
+import { Article } from "../schema";
 import { deleteArticleAction } from "../services/actions";
 
 const ArticleList = ({ articles }: { articles: Article[] }) => {

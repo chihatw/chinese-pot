@@ -1,35 +1,8 @@
 import { dbAdmin } from "@/firebase/admin";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
-import { Article } from "..";
+import { Article } from "../schema";
 
 const COLLECTION = "articles";
-
-export const getArticleCount = async () => {
-  console.log("get article count");
-  const snapshot = await dbAdmin.collection(COLLECTION).count().get();
-  return snapshot.data().count;
-};
-
-export const getArticle = async (articleId: string) => {
-  console.log("get article");
-  const snapshot = await dbAdmin
-    .collection(COLLECTION)
-    .withConverter(articleConverter)
-    .doc(articleId)
-    .get();
-  return snapshot.data();
-};
-
-export const getRecentArticles = async (limit: number) => {
-  console.log("get recent articles");
-  const snapshot = await dbAdmin
-    .collection(COLLECTION)
-    .withConverter(articleConverter)
-    .orderBy("createdAt", "desc")
-    .limit(limit)
-    .get();
-  return snapshot.docs.map((doc) => doc.data());
-};
 
 export const batchAddArticles = async (articles: Article[]) => {
   const batch = dbAdmin.batch();
