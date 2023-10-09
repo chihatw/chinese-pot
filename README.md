@@ -104,3 +104,6 @@ git push origin master
 
 # 問題
 突然、invertedIndexes の全レコード抽出ができなくなった
+
+# google プロバイダーの使用のために
+console の Authentication の Setting の「承認済みドメイン」にデプロイ先を登録する
