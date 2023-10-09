@@ -7,7 +7,6 @@ import {
 
 import { CONSONANTS } from "@/features/pinyin/constants/consonants";
 import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
-import { getPinyinStr } from "@/features/pinyin/services/utils";
 import { Sentence } from "../schema";
 
 type SentenceChar = {
@@ -62,26 +61,6 @@ export const buildHanzisFromSentence = (sentence: Sentence): Hanzi[] => {
     };
   });
 };
-
-export function buildSentenceFromHanzis(
-  hanzis: Hanzi[],
-  sentenceId: string,
-): Sentence {
-  return {
-    id: sentenceId,
-    text: hanzis.map((h) => h.form).join(""),
-    pinyinsStr: hanzis.map((h) => getPinyinStr(h.pinyin)).join(" "),
-    createdAt: Date.now(),
-  };
-}
-
-export function updateHanzis(hanzis: Hanzi[], sentenceId: string): Hanzi[] {
-  return hanzis.map((h) => ({
-    ...h,
-    count: h.count + 1,
-    latestSentenceId: sentenceId,
-  }));
-}
 
 export function buildHanzisGroupedByConsonantVowel(hanzis: Hanzi[]) {
   const items: { vowel: string; consonant: string; hanzis: Hanzi[] }[] = [];

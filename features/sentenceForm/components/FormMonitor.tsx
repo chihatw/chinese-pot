@@ -1,8 +1,8 @@
 "use client";
 
-import { Hanzi } from "@/features/hanzi/schema";
+import { Hanzi } from "@/features/hanzi";
+import { Sentence } from "@/features/sentence";
 import { Dispatch, SetStateAction } from "react";
-import { Sentence } from "../../schema";
 import HanziForm from "./HanziForm";
 import SelectHanziRadioGroup from "./SelectHanziRadioGroup";
 

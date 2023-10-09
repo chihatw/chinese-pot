@@ -1,26 +1,38 @@
 import BatchAddSentencesButton from "./components/BatchAddSentencesButton";
-import SentenceForm from "./components/SentenceForm";
 import SentenceLine from "./components/SentenceLine";
 import SentenceTable from "./components/SentenceTable";
 import SimpleSentenceMonitor from "./components/SimpleSentenceMonitor";
 import { Sentence } from "./schema";
+import {
+  batchAddSentencesAction,
+  removeSentenceAction,
+} from "./services/actions";
 import {
   getLastTenSentences,
   getSentence,
   getSentencesByForms,
   getSentencesByIds,
 } from "./services/firestore_restapi";
+import {
+  buildHanzisFromSentence,
+  buildHanzisGroupedByConsonantVowel,
+  buildSentenceChars,
+} from "./services/utils";
 
 export {
   BatchAddSentencesButton,
-  SentenceForm,
   SentenceLine,
   SentenceTable,
   SimpleSentenceMonitor,
+  batchAddSentencesAction,
+  buildHanzisFromSentence,
+  buildHanzisGroupedByConsonantVowel,
+  buildSentenceChars,
   getLastTenSentences,
   getSentence,
   getSentencesByForms,
   getSentencesByIds,
+  removeSentenceAction,
 };
 
 export type { Sentence };

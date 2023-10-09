@@ -1,12 +1,9 @@
 "use client";
 
-import { useToast } from "@/components/ui/use-toast";
-
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
-
+import { useToast } from "@/components/ui/use-toast";
+import { Sentence, batchAddSentencesAction } from "@/features/sentence";
 import SENTENCES_JSON from "../json/SENTENCES.json";
-import { Sentence } from "../schema";
-import { batchAddSentencesAction } from "../services/actions";
 
 const SENTENCES = SENTENCES_JSON as Sentence[];
 

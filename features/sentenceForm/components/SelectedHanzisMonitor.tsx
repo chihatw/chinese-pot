@@ -1,5 +1,5 @@
 import { Hanzi, PinyinHanzi } from "@/features/hanzi";
-import { getPinyinStr } from "@/features/pinyin/services/utils";
+import { getPinyinStr } from "@/features/pinyin";
 
 const SelectedHanzisMonitor = ({
   selectedHanziIds,

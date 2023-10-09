@@ -8,8 +8,13 @@ import {
 import { Hanzi, PinyinHanzi } from "@/features/hanzi";
 
 import { PinyinBadge, buildPinyin, getPinyinStr } from "@/features/pinyin";
-import { Sentence, SentenceLine, getSentence } from "@/features/sentence";
-import { buildHanzisGroupedByConsonantVowel } from "@/features/sentence/services/utils";
+import {
+  Sentence,
+  SentenceLine,
+  buildHanzisGroupedByConsonantVowel,
+  getSentence,
+} from "@/features/sentence";
+
 import { useEffect, useState } from "react";
 
 const HanziList = ({ hanzis }: { hanzis: Hanzi[] }) => {

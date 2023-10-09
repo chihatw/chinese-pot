@@ -88,3 +88,7 @@ function intersect(a, b) {
   return [...new Set(a)].filter(x => setB.has(x));
 }
 ```
+
+# エラー回避にしたこと
+- constants は index を通さない
+- '..' からの import は避ける

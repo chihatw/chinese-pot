@@ -2,10 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Sentence, SentenceLine } from "@/features/sentence";
+import {
+  Sentence,
+  SentenceLine,
+  buildHanzisFromSentence,
+  removeSentenceAction,
+} from "@/features/sentence";
 import { Delete } from "lucide-react";
-import { removeSentenceAction } from "../services/actions";
-import { buildHanzisFromSentence } from "../services/utils";
 
 const SentenceTable = ({ sentences }: { sentences: Sentence[] }) => {
   const { toast } = useToast();

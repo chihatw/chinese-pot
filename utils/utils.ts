@@ -59,3 +59,15 @@ export const getIntersection = (arrays: string[][]): string[] => {
 
   return intersection;
 };
+
+export const getOriginalPath = (
+  pathname: string,
+  searchParams: ReadonlyURLSearchParams,
+) => {
+  const original = new URLSearchParams(Array.from(searchParams.entries()));
+  let originalPath = pathname;
+  if (!!original.toString()) {
+    originalPath += `?${original.toString()}`;
+  }
+  return originalPath;
+};

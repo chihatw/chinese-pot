@@ -1,8 +1,9 @@
 "server only";
 
 import { getHanzisByForms } from "@/features/hanzi";
-import { SentenceForm, getSentencesByIds } from "@/features/sentence";
-import { SENTENCE_FORM_KEY } from "@/features/sentence/constants";
+import { getSentencesByIds } from "@/features/sentence";
+import { SentenceForm } from "@/features/sentenceForm";
+import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
 const SentenceFormPage = async ({
   searchParams,
@@ -18,7 +19,7 @@ const SentenceFormPage = async ({
   const sentences = await getSentencesByIds(latestSentenceIds);
 
   return (
-    <div className="mx-auto w-full max-w-md  pt-10">
+    <div className="mx-auto w-full max-w-md  pb-40 pt-10">
       <SentenceForm forms={forms} hanzis={hanzis} sentences={sentences} />
     </div>
   );

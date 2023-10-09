@@ -24,6 +24,7 @@ export const batchAddSentences = async (sentences: Sentence[]) => {
   await batch.commit();
 };
 
+// noto addSentence を index に通すと、エラー
 export const addSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
   // invertedIndexes
   const forms = [...new Set(sentence.text.split(""))];
