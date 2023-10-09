@@ -107,3 +107,19 @@ git push origin master
 
 # google プロバイダーの使用のために
 console の Authentication の Setting の「承認済みドメイン」にデプロイ先を登録する
+
+# firebase へのデプロイ
+[Integrate Next.js](https://firebase.google.com/docs/hosting/frameworks/nextjs)
+従量制へのアップグレードが必要
+環境変数が使えない！！
+
+## initialize
+```sh
+firebase experiments:enable webframeworks
+firebase init hosting
+```
+
+## deploy
+```sh
+firebase deploy
+```
