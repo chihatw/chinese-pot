@@ -1,9 +1,10 @@
 import { dbAdmin } from "@/firebase/admin";
+import { COLLECTIONS } from "@/firebase/constants";
 import { FieldValue, FirestoreDataConverter } from "firebase-admin/firestore";
 import { nanoid } from "nanoid";
 import { InvertedIndex } from "./schema";
 
-const COLLECTION = "invertedIndexes";
+const COLLECTION = COLLECTIONS.invertedIndexes;
 
 export const batchAddInvertedIndexes = async (
   invertedIndexes: InvertedIndex[],

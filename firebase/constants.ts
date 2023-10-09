@@ -19,3 +19,10 @@ export const REVALIDATE_TAGS = {
   invertedIndexes: "invertedIndexes",
   article: "article",
 };
+
+export const COLLECTIONS = {
+  hanzis: "hanzis",
+  articles: "articles",
+  sentences: "sentences",
+  invertedIndexes: "invertedIndexes",
+};

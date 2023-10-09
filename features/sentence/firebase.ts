@@ -11,9 +11,10 @@ import {
 } from "@/features/invertedIndex/firebase";
 import { Sentence } from "@/features/sentence";
 import { dbAdmin } from "@/firebase/admin";
+import { COLLECTIONS } from "@/firebase/constants";
 import { FieldValue, FirestoreDataConverter } from "firebase-admin/firestore";
 
-const COLLECTION = "sentences";
+const COLLECTION = COLLECTIONS.sentences;
 
 export const batchAddSentences = async (sentences: Sentence[]) => {
   console.log("batch add sentences");

@@ -1,8 +1,9 @@
 import { dbAdmin } from "@/firebase/admin";
+import { COLLECTIONS } from "@/firebase/constants";
 import { FirestoreDataConverter } from "firebase-admin/firestore";
-import { Article } from "../schema";
+import { Article } from "./schema";
 
-const COLLECTION = "articles";
+const COLLECTION = COLLECTIONS.articles;
 
 export const batchAddArticles = async (articles: Article[]) => {
   const batch = dbAdmin.batch();

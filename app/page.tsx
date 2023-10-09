@@ -13,7 +13,7 @@ import {
   BatchAddSentencesButton,
   getSentencesByForms,
 } from "@/features/sentence";
-import { REVALIDATE_TAGS } from "@/firebase/constants";
+import { COLLECTIONS, REVALIDATE_TAGS } from "@/firebase/constants";
 import { getDocumentCount } from "@/firebase/restapi";
 
 import { fontSans } from "@/lib/fonts";
@@ -26,17 +26,20 @@ export default async function Home({
 }) {
   const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
 
-  const hanzisCount = await getDocumentCount("hanzis", REVALIDATE_TAGS.hanzis);
+  const hanzisCount = await getDocumentCount(
+    COLLECTIONS.hanzis,
+    REVALIDATE_TAGS.hanzis,
+  );
   const articlesCount = await getDocumentCount(
-    "articles",
+    COLLECTIONS.articles,
     REVALIDATE_TAGS.articles,
   );
   const sentencesCount = await getDocumentCount(
-    "sentences",
+    COLLECTIONS.sentences,
     REVALIDATE_TAGS.senences,
   );
   const invertedIndexesCount = await getDocumentCount(
-    "invertedIndexes",
+    COLLECTIONS.invertedIndexes,
     REVALIDATE_TAGS.invertedIndexes,
   );
 
@@ -44,12 +47,14 @@ export default async function Home({
 
   return (
     <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-10 pt-10 sm:mx-auto sm:w-[min(500px,100%-120px)]">
-      <div className="space-y-1">
-        {!hanzisCount ? <BatchAddHanzisButton /> : null}
-        {!articlesCount ? <BatchAddArticlesButton /> : null}
-        {!sentencesCount ? <BatchAddSentencesButton /> : null}
-        {!invertedIndexesCount ? <BuildInvetedIndexesButton /> : null}
-      </div>
+      {process.env.NODE_ENV === "development" ? (
+        <div className="space-y-1">
+          {!hanzisCount ? <BatchAddHanzisButton /> : null}
+          {!articlesCount ? <BatchAddArticlesButton /> : null}
+          {!sentencesCount ? <BatchAddSentencesButton /> : null}
+          {!invertedIndexesCount ? <BuildInvetedIndexesButton /> : null}
+        </div>
+      ) : null}
       <div>
         <pre
           className={cn(

@@ -101,3 +101,6 @@ git add --all .
 git commit -a -m "Versioning untracked files"
 git push origin master
 ```
+
+# 問題
+突然、invertedIndexes の全レコード抽出ができなくなった

@@ -28,6 +28,7 @@ export const getDocumentCount = async (
     }),
   );
   const json = await res.json();
+
   if (json.error) {
     console.log(json.error);
     return 0;

@@ -1,10 +1,11 @@
 import { Pinyin } from "@/features/pinyin";
 import { dbAdmin } from "@/firebase/admin";
 
+import { COLLECTIONS } from "@/firebase/constants";
 import { FieldValue, FirestoreDataConverter } from "firebase-admin/firestore";
 import { Hanzi } from "./schema";
 
-const COLLECTION = "hanzis";
+const COLLECTION = COLLECTIONS.hanzis;
 
 export const batchAddHanzis = async (hanzis: Hanzi[]) => {
   const batch = dbAdmin.batch();

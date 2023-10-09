@@ -2,13 +2,13 @@
 
 import { REVALIDATE_TAGS } from "@/firebase/constants";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { Article } from "../schema";
 import {
   addArticle,
   batchAddArticles,
   deleteArticle,
   updateArticle,
-} from "./firebase";
+} from "../firebase";
+import { Article } from "../schema";
 
 export const batchAddArticlesAction = async (articles: Article[]) => {
   await batchAddArticles(articles);
