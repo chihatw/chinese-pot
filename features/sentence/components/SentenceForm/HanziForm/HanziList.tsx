@@ -8,8 +8,7 @@ import {
 import { Hanzi, PinyinHanzi } from "@/features/hanzi";
 
 import { PinyinBadge, buildPinyin, getPinyinStr } from "@/features/pinyin";
-import { Sentence, SentenceLine } from "@/features/sentence";
-import { getSentence_client } from "@/features/sentence/services/firebase_client";
+import { Sentence, SentenceLine, getSentence } from "@/features/sentence";
 import { buildHanzisGroupedByConsonantVowel } from "@/features/sentence/services/utils";
 import { useEffect, useState } from "react";
 
@@ -68,7 +67,7 @@ const PinyinHanziHoverCardContent = ({ hanzi }: { hanzi: Hanzi }) => {
       return;
     }
     const fetchData = async () => {
-      const sentence = await getSentence_client(hanzi.latestSentenceId);
+      const sentence = await getSentence(hanzi.latestSentenceId);
       if (!sentence) return;
       setSentence(sentence);
     };

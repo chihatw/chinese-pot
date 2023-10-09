@@ -6,11 +6,29 @@ import {
   PROJECT_ID,
   REVALIDATE_TAGS,
 } from "@/firebase/constants";
-import { FetchRequestURL, buildFetchRequestOption } from "@/firebase/restapi";
+import {
+  FetchRequestURL,
+  buildFetchRequestOption,
+  getDocumentURL,
+} from "@/firebase/restapi";
 import { getIntersection } from "@/utils/utils";
 import { Sentence } from "../schema";
 
 const COLLECTION = "sentences";
+
+export const getSentence = async (
+  id: string,
+): Promise<Sentence | undefined> => {
+  if (!id) return;
+
+  const res = await fetch(getDocumentURL(COLLECTION, id));
+  const json = await res.json();
+  if (json.error) {
+    console.log(json.error);
+    return;
+  }
+  return buildSentence(json);
+};
 
 export const getLastTenSentences = async (): Promise<Sentence[]> => {
   const res = await fetch(

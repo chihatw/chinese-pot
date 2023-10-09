@@ -1,5 +1,7 @@
 "use client";
 
+import { SENTENCE_FORM_KEY } from "../../constants";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -10,9 +12,8 @@ import { buildNewSearchParamsPath } from "@/utils/utils";
 import { nanoid } from "nanoid";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SENTENCE_FORM_KEY } from "../../constants";
-import { Sentence } from "../../schema";
 
+import { Sentence } from "@/features/sentence";
 import { addSentenceAction } from "../../services/actions";
 import { buildSentenceFromHanzis, updateHanzis } from "../../services/utils";
 import FormMonitor from "./FormMonitor";

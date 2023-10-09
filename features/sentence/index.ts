@@ -6,6 +6,7 @@ import SimpleSentenceMonitor from "./components/SimpleSentenceMonitor";
 import { Sentence } from "./schema";
 import {
   getLastTenSentences,
+  getSentence,
   getSentencesByForms,
   getSentencesByIds,
 } from "./services/firestore_restapi";
@@ -17,6 +18,7 @@ export {
   SentenceTable,
   SimpleSentenceMonitor,
   getLastTenSentences,
+  getSentence,
   getSentencesByForms,
   getSentencesByIds,
 };
