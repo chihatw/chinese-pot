@@ -92,3 +92,12 @@ function intersect(a, b) {
 # エラー回避にしたこと
 - constants は index を通さない
 - '..' からの import は避ける
+
+# Vercel の deploy が失敗した時
+[How to fix Next.js Vercel deployment module not found error](https://stackoverflow.com/questions/62378045/how-to-fix-next-js-vercel-deployment-module-not-found-error)
+```shell
+git rm -r --cached .
+git add --all .
+git commit -a -m "Versioning untracked files"
+git push origin master
+```
