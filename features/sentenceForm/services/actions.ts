@@ -12,6 +12,7 @@ import { revalidateTag } from "next/cache";
 export const addSentenceAction = async (
   selectedHanziIds: string[],
   hanzis: Hanzi[],
+  articleId?: string,
 ) => {
   const selectedHanzis = selectedHanziIds.map(
     (id) => hanzis.find((h) => h.id === id)!,
@@ -21,6 +22,8 @@ export const addSentenceAction = async (
   const sentence = buildSentenceFromHanzis(selectedHanzis, sentenceId);
   const updatedHanzis = updateHanzis(selectedHanzis, sentenceId);
 
-  await addSentence(sentence, updatedHanzis);
+  await addSentence(sentence, updatedHanzis, articleId);
+
   revalidateTag(REVALIDATE_TAGS.senences); // note revalidatePath にすると、現在表示されていないページは更新されない
+  revalidateTag(REVALIDATE_TAGS.article);
 };

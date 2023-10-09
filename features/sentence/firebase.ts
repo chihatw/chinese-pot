@@ -1,11 +1,17 @@
 import { Hanzi } from "@/features/hanzi";
-import { hanziConverter } from "@/features/hanzi/services/firebase";
+import {
+  decrementHanziCount_in_batch,
+  updateHanzi_in_batch,
+} from "@/features/hanzi/firebase";
 import { getInvertedIndexesByForms } from "@/features/invertedIndex";
-import { invertedIndexConverter } from "@/features/invertedIndex/services/firebase";
+import {
+  createInvertedIndex_in_batch,
+  decrementInvertedIndexCount_in_batch,
+  incrementInvertedIndexCount_in_batch,
+} from "@/features/invertedIndex/firebase";
 import { Sentence } from "@/features/sentence";
 import { dbAdmin } from "@/firebase/admin";
 import { FieldValue, FirestoreDataConverter } from "firebase-admin/firestore";
-import { nanoid } from "nanoid";
 
 const COLLECTION = "sentences";
 
@@ -25,8 +31,11 @@ export const batchAddSentences = async (sentences: Sentence[]) => {
 };
 
 // noto addSentence を index に通すと、エラー
-export const addSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
-  // invertedIndexes
+export const addSentence = async (
+  sentence: Sentence,
+  hanzis: Hanzi[],
+  articleId?: string,
+) => {
   const forms = [...new Set(sentence.text.split(""))];
   const invertedIndexes = await getInvertedIndexesByForms(forms);
 
@@ -35,57 +44,37 @@ export const addSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
   for (const form of forms) {
     const invertedIndex = invertedIndexes.find((i) => i.form === form);
     if (!invertedIndex) {
-      const id = nanoid(8);
-      batch.set(
-        dbAdmin
-          .collection("invertedIndexes")
-          .withConverter(invertedIndexConverter)
-          .doc(id),
-        {
-          id,
-          form,
-          count: 1,
-          sentenceIds: [sentence.id],
-        },
-      );
+      createInvertedIndex_in_batch(batch, form, sentence.id);
     } else {
-      batch.update(
-        dbAdmin
-          .collection("invertedIndexes")
-          .withConverter(invertedIndexConverter)
-          .doc(invertedIndex.id),
-        {
-          count: FieldValue.increment(1),
-          sentenceIds: FieldValue.arrayUnion(sentence.id),
-        },
+      incrementInvertedIndexCount_in_batch(
+        batch,
+        invertedIndex.id,
+        sentence.id,
       );
     }
   }
 
   for (const hanzi of hanzis) {
-    // note converter が機能せず、id や pinyin がそのまま 登録されるので、手動で変換
-    batch.update(dbAdmin.collection("hanzis").doc(hanzi.id), {
-      consonant: hanzi.pinyin.consonant,
-      count: hanzi.count,
-      form: hanzi.form,
-      latestSentenceId: hanzi.latestSentenceId,
-      tone: hanzi.pinyin.tone,
-      vowel: hanzi.pinyin.vowel,
+    updateHanzi_in_batch(batch, hanzi);
+  }
+
+  createSentence_in_batch(batch, sentence);
+
+  if (!!articleId) {
+    // todo
+    batch.update(dbAdmin.collection("articles").doc(articleId), {
+      sentenceIds: FieldValue.arrayUnion(sentence.id),
     });
   }
 
-  batch.set(
-    dbAdmin
-      .collection("sentences")
-      .withConverter(sentenceConverter)
-      .doc(sentence.id),
-    sentence,
-  );
   batch.commit();
 };
 
-export const removeSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
-  // invertedIndexes
+export const removeSentence = async (
+  sentence: Sentence,
+  hanzis: Hanzi[],
+  articleId?: string,
+) => {
   const forms = [...new Set(sentence.text.split(""))];
   const invertedIndexes = await getInvertedIndexesByForms(forms);
 
@@ -94,34 +83,22 @@ export const removeSentence = async (sentence: Sentence, hanzis: Hanzi[]) => {
   for (const form of forms) {
     const invertedIndex = invertedIndexes.find((i) => i.form === form);
     if (!invertedIndex) throw new Error("invertedIndex cannot find");
-    batch.update(
-      dbAdmin
-        .collection("invertedIndexes")
-        .withConverter(invertedIndexConverter)
-        .doc(invertedIndex.id),
-      {
-        count: FieldValue.increment(-1),
-        sentenceIds: FieldValue.arrayRemove(sentence.id),
-      },
-    );
+    decrementInvertedIndexCount_in_batch(batch, invertedIndex.id, sentence.id);
   }
 
   for (const hanzi of hanzis) {
-    batch.update(
-      dbAdmin.collection("hanzis").withConverter(hanziConverter).doc(hanzi.id),
-      {
-        count: FieldValue.increment(-1),
-        latestSentenceId: "",
-      },
-    );
+    decrementHanziCount_in_batch(batch, hanzi.id);
   }
 
-  batch.delete(
-    dbAdmin
-      .collection("sentences")
-      .withConverter(sentenceConverter)
-      .doc(sentence.id),
-  );
+  deleteSentence_in_batch(batch, sentence.id);
+
+  if (!!articleId) {
+    // todo
+    batch.update(dbAdmin.collection("articles").doc(articleId), {
+      sentenceIds: FieldValue.arrayRemove(sentence.id),
+    });
+  }
+
   try {
     batch.commit();
   } catch (e) {
@@ -146,4 +123,29 @@ const sentenceConverter: FirestoreDataConverter<Sentence> = {
       createdAt: sentence.createdAt,
     };
   },
+};
+
+const createSentence_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  sentence: Sentence,
+) => {
+  batch.set(
+    dbAdmin
+      .collection("sentences")
+      .withConverter(sentenceConverter)
+      .doc(sentence.id),
+    sentence,
+  );
+};
+
+const deleteSentence_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  sentenceId: string,
+) => {
+  batch.delete(
+    dbAdmin
+      .collection("sentences")
+      .withConverter(sentenceConverter)
+      .doc(sentenceId),
+  );
 };

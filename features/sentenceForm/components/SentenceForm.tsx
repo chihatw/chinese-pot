@@ -8,9 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
-import { Hanzi } from "@/features/hanzi";
-import { Sentence } from "@/features/sentence";
 import {
+  SentenceFormProps,
   addSentenceAction,
   getSelectedHanziIds,
 } from "@/features/sentenceForm";
@@ -23,11 +22,8 @@ const SentenceForm = ({
   forms,
   hanzis,
   sentences,
-}: {
-  forms: string;
-  hanzis: Hanzi[];
-  sentences: Sentence[];
-}) => {
+  articleId,
+}: SentenceFormProps) => {
   const { toast } = useToast();
 
   const [input, setInput] = useState(forms);
@@ -50,54 +46,50 @@ const SentenceForm = ({
   }, [forms, hanzis]);
 
   const handleSubmit = async () => {
-    await addSentenceAction(selectedHanziIds, hanzis);
+    await addSentenceAction(selectedHanziIds, hanzis, articleId);
 
     toast({ description: `added sentence!!` });
     setInput("");
   };
 
   return (
-    <div>
-      <div className="text-4xl font-bold">SentenceForm</div>
-
-      <div className="grid gap-4 pt-4">
-        <Input
-          className="bg-white"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <div className="space-y-4">
-          {searchParamsValue.split("").map((form, index) => {
-            const filteredHanzis = hanzis
-              .filter((h) => h.form === form)
-              .sort((a, b) => b.count - a.count);
-            return (
-              <FormMonitor
-                key={index}
-                index={index}
-                form={form}
-                sentences={sentences}
-                hanzis={filteredHanzis}
-                selectedHanziId={selectedHanziIds[index]}
-                setSelectedHanziIds={setSelectedHanziIds}
-              />
-            );
-          })}
-        </div>
-        <SelectedHanzisMonitor
-          hanzis={hanzis}
-          selectedHanziIds={selectedHanziIds}
-        />
-        <form action={handleSubmit}>
-          <Button
-            disabled={selectedHanziIds.some((id) => !id)}
-            type="submit"
-            className="w-full"
-          >
-            submit
-          </Button>
-        </form>
+    <div className="grid gap-4">
+      <Input
+        className="bg-white"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <div className="space-y-4">
+        {searchParamsValue.split("").map((form, index) => {
+          const filteredHanzis = hanzis
+            .filter((h) => h.form === form)
+            .sort((a, b) => b.count - a.count);
+          return (
+            <FormMonitor
+              key={index}
+              index={index}
+              form={form}
+              sentences={sentences}
+              hanzis={filteredHanzis}
+              selectedHanziId={selectedHanziIds[index]}
+              setSelectedHanziIds={setSelectedHanziIds}
+            />
+          );
+        })}
       </div>
+      <SelectedHanzisMonitor
+        hanzis={hanzis}
+        selectedHanziIds={selectedHanziIds}
+      />
+      <form action={handleSubmit}>
+        <Button
+          disabled={selectedHanziIds.some((id) => !id)}
+          type="submit"
+          className="w-full"
+        >
+          {articleId ? `Add to Article` : "Create New Sentence"}
+        </Button>
+      </form>
     </div>
   );
 };

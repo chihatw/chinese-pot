@@ -12,10 +12,15 @@ const SentenceLine = ({
 }) => {
   const sentenceChars = buildSentenceChars(sentence, highlight || "");
   return (
-    <div className="flex flex-wrap gap-1 ">
-      {sentenceChars.map((char, index) => (
-        <PinyinHanzi key={index} {...char} textSize={textSize} />
-      ))}
+    <div>
+      <div className="text-right text-xs font-extralight text-gray-500">
+        {sentence.id}
+      </div>
+      <div className="flex flex-wrap gap-1 ">
+        {sentenceChars.map((char, index) => (
+          <PinyinHanzi key={index} {...char} textSize={textSize} />
+        ))}
+      </div>
     </div>
   );
 };

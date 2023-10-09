@@ -82,6 +82,7 @@ export const getSentencesByIds = async (
               `projects/${PROJECT_ID}/databases/(default)/documents/${COLLECTION}/${sentenceId}`,
           ),
         ],
+        tags: [REVALIDATE_TAGS.senences],
       }),
     );
     const json = await res.json();

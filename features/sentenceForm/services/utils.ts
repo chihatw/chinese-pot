@@ -1,6 +1,7 @@
-import { Hanzi } from "@/features/hanzi";
+import { Hanzi, getHanzisByForms } from "@/features/hanzi";
 import { getPinyinStr } from "@/features/pinyin";
-import { Sentence } from "@/features/sentence";
+import { Sentence, getSentencesByIds } from "@/features/sentence";
+import { SentenceFormProps } from "..";
 
 export const buildSentenceFromHanzis = (
   hanzis: Hanzi[],
@@ -31,4 +32,17 @@ export const updateHanzis = (hanzis: Hanzi[], sentenceId: string): Hanzi[] => {
     count: h.count + 1,
     latestSentenceId: sentenceId,
   }));
+};
+
+export const buildSentenceFormProps = async (
+  forms: string,
+): Promise<SentenceFormProps> => {
+  const forms_uniq = [...new Set(forms.split("").filter(Boolean))];
+
+  // forms に含まれる Hanzi を取得
+  const hanzis = forms_uniq.length ? await getHanzisByForms(forms_uniq) : [];
+  const latestSentenceIds = [...new Set(hanzis.map((h) => h.latestSentenceId))];
+  const sentences = await getSentencesByIds(latestSentenceIds);
+
+  return { hanzis, forms, sentences };
 };

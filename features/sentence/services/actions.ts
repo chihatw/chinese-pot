@@ -10,12 +10,16 @@ import { Sentence } from "../schema";
 export const removeSentenceAction = async (
   sentence: Sentence,
   hanzis: Hanzi[],
+  articleId?: string,
 ) => {
-  await removeSentence(sentence, hanzis);
+  await removeSentence(sentence, hanzis, articleId);
+
   revalidateTag(REVALIDATE_TAGS.senences);
+  revalidateTag(REVALIDATE_TAGS.article);
 };
 
 export const batchAddSentencesAction = async (sentences: Sentence[]) => {
   await batchAddSentences(sentences);
   revalidateTag(REVALIDATE_TAGS.senences);
+  revalidateTag(REVALIDATE_TAGS.article);
 };

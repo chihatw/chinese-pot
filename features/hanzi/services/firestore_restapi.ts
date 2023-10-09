@@ -21,7 +21,9 @@ export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
     return [];
   }
 
-  return (json as any[]).map((item) => buildHanzi(item.document));
+  return (json as any[])
+    .filter((item) => !!item.document)
+    .map((item) => buildHanzi(item.document));
 };
 
 export const getHanzisByPinyinFilter = async (
@@ -52,7 +54,9 @@ export const getHanzisByPinyinFilter = async (
     return [];
   }
 
-  return (json as any[]).map((item) => buildHanzi(item.document));
+  return (json as any[])
+    .filter((item) => !!item.document)
+    .map((item) => buildHanzi(item.document));
 };
 
 const buildHanzi = (document: any): Hanzi => {

@@ -9,7 +9,9 @@ import { Article } from "../schema";
 const COLLECTION = "articles";
 
 export const getArticle = async (id: string) => {
-  const res = await fetch(getDocumentURL(COLLECTION, id));
+  const res = await fetch(getDocumentURL(COLLECTION, id), {
+    next: { tags: [REVALIDATE_TAGS.article] },
+  });
   const json = await res.json();
   if (json.error) {
     console.log(json.error);

@@ -1,21 +1,28 @@
 "server only";
 
 import { getArticle } from "@/features/article";
+import { SentenceForm, buildSentenceFormProps } from "@/features/sentenceForm";
+import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const ArticleSentenceFormPage = async ({
   params: { id },
+  searchParams,
 }: {
   params: { id: string };
+  searchParams: { [SENTENCE_FORM_KEY]?: string };
 }) => {
   !id && redirect("/");
 
   const article = await getArticle(id);
   !article && redirect("/");
 
+  const forms = searchParams[SENTENCE_FORM_KEY]?.trim() || "";
+  const { hanzis, sentences } = await buildSentenceFormProps(forms);
+
   return (
-    <div className="mx-auto w-full max-w-md space-y-8 pt-10">
+    <div className="mx-auto w-full max-w-md space-y-8 pb-40 pt-10">
       <div className="text-2xl font-bold">{article!.title}</div>
       <div className="flex">
         <Link href={`/article/${id}`}>
@@ -24,6 +31,12 @@ const ArticleSentenceFormPage = async ({
           </div>
         </Link>
       </div>
+      <SentenceForm
+        articleId={id}
+        forms={forms}
+        hanzis={hanzis}
+        sentences={sentences}
+      />
     </div>
   );
 };

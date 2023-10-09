@@ -1,8 +1,8 @@
 import { Pinyin } from "@/features/pinyin";
 import { dbAdmin } from "@/firebase/admin";
 
-import { FirestoreDataConverter } from "firebase-admin/firestore";
-import { Hanzi } from "../schema";
+import { FieldValue, FirestoreDataConverter } from "firebase-admin/firestore";
+import { Hanzi } from "./schema";
 
 const COLLECTION = "hanzis";
 
@@ -28,7 +28,35 @@ export const addHanzi = async (hanzi: Hanzi) => {
     .set(hanzi);
 };
 
-export const hanziConverter: FirestoreDataConverter<Hanzi> = {
+export const updateHanzi_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  hanzi: Hanzi,
+) => {
+  // note converter が機能せず、id や pinyin がそのまま 登録されるので、手動で変換
+  batch.update(dbAdmin.collection(COLLECTION).doc(hanzi.id), {
+    consonant: hanzi.pinyin.consonant,
+    count: hanzi.count,
+    form: hanzi.form,
+    latestSentenceId: hanzi.latestSentenceId,
+    tone: hanzi.pinyin.tone,
+    vowel: hanzi.pinyin.vowel,
+  });
+};
+
+export const decrementHanziCount_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  hanziId: string,
+) => {
+  batch.update(
+    dbAdmin.collection(COLLECTION).withConverter(hanziConverter).doc(hanziId),
+    {
+      count: FieldValue.increment(-1),
+      latestSentenceId: "",
+    },
+  );
+};
+
+const hanziConverter: FirestoreDataConverter<Hanzi> = {
   fromFirestore(snapshot) {
     const data = snapshot.data();
     return {

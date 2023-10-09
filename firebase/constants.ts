@@ -17,4 +17,5 @@ export const REVALIDATE_TAGS = {
   articles: "articles",
   hanzis: "hanzis",
   invertedIndexes: "invertedIndexes",
+  article: "article",
 };

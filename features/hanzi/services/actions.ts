@@ -1,7 +1,7 @@
 "use server";
 
 import { Hanzi } from "@/features/hanzi";
-import { batchAddHanzis } from "@/features/hanzi/services/firebase";
+import { batchAddHanzis } from "@/features/hanzi/firebase";
 import { REVALIDATE_TAGS } from "@/firebase/constants";
 import { revalidateTag } from "next/cache";
 
