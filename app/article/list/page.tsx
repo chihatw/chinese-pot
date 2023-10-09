@@ -1,12 +1,13 @@
 "server only";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import { ArticleList, getRecentArticles } from "@/features/article";
 import { Plus } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 const ArticleListPage = async () => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session?.user.uid) {
     return (
       <div className="grid place-items-center text-5xl">you must log in</div>
