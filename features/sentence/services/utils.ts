@@ -5,10 +5,10 @@ import {
   getVowelCounts,
 } from "@/features/hanzi";
 
-import { CONSONANTS } from "@/features/pinyin";
+import { CONSONANTS } from "@/features/pinyin/constants/consonants";
 import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
 import { getPinyinStr } from "@/features/pinyin/services/utils";
-import { Sentence } from "..";
+import { Sentence } from "../schema";
 
 type SentenceChar = {
   form: string;

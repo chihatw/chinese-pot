@@ -15,6 +15,27 @@ export const getDocumentURL = (collection: string, docId: string) => {
   return `${getBaseUrl()}/v1/projects/${PROJECT_ID}/databases/(default)/documents/${collection}/${docId}`;
 };
 
+export const getDocumentCount = async (
+  collectionId: string,
+  tag: string,
+): Promise<number> => {
+  const res = await fetch(
+    FetchRequestURL,
+    buildFetchRequestOption({
+      collectionId,
+      selectFields: [],
+      tags: [tag],
+    }),
+  );
+  const json = await res.json();
+  if (json.error) {
+    console.log(json.error);
+    return 0;
+  }
+
+  return (json as any[]).filter((item) => item.document).length;
+};
+
 // index を通して export するとエラー
 export const FetchRequestURL = (() => {
   return `${getBaseUrl()}/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`;

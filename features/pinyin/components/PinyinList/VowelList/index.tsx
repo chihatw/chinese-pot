@@ -6,8 +6,9 @@ import {
   MAJOR_VOWELS,
   VOWELS,
   VOWEL_PAIRS,
-} from "../../..";
-import { pinyinColor } from "../../../services/pinyinColor";
+} from "@/features/pinyin/constants/vowels";
+
+import { pinyinColor } from "@/features/pinyin/services/pinyinColor";
 import MajorVowelsRow from "./MajorVowelsRow";
 import MinorVowelsRow from "./MinorVowelsRow";
 

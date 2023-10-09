@@ -1,16 +1,17 @@
+import { Pinyin, PinyinFilter } from "@/features/pinyin";
 import {
   CONSONANT_FILTER,
+  ONE_CHAR_CONSONANTS,
+  TWO_CHAR_CONSONANTS,
+} from "../constants/consonants";
+import { TONES } from "../constants/tones";
+import { VOWEL_FILTER } from "../constants/vowelfilter";
+import {
   EXTROVERTED_VOWELS,
   INTROVERTED_VOWELS,
-  ONE_CHAR_CONSONANTS,
-  Pinyin,
-  PinyinFilter,
-  TONES,
-  TWO_CHAR_CONSONANTS,
   VOWELS,
-  VOWEL_FILTER,
   VOWEL_PAIRS,
-} from "..";
+} from "../constants/vowels";
 
 export const buildPinyin = (value: string): Pinyin => {
   // 最後尾が TONE かどうかチェック

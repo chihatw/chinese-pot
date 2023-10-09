@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-import { Pinyin } from "..";
+import { Pinyin } from "../schema";
 import { isValidPinyin } from "../services/buildPinyin";
 import { pinyinColor } from "../services/pinyinColor";
 import { getPinyinStr } from "../services/utils";

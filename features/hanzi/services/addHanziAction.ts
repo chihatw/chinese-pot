@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Hanzi } from "..";
+import { Hanzi } from "../schema";
 import { addHanzi } from "./firebase";
 
 export const addHanziAction = async (hanzi: Hanzi) => {

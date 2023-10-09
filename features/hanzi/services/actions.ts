@@ -2,9 +2,10 @@
 
 import { Hanzi } from "@/features/hanzi";
 import { batchAddHanzis } from "@/features/hanzi/services/firebase";
-import { revalidatePath } from "next/cache";
+import { REVALIDATE_TAGS } from "@/firebase/constants";
+import { revalidateTag } from "next/cache";
 
 export const batchAddHanzisAction = async (hanzis: Hanzi[]) => {
   await batchAddHanzis(hanzis);
-  revalidatePath("/");
+  revalidateTag(REVALIDATE_TAGS.hanzis);
 };

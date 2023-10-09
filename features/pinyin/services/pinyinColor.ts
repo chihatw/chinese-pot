@@ -1,11 +1,13 @@
 import {
+  ONE_CHAR_CONSONANTS,
+  TWO_CHAR_CONSONANTS,
+} from "../constants/consonants";
+import {
   EXTROVERTED_VOWELS,
   INTROVERTED_VOWELS,
   MAJOR_VOWELS,
-  ONE_CHAR_CONSONANTS,
-  TWO_CHAR_CONSONANTS,
   VOWEL_PAIRS,
-} from "..";
+} from "../constants/vowels";
 
 export const pinyinColor = (pinyin: string) => {
   if (ONE_CHAR_CONSONANTS.includes(pinyin)) {

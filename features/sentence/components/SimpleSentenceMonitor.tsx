@@ -1,6 +1,6 @@
 import { PinyinBadge } from "@/features/pinyin";
 import { buildPinyin } from "@/features/pinyin/services/buildPinyin";
-import { Sentence } from "..";
+import { Sentence } from "../schema";
 
 const SimpleSentenceMonitor = ({ sentence }: { sentence: Sentence }) => {
   return (

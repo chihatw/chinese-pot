@@ -3,8 +3,8 @@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PinyinHanzi } from "@/features/hanzi";
 import { Hanzi } from "@/features/hanzi/schema";
+import { Sentence, SentenceLine } from "@/features/sentence";
 import { Dispatch, SetStateAction } from "react";
-import { Sentence, SentenceLine } from "../..";
 import { buildHanzisFromSentence } from "../../services/utils";
 
 const SelectHanziRadioGroup = ({

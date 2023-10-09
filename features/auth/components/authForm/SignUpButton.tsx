@@ -1,10 +1,10 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { SignUpSchema } from "@/features/auth/schema";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { ReactNode } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { Button } from "../../../../components/ui/button";
 
 const SignUpButton = ({
   progress,
@@ -20,7 +20,7 @@ const SignUpButton = ({
       type="submit"
       className={cn(
         "relative z-[1] w-full overflow-hidden bg-gray-300",
-        "before:bg-main before:absolute before:inset-0 before:-z-[1]  before:inline-block before:duration-700",
+        "before:absolute before:inset-0 before:-z-[1] before:inline-block  before:bg-main before:duration-700",
         (() => {
           switch (progress) {
             case 1:

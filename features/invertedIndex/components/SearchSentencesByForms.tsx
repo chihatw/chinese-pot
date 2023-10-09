@@ -4,7 +4,7 @@ import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FORM_SEARCH_KEY } from "..";
+import { FORM_SEARCH_KEY } from "../constants";
 
 const SearchSentencesByForms = ({ forms }: { forms: string }) => {
   const router = useRouter();

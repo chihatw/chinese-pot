@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/hover-card";
 import { PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
-import { Hanzi } from "../..";
+import { Hanzi } from "../../schema";
 import { buildFormUniqHanzis } from "../../services/util";
 
 const FormsMonitor = ({ hanzis }: { hanzis: Hanzi[] }) => {

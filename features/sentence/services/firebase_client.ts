@@ -1,9 +1,10 @@
 import { dbClient } from "@/firebase/client";
 import { FirestoreDataConverter, doc, getDoc } from "firebase/firestore";
-import { Sentence } from "..";
+import { Sentence } from "../schema";
 
 const COLLECTION = "sentences";
 
+// debug
 export const getSentence_client = async (id: string) => {
   const snapshot = await getDoc(
     doc(dbClient, COLLECTION, id).withConverter(sentenceConverter),

@@ -3,19 +3,6 @@ import { InvertedIndex } from "../schema";
 
 const COLLECTION = "invertedIndexes";
 
-export const getInvertedIndexesCount = async () => {
-  const res = await fetch(
-    FetchRequestURL,
-    buildFetchRequestOption({ collectionId: COLLECTION, selectFields: [] }),
-  );
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return 0;
-  }
-  return json.length;
-};
-
 export const getInvertedIndexByForm = async (
   form: string,
 ): Promise<InvertedIndex | undefined> => {

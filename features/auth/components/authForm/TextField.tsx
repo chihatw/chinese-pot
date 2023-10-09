@@ -1,13 +1,13 @@
-import { HTMLInputTypeAttribute, ReactNode } from "react";
-import { Control, FieldValue, FieldValues } from "react-hook-form";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../components/ui/form";
-import { Input } from "../../../../components/ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { HTMLInputTypeAttribute, ReactNode } from "react";
+import { Control, FieldValue, FieldValues } from "react-hook-form";
 
 const TextField = <T extends FieldValues>({
   control,

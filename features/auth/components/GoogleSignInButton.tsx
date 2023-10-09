@@ -1,7 +1,8 @@
+import { Button } from "@/components/ui/button";
 import { signInAppWithGoogle } from "@/features/auth/services/auth";
 import { ReactNode, useState } from "react";
+
 import { FaGoogle } from "react-icons/fa";
-import { Button } from "../../../components/ui/button";
 
 const GoogleSignInButton = ({ children }: { children: ReactNode }) => {
   const [openOverlay, setOpenOverlay] = useState(false);
@@ -17,7 +18,7 @@ const GoogleSignInButton = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Button
-        className="bg-main hover:bg-main-300  active:bg-main-600 w-full"
+        className="w-full bg-main  hover:bg-main-300 active:bg-main-600"
         onClick={loginWithGoogle}
       >
         {children}

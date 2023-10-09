@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
-import { CONSONANTS } from "../..";
+import { CONSONANTS } from "../../constants/consonants";
 import { pinyinColor } from "../../services/pinyinColor";
 
 const ConsonantList = () => {

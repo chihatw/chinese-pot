@@ -1,5 +1,6 @@
 import { Hanzi } from "@/features/hanzi";
-import { getConsonantCounts } from "../../../../../services/util";
+
+import { getConsonantCounts } from "@/features/hanzi/services/util";
 import VowelConsonantBadge from "./VowelConsonantBadge";
 
 const VowelConsonantList = ({ hanzis }: { hanzis: Hanzi[] }) => {

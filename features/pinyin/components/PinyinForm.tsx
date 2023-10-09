@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import { Pinyin, PinyinLine } from "@/features/pinyin";
 import { useEffect, useState } from "react";
-import { Pinyin, PinyinLine } from "..";
 import { buildPinyins } from "../services/buildPinyin";
 
 const PinyinForm = () => {

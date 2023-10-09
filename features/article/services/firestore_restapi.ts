@@ -1,3 +1,4 @@
+import { REVALIDATE_TAGS } from "@/firebase/constants";
 import {
   FetchRequestURL,
   buildFetchRequestOption,
@@ -6,20 +7,6 @@ import {
 import { Article } from "../schema";
 
 const COLLECTION = "articles";
-
-export const getArticleCount = async () => {
-  const res = await fetch(
-    FetchRequestURL,
-    buildFetchRequestOption({ collectionId: COLLECTION, selectFields: [] }),
-  );
-
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return 0;
-  }
-  return json.length;
-};
 
 export const getArticle = async (id: string) => {
   const res = await fetch(getDocumentURL(COLLECTION, id));
@@ -38,6 +25,7 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
       collectionId: COLLECTION,
       orderBy: ["createdAt", "desc"],
       limit,
+      tags: [REVALIDATE_TAGS.articles],
     }),
   );
   const json = await res.json();

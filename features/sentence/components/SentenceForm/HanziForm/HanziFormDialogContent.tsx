@@ -5,8 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Hanzi, PinyinHanzi, buildHanziId } from "@/features/hanzi";
 
 import {
-  INITIAL_PINYIN,
-  INITIAL_PINYIN_FILTERL,
   Pinyin,
   PinyinBadge,
   PinyinFilter,
@@ -23,6 +21,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { addHanziAction } from "@/features/hanzi/services/addHanziAction";
 
 import { getHanzisByPinyinFilter } from "@/features/hanzi/services/firestore_restapi";
+import {
+  INITIAL_PINYIN,
+  INITIAL_PINYIN_FILTERL,
+} from "@/features/pinyin/schema";
 import { useEffect, useState } from "react";
 import HanziList from "./HanziList";
 

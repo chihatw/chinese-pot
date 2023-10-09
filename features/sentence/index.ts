@@ -1,3 +1,4 @@
+import BatchAddSentencesButton from "./components/BatchAddSentencesButton";
 import SentenceForm from "./components/SentenceForm";
 import SentenceLine from "./components/SentenceLine";
 import SentenceTable from "./components/SentenceTable";
@@ -7,10 +8,10 @@ import {
   getLastTenSentences,
   getSentencesByForms,
   getSentencesByIds,
-  getSentencesCount,
 } from "./services/firestore_restapi";
 
 export {
+  BatchAddSentencesButton,
   SentenceForm,
   SentenceLine,
   SentenceTable,
@@ -18,7 +19,6 @@ export {
   getLastTenSentences,
   getSentencesByForms,
   getSentencesByIds,
-  getSentencesCount,
 };
 
 export type { Sentence };

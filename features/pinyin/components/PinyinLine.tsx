@@ -1,4 +1,4 @@
-import { Pinyin, PinyinBadge } from "..";
+import { Pinyin, PinyinBadge } from "@/features/pinyin";
 
 const PinyinLine = ({ pinyins }: { pinyins: Pinyin[] }) => {
   return (

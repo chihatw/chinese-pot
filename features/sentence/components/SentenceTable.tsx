@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Sentence, SentenceLine } from "@/features/sentence";
 import { Delete } from "lucide-react";
-import { Sentence, SentenceLine } from "..";
 import { removeSentenceAction } from "../services/actions";
 import { buildHanzisFromSentence } from "../services/utils";
 

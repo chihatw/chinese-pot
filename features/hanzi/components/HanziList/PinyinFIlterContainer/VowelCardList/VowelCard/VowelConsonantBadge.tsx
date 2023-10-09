@@ -5,10 +5,10 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
+import { Hanzi } from "@/features/hanzi";
+import { getCorrectVowel, getToneCounts } from "@/features/hanzi/services/util";
 import { PinyinBadge } from "@/features/pinyin";
 import { cn } from "@/lib/utils";
-import { Hanzi } from "../../../../..";
-import { getCorrectVowel, getToneCounts } from "../../../../../services/util";
 
 const VowelConsonantBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const hanzi = hanzis[0];

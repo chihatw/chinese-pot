@@ -1,6 +1,7 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
-import { Hanzi } from "../../../../..";
+
+import { Hanzi } from "@/features/hanzi";
 import VowelConsonantList from "./VowelConsonantList";
 import VowelCount from "./VowelCount";
 import VowelToneList from "./VowelToneList";

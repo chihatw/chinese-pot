@@ -2,7 +2,7 @@
 
 import { Hanzi } from "@/features/hanzi/schema";
 import { Dispatch, SetStateAction } from "react";
-import { Sentence } from "../..";
+import { Sentence } from "../../schema";
 import HanziForm from "./HanziForm";
 import SelectHanziRadioGroup from "./SelectHanziRadioGroup";
 

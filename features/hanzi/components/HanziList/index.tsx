@@ -1,6 +1,6 @@
 "server only";
 
-import { Hanzi } from "../..";
+import { Hanzi } from "../../schema";
 import FormFilterContainer from "./FormFilterContainer";
 import MarksMonitor from "./MarksMonitor";
 import PinyinFilterContainer from "./PinyinFilterContainer";

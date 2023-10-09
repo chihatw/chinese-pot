@@ -1,7 +1,8 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { FORM_SEARCH_KEY } from "@/features/invertedIndex";
+import { FORM_SEARCH_KEY } from "@/features/invertedIndex/constants";
+
 import { Sentence } from "@/features/sentence";
 import useDebouce from "@/hooks/useDebounce";
 import { buildNewSearchParamsPath } from "@/utils/utils";

@@ -1,4 +1,4 @@
-import { Hanzi } from "../..";
+import { Hanzi } from "../../schema";
 
 const MarksMonitor = ({ marks }: { marks: Hanzi[] }) => {
   return (

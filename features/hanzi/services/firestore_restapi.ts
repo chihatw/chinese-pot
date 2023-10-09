@@ -6,23 +6,6 @@ import { Hanzi } from "../schema";
 
 const COLLECTION = "hanzis";
 
-export const getHanzisCount = async (): Promise<number> => {
-  const res = await fetch(
-    FetchRequestURL,
-    buildFetchRequestOption({
-      collectionId: COLLECTION,
-      selectFields: [],
-    }),
-  );
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return 0;
-  }
-
-  return json.length;
-};
-
 export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
   const res = await fetch(
     FetchRequestURL,

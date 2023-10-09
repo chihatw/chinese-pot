@@ -1,24 +1,19 @@
 import ArticleForm from "./components/ArticleForm";
 import ArticleList from "./components/ArticleList";
 import ArticleSentences from "./components/ArticleSentences";
+import BatchAddArticlesButton from "./components/BatchAddArticlesButton";
 import CreateArticleButton from "./components/CreateArticleButton";
-import RandomArticleSentences from "./components/RandomArticleSentences";
 import { Article } from "./schema";
 
-import {
-  getArticle,
-  getArticleCount,
-  getRecentArticles,
-} from "./services/firestore_restapi";
+import { getArticle, getRecentArticles } from "./services/firestore_restapi";
 
 export {
   ArticleForm,
   ArticleList,
   ArticleSentences,
+  BatchAddArticlesButton,
   CreateArticleButton,
-  RandomArticleSentences,
   getArticle,
-  getArticleCount,
   getRecentArticles,
 };
 

@@ -6,7 +6,8 @@ import { Mail, SendHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { Button } from "../../../../components/ui/button";
+
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +15,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../../components/ui/dialog";
-import { FormLabel } from "../../../../components/ui/form";
-import { Input } from "../../../../components/ui/input";
-import { useToast } from "../../../../components/ui/use-toast";
+} from "@/components/ui/dialog";
+import { FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 const ResetPasswordButton = () => {
   const [input, setInput] = useState("");
@@ -111,7 +112,7 @@ const ResetPasswordButton = () => {
             className={cn(
               "relativ",
               isValidEmail
-                ? "bg-main pointer-events-auto"
+                ? "pointer-events-auto bg-main"
                 : "pointer-events-none bg-gray-300",
             )}
           >

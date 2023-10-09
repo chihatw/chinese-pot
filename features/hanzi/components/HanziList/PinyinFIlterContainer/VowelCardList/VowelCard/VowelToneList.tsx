@@ -1,5 +1,5 @@
-import { Hanzi } from "../../../../..";
-import { getToneCounts } from "../../../../../services/util";
+import { Hanzi } from "@/features/hanzi";
+import { getToneCounts } from "@/features/hanzi/services/util";
 import VowelToneBadge from "./VowelToneBadge";
 
 const VowelToneList = ({ hanzis }: { hanzis: Hanzi[] }) => {

@@ -1,8 +1,19 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { Article } from "..";
-import { addArticle, deleteArticle, updateArticle } from "./firebase";
+import { REVALIDATE_TAGS } from "@/firebase/constants";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { Article } from "../schema";
+import {
+  addArticle,
+  batchAddArticles,
+  deleteArticle,
+  updateArticle,
+} from "./firebase";
+
+export const batchAddArticlesAction = async (articles: Article[]) => {
+  await batchAddArticles(articles);
+  revalidateTag(REVALIDATE_TAGS.articles);
+};
 
 export const addArticleAction = async (article: Article) => {
   await addArticle(article);

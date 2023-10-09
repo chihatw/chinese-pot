@@ -12,19 +12,6 @@ import { Sentence } from "../schema";
 
 const COLLECTION = "sentences";
 
-export const getSentencesCount = async () => {
-  const res = await fetch(
-    FetchRequestURL,
-    buildFetchRequestOption({ collectionId: COLLECTION, selectFields: [] }),
-  );
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return 0;
-  }
-  return json.length;
-};
-
 export const getLastTenSentences = async (): Promise<Sentence[]> => {
   const res = await fetch(
     FetchRequestURL,

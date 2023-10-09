@@ -1,5 +1,5 @@
 import { PinyinHanzi } from "@/features/hanzi";
-import { Sentence } from "..";
+import { Sentence } from "../schema";
 import { buildSentenceChars } from "../services/utils";
 
 const SentenceLine = ({

@@ -1,9 +1,9 @@
 "use client";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Hanzi, getHanzisByVowel, getVowelCounts } from "@/features/hanzi";
 import { PinyinFilter } from "@/features/pinyin";
 import React, { useState } from "react";
-import { Hanzi, getHanzisByVowel, getVowelCounts } from "../../../..";
 
 import FormsMonitor from "../../FormsMonitor";
 import VowelCard from "./VowelCard";

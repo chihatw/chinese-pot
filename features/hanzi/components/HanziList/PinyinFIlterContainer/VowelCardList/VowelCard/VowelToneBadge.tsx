@@ -5,13 +5,14 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Separator } from "@/components/ui/separator";
-import { PinyinBadge, VOWEL_PAIRS } from "@/features/pinyin";
-
-import { Hanzi } from "../../../../..";
+import { Hanzi } from "@/features/hanzi";
 import {
   getConsonantCounts,
   getCorrectVowel,
-} from "../../../../../services/util";
+} from "@/features/hanzi/services/util";
+import { PinyinBadge } from "@/features/pinyin";
+
+import { VOWEL_PAIRS } from "@/features/pinyin/constants/vowels";
 
 const VowelToneBadge = ({ hanzis }: { hanzis: Hanzi[] }) => {
   const hanzi = hanzis.at(0)!;

@@ -2,9 +2,13 @@
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { SENTENCES } from "..";
-import ServerActionPendingButton from "../../../components/ServerActionPendingButton";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
+
+import SENTENCES_JSON from "../json/SENTENCES.json";
+import { Sentence } from "../schema";
 import { batchAddSentencesAction } from "../services/actions";
+
+const SENTENCES = SENTENCES_JSON as Sentence[];
 
 const BatchAddSentencesButton = () => {
   const { toast } = useToast();

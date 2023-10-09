@@ -1,21 +1,20 @@
 "server only";
 
-import { getArticleCount } from "@/features/article";
-import { getHanzisCount } from "@/features/hanzi";
-import BatchAddHanzisButton from "@/features/hanziSeeds/components/BatchAddHanzisButton";
+import { FORM_SEARCH_KEY } from "@/features/invertedIndex/constants";
+
+import { BatchAddArticlesButton } from "@/features/article";
+import { BatchAddHanzisButton } from "@/features/hanzi";
 import {
-  FORM_SEARCH_KEY,
+  BuildInvetedIndexesButton,
   SearchResultList,
   SearchSentencesByForms,
-  getInvertedIndexesCount,
 } from "@/features/invertedIndex";
-import { BuildInvetedIndexesButton } from "@/features/invertedIndexSeed";
-import { getSentencesByForms, getSentencesCount } from "@/features/sentence";
-
 import {
-  BatchAddArticlesButton,
   BatchAddSentencesButton,
-} from "@/features/sentenceSeeds";
+  getSentencesByForms,
+} from "@/features/sentence";
+import { REVALIDATE_TAGS } from "@/firebase/constants";
+import { getDocumentCount } from "@/firebase/restapi";
 
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -27,10 +26,19 @@ export default async function Home({
 }) {
   const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
 
-  const hanzisCount = await getHanzisCount();
-  const articlesCount = await getArticleCount();
-  const sentencesCount = await getSentencesCount();
-  const invertedIndexesCount = await getInvertedIndexesCount();
+  const hanzisCount = await getDocumentCount("hanzis", REVALIDATE_TAGS.hanzis);
+  const articlesCount = await getDocumentCount(
+    "articles",
+    REVALIDATE_TAGS.articles,
+  );
+  const sentencesCount = await getDocumentCount(
+    "sentences",
+    REVALIDATE_TAGS.senences,
+  );
+  const invertedIndexesCount = await getDocumentCount(
+    "invertedIndexes",
+    REVALIDATE_TAGS.invertedIndexes,
+  );
 
   const { total, sentences } = await getSentencesByForms(forms);
 
@@ -63,8 +71,6 @@ export default async function Home({
       </div>
       <SearchSentencesByForms forms={forms} />
       <SearchResultList forms={forms} total={total} sentences={sentences} />
-      {/* <PinyinList /> */}
-      {/* <RandomArticleSentences /> */}
     </main>
   );
 }

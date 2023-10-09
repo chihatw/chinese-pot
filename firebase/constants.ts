@@ -14,4 +14,7 @@ export const PROJECT_ID = "chinese-pot";
 // noto index を通すと、 not found になる
 export const REVALIDATE_TAGS = {
   senences: "sentences",
+  articles: "articles",
+  hanzis: "hanzis",
+  invertedIndexes: "invertedIndexes",
 };
