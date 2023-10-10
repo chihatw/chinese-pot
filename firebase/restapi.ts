@@ -282,7 +282,7 @@ const buildHanzi = (document: any): Hanzi => {
   };
 };
 
-// note これは revalidate されない
+// note structuredQuery を使わずに取得すると、 revalidate されない
 export const getArticle_deprecated = async (id: string) => {
   const res = await fetch(getDocumentURL(COLLECTIONS.articles, id), {
     next: { tags: [REVALIDATE_TAGS.article] },

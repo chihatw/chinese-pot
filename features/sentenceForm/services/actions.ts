@@ -26,7 +26,8 @@ export const addSentenceAction = async (
 
   await addSentence(sentence, updatedHanzis, articleId);
 
-  revalidateTag(REVALIDATE_TAGS.senences); // note revalidatePath にすると、現在表示されていないページは更新されない
+  // note revalidatePath にすると、現在表示されていないページは更新されない
+  revalidateTag(REVALIDATE_TAGS.senences);
   revalidateTag(REVALIDATE_TAGS.articles);
 
   if (articleId) {
