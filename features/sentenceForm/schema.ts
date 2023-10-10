@@ -6,4 +6,5 @@ export interface SentenceFormProps {
   hanzis: Hanzi[];
   sentences: Sentence[];
   articleId?: string;
+  total: number;
 }

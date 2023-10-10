@@ -2,8 +2,7 @@
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { useToast } from "@/components/ui/use-toast";
 
-import { batchAddInvertedIndexesAction } from "../services/actions";
-
+import { batchAddInvertedIndexesAction } from "@/app/_actions";
 import INVERTED_INDEXES_JSON from "../json/inverted_indexes.json";
 import { InvertedIndex } from "../schema";
 

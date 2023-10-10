@@ -1,6 +1,7 @@
 "server only";
 
-import { ArticleForm, getArticle } from "@/features/article";
+import { ArticleForm } from "@/features/article";
+import { getArticlesByIds } from "@/firebase/restapi";
 
 const ArticleFormPage = async ({
   searchParams: { id },
@@ -9,7 +10,8 @@ const ArticleFormPage = async ({
 }) => {
   let article = undefined;
   if (id) {
-    article = await getArticle(id);
+    const articles = await getArticlesByIds([id]);
+    article = articles.at(0);
   }
   return (
     <div className="mx-auto w-full max-w-md space-y-10 pt-10">

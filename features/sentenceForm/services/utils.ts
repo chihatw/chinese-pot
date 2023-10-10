@@ -1,6 +1,7 @@
-import { Hanzi, getHanzisByForms } from "@/features/hanzi";
+import { Hanzi } from "@/features/hanzi";
 import { getPinyinStr } from "@/features/pinyin";
-import { Sentence, getSentencesByIds } from "@/features/sentence";
+import { Sentence } from "@/features/sentence";
+import { getHanzisByForms, getSentencesByIds } from "@/firebase/restapi";
 import { SentenceFormProps } from "..";
 
 export const buildSentenceFromHanzis = (
@@ -34,6 +35,9 @@ export const updateHanzis = (hanzis: Hanzi[], sentenceId: string): Hanzi[] => {
   }));
 };
 
+/**
+ *
+ */
 export const buildSentenceFormProps = async (
   forms: string,
 ): Promise<SentenceFormProps> => {
@@ -42,7 +46,7 @@ export const buildSentenceFormProps = async (
   // forms に含まれる Hanzi を取得
   const hanzis = forms_uniq.length ? await getHanzisByForms(forms_uniq) : [];
   const latestSentenceIds = [...new Set(hanzis.map((h) => h.latestSentenceId))];
-  const sentences = await getSentencesByIds(latestSentenceIds);
+  const { sentences, total } = await getSentencesByIds(latestSentenceIds);
 
-  return { hanzis, forms, sentences };
+  return { hanzis, forms, sentences, total };
 };

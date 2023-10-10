@@ -1,12 +1,12 @@
 "use client";
 
+import { removeSentenceAction } from "@/app/_actions";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Sentence,
   SentenceLine,
   buildHanzisFromSentence,
-  removeSentenceAction,
 } from "@/features/sentence";
 import { Delete } from "lucide-react";
 

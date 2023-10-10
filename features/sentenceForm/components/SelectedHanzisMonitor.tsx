@@ -10,19 +10,19 @@ const SelectedHanzisMonitor = ({
 }) => {
   return (
     <div className="flex flex-wrap items-end gap-2 px-2">
-      {selectedHanziIds.map((hanziId) => {
+      {selectedHanziIds.map((hanziId, index) => {
         const hanzi = hanzis.find((h) => h.id === hanziId);
         if (!hanzi)
           return (
             <div
-              key={hanziId}
+              key={index}
               className="text-4xl font-extralight text-gray-500 "
             >
               _
             </div>
           );
         return (
-          <div key={hanziId}>
+          <div key={index}>
             <PinyinHanzi
               form={hanzi.form}
               pinyinStr={getPinyinStr(hanzi.pinyin)}

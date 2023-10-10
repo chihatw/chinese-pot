@@ -3,16 +3,7 @@ import SentenceLine from "./components/SentenceLine";
 import SentenceTable from "./components/SentenceTable";
 import SimpleSentenceMonitor from "./components/SimpleSentenceMonitor";
 import { Sentence } from "./schema";
-import {
-  batchAddSentencesAction,
-  removeSentenceAction,
-} from "./services/actions";
-import {
-  getRecentSentences,
-  getSentence,
-  getSentencesByForms,
-  getSentencesByIds,
-} from "./services/firestore_restapi";
+
 import {
   buildHanzisFromSentence,
   buildHanzisGroupedByConsonantVowel,
@@ -24,15 +15,9 @@ export {
   SentenceLine,
   SentenceTable,
   SimpleSentenceMonitor,
-  batchAddSentencesAction,
   buildHanzisFromSentence,
   buildHanzisGroupedByConsonantVowel,
   buildSentenceChars,
-  getRecentSentences,
-  getSentence,
-  getSentencesByForms,
-  getSentencesByIds,
-  removeSentenceAction,
 };
 
 export type { Sentence };

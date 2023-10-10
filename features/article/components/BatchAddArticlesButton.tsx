@@ -4,9 +4,9 @@ import { useToast } from "@/components/ui/use-toast";
 
 import ServerActionPendingButton from "../../../components/ServerActionPendingButton";
 
+import { batchAddArticlesAction } from "@/app/_actions";
 import ARTICLES_JSON from "../json/ARTICLES.json";
 import { Article } from "../schema";
-import { batchAddArticlesAction } from "../services/actions";
 
 const articles = ARTICLES_JSON as Article[];
 

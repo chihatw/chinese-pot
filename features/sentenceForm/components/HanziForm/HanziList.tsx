@@ -12,8 +12,8 @@ import {
   Sentence,
   SentenceLine,
   buildHanzisGroupedByConsonantVowel,
-  getSentence,
 } from "@/features/sentence";
+import { getSentence } from "@/firebase/restapi";
 
 import { useEffect, useState } from "react";
 

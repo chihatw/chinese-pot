@@ -11,6 +11,8 @@ const app = getApps()?.length ? getApps()[0] : initializeApp(firebaseConfig);
 
 export const authClient = getAuth(app);
 export const dbClient = getFirestore(app);
+
+// note local build
 const isDev = process.env.NODE_ENV === "development";
 if (isDev) {
   connectAuthEmulator(authClient, "http://127.0.0.1:9099");

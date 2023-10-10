@@ -2,7 +2,6 @@
 
 import { Input } from "@/components/ui/input";
 
-import { getHanzisByPinyinFilter } from "@/features/hanzi/services/firestore_restapi";
 import { PinyinFilter } from "@/features/pinyin";
 import { buildPinyinFilter } from "@/features/pinyin/services/buildPinyin";
 import useDebouce from "@/hooks/useDebounce";
@@ -10,6 +9,7 @@ import { fontSans } from "@/lib/fonts";
 import { useEffect, useState } from "react";
 
 import { Hanzi } from "@/features/hanzi";
+import { getHanzisByPinyinFilter } from "@/firebase/restapi";
 import PinyinFilterMonitor from "./PinyinFilterMonitor";
 import VowelCardList from "./VowelCardList";
 

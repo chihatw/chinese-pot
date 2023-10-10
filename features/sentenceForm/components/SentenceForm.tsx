@@ -15,6 +15,7 @@ import {
 } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
+import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
 import { useRouter } from "next/navigation";
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
@@ -24,6 +25,7 @@ const SentenceForm = ({
   hanzis,
   sentences,
   articleId,
+  total,
 }: SentenceFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
@@ -49,12 +51,6 @@ const SentenceForm = ({
 
   const handleSubmit = async () => {
     await addSentenceAction(selectedHanziIds, hanzis, articleId);
-
-    toast({ description: `added sentence!!` });
-    setInput("");
-    if (articleId) {
-      router.push(`/article/${articleId}`);
-    }
   };
 
   return (
@@ -65,23 +61,24 @@ const SentenceForm = ({
         onChange={(e) => setInput(e.target.value)}
       />
       <div className="space-y-4">
-        {searchParamsValue.split("").map((form, index) => {
-          const filteredHanzis = hanzis
-            .filter((h) => h.form === form)
-            .sort((a, b) => b.count - a.count);
-          return (
-            <FormMonitor
-              key={index}
-              index={index}
-              form={form}
-              sentences={sentences}
-              hanzis={filteredHanzis}
-              selectedHanziId={selectedHanziIds[index]}
-              setSelectedHanziIds={setSelectedHanziIds}
-              articleId={articleId}
-            />
-          );
-        })}
+        <div className="font-extralight">
+          <span> {total}</span>
+          {total > SEARCH_SENTENCES_MAX ? (
+            <span>該当文が多すぎます</span>
+          ) : null}
+        </div>
+        {searchParamsValue.split("").map((form, index) => (
+          <FormMonitor
+            key={index}
+            index={index}
+            form={form}
+            sentences={sentences}
+            hanzis={hanzis.filter((h) => h.form === form)}
+            selectedHanziId={selectedHanziIds[index]}
+            setSelectedHanziIds={setSelectedHanziIds}
+            articleId={articleId}
+          />
+        ))}
       </div>
       <SelectedHanzisMonitor
         hanzis={hanzis}

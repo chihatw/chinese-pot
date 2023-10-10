@@ -3,7 +3,7 @@ import {
   SearchSentencesByForms,
 } from "@/features/invertedIndex";
 import { FORM_SEARCH_KEY } from "@/features/invertedIndex/constants";
-import { getSentencesByForms } from "@/features/sentence";
+import { getSentencesByForms } from "@/firebase/restapi";
 
 const SentenceSearchPage = async ({
   searchParams,

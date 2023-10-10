@@ -1,8 +1,8 @@
 "server only";
 
-import { getArticle } from "@/features/article";
 import { SentenceForm, buildSentenceFormProps } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
+import { getArticlesByIds } from "@/firebase/restapi";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,8 @@ const ArticleSentenceFormPage = async ({
 }) => {
   !id && redirect("/");
 
-  const article = await getArticle(id);
+  const articles = await getArticlesByIds([id]);
+  const article = articles.at(0);
   !article && redirect("/");
 
   const forms = searchParams[SENTENCE_FORM_KEY]?.trim() || "";
@@ -36,6 +37,7 @@ const ArticleSentenceFormPage = async ({
         forms={forms}
         hanzis={hanzis}
         sentences={sentences}
+        total={sentences.length}
       />
     </div>
   );

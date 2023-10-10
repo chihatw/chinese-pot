@@ -1,18 +1,17 @@
 "server only";
 
-import { getArticle } from "@/features/article";
-import { getSentencesByIds } from "@/features/sentence";
 import SentenceTable from "@/features/sentence/components/SentenceTable";
+import { getArticlesByIds, getSentencesByIds } from "@/firebase/restapi";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
-  const article = await getArticle(id);
+  const articles = await getArticlesByIds([id]);
+  const article = articles.at(0);
   if (!article) {
     redirect("/article/list");
   }
-
-  const sentences = await getSentencesByIds(article.sentenceIds);
+  const { sentences } = await getSentencesByIds(article.sentenceIds);
 
   return (
     <div className="mx-auto w-full max-w-md space-y-4 pb-40 pt-10">
@@ -25,7 +24,12 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </Link>
       </div>
-      <SentenceTable sentences={sentences} articleId={article.id} />
+      <SentenceTable
+        sentences={article.sentenceIds.map(
+          (id) => sentences.find((s) => s.id === id)!,
+        )}
+        articleId={article.id}
+      />
     </div>
   );
 };

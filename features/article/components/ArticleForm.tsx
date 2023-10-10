@@ -1,5 +1,6 @@
 "use client";
 
+import { addArticleAction, updateArticleAction } from "@/app/_actions";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -10,11 +11,12 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Article } from "../schema";
-import { addArticleAction, updateArticleAction } from "../services/actions";
 
 const ArticleForm = ({ article }: { article?: Article }) => {
+  const router = useRouter();
   const { toast } = useToast();
   const [value, setValue] = useState<{ title: string; date?: Date }>({
     title: article?.title || "",
@@ -36,10 +38,7 @@ const ArticleForm = ({ article }: { article?: Article }) => {
       createdAt: date.getTime(),
       sentenceIds: [],
     };
-
     await addArticleAction(article);
-    toast({ description: `added new article!!` });
-    setValue({ title: "", date: new Date() });
   };
 
   const updateArticle = async (

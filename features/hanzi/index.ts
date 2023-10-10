@@ -10,10 +10,6 @@ import BatchAddHanzisButton from "./components/BatchAddHanzisButton";
 import HanziList from "./components/HanziList";
 import PinyinFilterMonitor from "./components/HanziList/PinyinFilterContainer/PinyinFilterMonitor";
 import PinyinHanzi from "./components/PinyinHanzi";
-import {
-  getHanzisByForms,
-  getHanzisByPinyinFilter,
-} from "./services/firestore_restapi";
 
 export {
   BatchAddHanzisButton,
@@ -22,8 +18,6 @@ export {
   PinyinHanzi,
   buildHanziFromId,
   buildHanziId,
-  getHanzisByForms,
-  getHanzisByPinyinFilter,
   getHanzisByVowel,
   getVowelCounts,
 };

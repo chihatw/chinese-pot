@@ -3,9 +3,9 @@
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { useToast } from "@/components/ui/use-toast";
 
+import { batchAddHanzisAction } from "@/app/_actions";
 import HANZIS_JSON from "../json/hanzis.json";
 import { Hanzi } from "../schema";
-import { batchAddHanzisAction } from "../services/actions";
 
 const hanzis = HANZIS_JSON as Hanzi[];
 

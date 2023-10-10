@@ -1,14 +1,14 @@
 "server only";
 
-import { SimpleSentenceMonitor, getSentencesByIds } from "@/features/sentence";
-
-import { getArticle } from "../services/firestore_restapi";
+import { SimpleSentenceMonitor } from "@/features/sentence";
+import { getArticlesByIds, getSentencesByIds } from "@/firebase/restapi";
 
 const ArticleSentences = async ({ articleId }: { articleId: string }) => {
-  const article = await getArticle(articleId);
+  const articles = await getArticlesByIds([articleId]);
+  const article = articles.at(0);
   if (!article) return null;
 
-  const sentences = await getSentencesByIds(article.sentenceIds);
+  const { sentences } = await getSentencesByIds(article.sentenceIds);
 
   return (
     <div key={article.id} className="space-y-4 rounded bg-white p-5">

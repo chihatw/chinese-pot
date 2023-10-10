@@ -2,21 +2,20 @@
 
 import { FORM_SEARCH_KEY } from "@/features/invertedIndex/constants";
 
-import {
-  Article,
-  BatchAddArticlesButton,
-  getRecentArticles,
-} from "@/features/article";
+import { Article, BatchAddArticlesButton } from "@/features/article";
 import { BatchAddHanzisButton } from "@/features/hanzi";
 import { BuildInvetedIndexesButton } from "@/features/invertedIndex";
 import {
   BatchAddSentencesButton,
   Sentence,
   SentenceLine,
-  getSentencesByIds,
 } from "@/features/sentence";
 import { COLLECTIONS, REVALIDATE_TAGS } from "@/firebase/constants";
-import { getDocumentCount } from "@/firebase/restapi";
+import {
+  getDocumentCount,
+  getRecentArticles,
+  getSentencesByIds,
+} from "@/firebase/restapi";
 
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -53,7 +52,9 @@ export default async function Home({
   if (articles.length) {
     article = articles.at(0);
     if (article) {
-      const _sentences = await getSentencesByIds(article?.sentenceIds);
+      const { sentences: _sentences } = await getSentencesByIds(
+        article?.sentenceIds,
+      );
       if (_sentences.length) {
         sentences = _sentences;
       }
