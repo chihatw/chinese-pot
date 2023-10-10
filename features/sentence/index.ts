@@ -8,7 +8,7 @@ import {
   removeSentenceAction,
 } from "./services/actions";
 import {
-  getLastTenSentences,
+  getRecentSentences,
   getSentence,
   getSentencesByForms,
   getSentencesByIds,
@@ -28,7 +28,7 @@ export {
   buildHanzisFromSentence,
   buildHanzisGroupedByConsonantVowel,
   buildSentenceChars,
-  getLastTenSentences,
+  getRecentSentences,
   getSentence,
   getSentencesByForms,
   getSentencesByIds,

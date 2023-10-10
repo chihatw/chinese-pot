@@ -25,7 +25,7 @@ const SentenceTable = ({
     toast({ description: "deleted sentence" });
   };
   return (
-    <div className="pt-10">
+    <div>
       {articleId ? (
         <div className="-mt-12 pb-8">
           <div className="text-right text-xs text-gray-500">articleId:</div>

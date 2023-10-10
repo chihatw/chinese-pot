@@ -30,13 +30,15 @@ export const getSentence = async (
   return buildSentence(json);
 };
 
-export const getLastTenSentences = async (): Promise<Sentence[]> => {
+export const getRecentSentences = async (
+  limit: number,
+): Promise<Sentence[]> => {
   const res = await fetch(
     FetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTION,
       orderBy: ["createdAt", "desc"],
-      limit: 10,
+      limit,
       tags: [REVALIDATE_TAGS.senences],
     }),
   );

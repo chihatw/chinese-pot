@@ -9,7 +9,6 @@ const ArticleListPage = async () => {
   const articles = await getRecentArticles(3);
   return (
     <div className="mx-auto w-full max-w-lg  space-y-10 pt-10">
-      <div>new</div>
       <div className="text-4xl font-extrabold">Article Listd</div>
       <div className="flex">
         <Link href={"/article/form"}>

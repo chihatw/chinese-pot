@@ -19,9 +19,11 @@ export const getInvertedIndexByForm = async (
     return;
   }
 
-  if (!(json as any[]).length) return;
+  const _json = (json as any[]).filter((item) => item.document);
 
-  return buildInvertedIndex((json as any[])[0].document);
+  if (!_json.length) return;
+
+  return buildInvertedIndex(_json[0].document);
 };
 
 export const getInvertedIndexesByForms = async (
@@ -35,6 +37,9 @@ export const getInvertedIndexesByForms = async (
     }),
   );
   const json = await res.json();
+
+  if (!json) return [];
+
   if (json.error) {
     console.log(json.error);
     return [];
