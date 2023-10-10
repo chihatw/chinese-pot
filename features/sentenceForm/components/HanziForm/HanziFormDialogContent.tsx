@@ -18,8 +18,8 @@ import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 import { useToast } from "@/components/ui/use-toast";
-import { addHanziAction } from "@/features/hanzi/services/addHanziAction";
 
+import { addHanziAction } from "@/app/_actions";
 import {
   INITIAL_PINYIN,
   INITIAL_PINYIN_FILTERL,
