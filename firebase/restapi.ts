@@ -7,6 +7,7 @@ import {
 } from "./schema";
 
 function getBaseUrl() {
+  // const isDev = false;
   const isDev = process.env.NODE_ENV === "development";
   return isDev ? "http://localhost:8080" : "https://firestore.googleapis.com";
 }

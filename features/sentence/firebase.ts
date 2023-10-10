@@ -62,7 +62,6 @@ export const addSentence = async (
   createSentence_in_batch(batch, sentence);
 
   if (!!articleId) {
-    // todo
     batch.update(dbAdmin.collection("articles").doc(articleId), {
       sentenceIds: FieldValue.arrayUnion(sentence.id),
     });
@@ -94,7 +93,6 @@ export const removeSentence = async (
   deleteSentence_in_batch(batch, sentence.id);
 
   if (!!articleId) {
-    // todo
     batch.update(dbAdmin.collection("articles").doc(articleId), {
       sentenceIds: FieldValue.arrayRemove(sentence.id),
     });

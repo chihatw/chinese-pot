@@ -15,6 +15,7 @@ import {
 } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
+import { useRouter } from "next/navigation";
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
 
@@ -24,6 +25,7 @@ const SentenceForm = ({
   sentences,
   articleId,
 }: SentenceFormProps) => {
+  const router = useRouter();
   const { toast } = useToast();
 
   const [input, setInput] = useState(forms);
@@ -50,6 +52,9 @@ const SentenceForm = ({
 
     toast({ description: `added sentence!!` });
     setInput("");
+    if (articleId) {
+      router.push(`/article/${articleId}`);
+    }
   };
 
   return (
@@ -73,6 +78,7 @@ const SentenceForm = ({
               hanzis={filteredHanzis}
               selectedHanziId={selectedHanziIds[index]}
               setSelectedHanziIds={setSelectedHanziIds}
+              articleId={articleId}
             />
           );
         })}

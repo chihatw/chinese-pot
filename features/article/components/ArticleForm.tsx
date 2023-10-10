@@ -39,6 +39,7 @@ const ArticleForm = ({ article }: { article?: Article }) => {
 
     await addArticleAction(article);
     toast({ description: `added new article!!` });
+    setValue({ title: "", date: new Date() });
   };
 
   const updateArticle = async (

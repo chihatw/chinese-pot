@@ -17,8 +17,10 @@ const ArticleList = ({ articles }: { articles: Article[] }) => {
           key={article.id}
           className="space-y-2 rounded bg-white p-5 pt-3 shadow"
         >
-          <div className="text-sm font-extralight text-gray-500">
-            {new Date(article.createdAt).toLocaleDateString("ja")}
+          <div className="space-x-1 text-sm font-extralight text-gray-500">
+            <span>{new Date(article.createdAt).toLocaleDateString("ja")}</span>
+            <span>-</span>
+            <span>{article.sentenceIds.length}</span>
           </div>
           <div className="grid grid-cols-[1fr,auto,auto] items-center gap-2">
             <Link href={`/article/${article.id}`}>

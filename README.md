@@ -101,6 +101,9 @@ git add --all .
 git commit -a -m "Versioning untracked files"
 git push origin master
 ```
+## middleware が思うように動かない時
+[NextAuth.js Deployment Vercel](https://next-auth.js.org/deployment#vercel)
+- 環境変数 `NEXTAUTH_URL` を設定しない
 
 # 問題
 突然、invertedIndexes の全レコード抽出ができなくなった
@@ -123,3 +126,11 @@ firebase init hosting
 ```sh
 firebase deploy
 ```
+
+# local で　本番環境を使う
+- `.env.local` の　`FIRESTORE_EMULATOR_HOST`, `FIREBASE_AUTH_EMULATOR_HOST` をコメントアウト
+- `fireabase/client.ts` の `isDev` をコメントアウト
+- `firebase/restapi.ts` `getBaseUrl` の `isDev` を `false` に
+
+# 通信回数が多すぎる
+- 読み出しが少なくなるようにデータ構造を変更する

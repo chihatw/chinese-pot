@@ -12,12 +12,12 @@ import { Article } from "../schema";
 
 export const batchAddArticlesAction = async (articles: Article[]) => {
   await batchAddArticles(articles);
-  revalidateTag(REVALIDATE_TAGS.articles);
+  revalidatePath("/");
 };
 
 export const addArticleAction = async (article: Article) => {
   await addArticle(article);
-  revalidatePath("/article/list");
+  revalidateTag(REVALIDATE_TAGS.articles);
 };
 
 export const updateArticleAction = async (
@@ -26,7 +26,8 @@ export const updateArticleAction = async (
   createdAt: number,
 ) => {
   await updateArticle(id, title, createdAt);
-  revalidatePath("article/list");
+  revalidateTag(REVALIDATE_TAGS.articles);
+  revalidateTag(REVALIDATE_TAGS.article);
 };
 
 export const deleteArticleAction = async (id: string) => {

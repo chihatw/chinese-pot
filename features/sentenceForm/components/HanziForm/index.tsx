@@ -6,7 +6,13 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import HanziFormDialogContent from "./HanziFormDialogContent";
 
-const HanziForm = ({ form }: { form: string }) => {
+const HanziForm = ({
+  form,
+  articleId,
+}: {
+  form: string;
+  articleId?: string;
+}) => {
   return (
     <Dialog>
       <DialogTrigger>
@@ -20,7 +26,7 @@ const HanziForm = ({ form }: { form: string }) => {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <HanziFormDialogContent form={form} />
+        <HanziFormDialogContent form={form} articleId={articleId} />
       </DialogContent>
     </Dialog>
   );

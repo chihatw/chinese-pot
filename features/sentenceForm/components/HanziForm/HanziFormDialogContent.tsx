@@ -28,7 +28,13 @@ import {
 import { useEffect, useState } from "react";
 import HanziList from "./HanziList";
 
-const HanziFormDialogContent = ({ form }: { form: string }) => {
+const HanziFormDialogContent = ({
+  form,
+  articleId,
+}: {
+  form: string;
+  articleId?: string;
+}) => {
   const { toast } = useToast();
   const [input, setInput] = useState("");
   const [hanzis, setHanzis] = useState<Hanzi[]>([]);
@@ -69,7 +75,7 @@ const HanziFormDialogContent = ({ form }: { form: string }) => {
       count: 0,
       latestSentenceId: "",
     };
-    await addHanziAction(hanzi);
+    await addHanziAction(hanzi, articleId);
     toast({ description: `added hanzi: ${hanzi.form}` });
   };
   return (

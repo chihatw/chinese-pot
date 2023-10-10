@@ -34,7 +34,7 @@ const SentenceTable = ({
           </div>
         </div>
       ) : null}
-      <div className="space-y-2 ">
+      <div className="space-y-4 ">
         {sentences.map((sentence, index) => (
           <div
             key={sentence.id}

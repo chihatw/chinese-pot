@@ -13,6 +13,7 @@ const FormMonitor = ({
   sentences,
   selectedHanziId,
   setSelectedHanziIds,
+  articleId,
 }: {
   index: number;
   form: string;
@@ -20,6 +21,7 @@ const FormMonitor = ({
   selectedHanziId: string;
   setSelectedHanziIds: Dispatch<SetStateAction<string[]>>;
   sentences: Sentence[];
+  articleId?: string;
 }) => {
   return (
     <div className="grid grid-cols-[auto,1fr] items-center gap-4">
@@ -33,7 +35,7 @@ const FormMonitor = ({
           sentences={sentences}
           hanzis={hanzis}
         />
-        <HanziForm form={form} />
+        <HanziForm form={form} articleId={articleId} />
       </div>
     </div>
   );
