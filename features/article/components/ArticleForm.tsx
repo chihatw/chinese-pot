@@ -1,6 +1,7 @@
 "use client";
 
 import { addArticleAction, updateArticleAction } from "@/app/_actions";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -11,12 +12,10 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Article } from "../schema";
 
 const ArticleForm = ({ article }: { article?: Article }) => {
-  const router = useRouter();
   const { toast } = useToast();
   const [value, setValue] = useState<{ title: string; date?: Date }>({
     title: article?.title || "",
@@ -87,13 +86,9 @@ const ArticleForm = ({ article }: { article?: Article }) => {
         </PopoverContent>
       </Popover>
       <form action={handleSubmit}>
-        <Button
-          type="submit"
-          disabled={!value.title || !value.date}
-          className="w-full"
-        >
-          Submit
-        </Button>
+        <div className="grid">
+          <ServerActionPendingButton label="Submit" />
+        </div>
       </form>
     </div>
   );

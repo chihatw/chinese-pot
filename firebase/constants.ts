@@ -15,7 +15,6 @@ export const REVALIDATE_TAGS = {
   article: "article",
   hanzisByForms: "hanzisByForms",
   invertedIndexByForm: "invertedIndexByForm",
-  invertedIndexesByForms: "invertedIndexesByForms",
 };
 
 export const COLLECTIONS = {

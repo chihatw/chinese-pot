@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteArticleAction } from "@/app/_actions";
-import { Button } from "@/components/ui/button";
+import ServerActionPendingIconButton from "@/components/ServerActionPendingIconButton";
 import { Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Article } from "../schema";
@@ -32,14 +32,12 @@ const ArticleList = ({ articles }: { articles: Article[] }) => {
               <Edit2 />
             </Link>
             <form action={() => handleSubmit(article.id)}>
-              <Button
-                type="submit"
+              <ServerActionPendingIconButton
                 variant="ghost"
-                size="icon"
                 disabled={!!article.sentenceIds.length}
               >
                 <Trash2 />
-              </Button>
+              </ServerActionPendingIconButton>
             </form>
           </div>
         </div>

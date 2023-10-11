@@ -133,21 +133,6 @@ const getInvertedIndexByForm = async (
   return results.at(0);
 };
 
-const getInvertedIndexesByForms_declare = async (
-  forms: string[],
-): Promise<InvertedIndex[]> => {
-  const res = await fetch(
-    fetchRequestURL,
-    buildFetchRequestOption({
-      collectionId: COLLECTIONS.invertedIndexes,
-      where: ["form", "IN", forms],
-      tags: [REVALIDATE_TAGS.invertedIndexesByForms],
-    }),
-  );
-  const docs = await getDocs(res);
-  return docs.map((doc) => buildInvertedIndex(doc));
-};
-
 export const getRecentSentences = async (
   limit: number,
 ): Promise<Sentence[]> => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteSentenceAction } from "@/app/_actions";
-import { Button } from "@/components/ui/button";
+import ServerActionPendingIconButton from "@/components/ServerActionPendingIconButton";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Sentence,
@@ -43,9 +43,9 @@ const SentenceTable = ({
             <div className="text-xs">{index + 1}</div>
             <SentenceLine sentence={sentence} />
             <form action={() => handleSubmit(sentence.id)}>
-              <Button variant="ghost" type="submit">
+              <ServerActionPendingIconButton variant="ghost">
                 <Delete />
-              </Button>
+              </ServerActionPendingIconButton>
             </form>
           </div>
         ))}

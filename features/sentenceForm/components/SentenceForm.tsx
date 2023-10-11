@@ -4,7 +4,6 @@ import useBuildSearchParams from "@/hooks/useBuildSearchParams";
 import useDebouce from "@/hooks/useDebounce";
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -14,6 +13,7 @@ import {
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
 import { addSentenceAction } from "@/app/_actions";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
@@ -79,13 +79,12 @@ const SentenceForm = ({
         selectedHanziIds={selectedHanziIds}
       />
       <form action={handleSubmit}>
-        <Button
-          disabled={selectedHanziIds.some((id) => !id)}
-          type="submit"
-          className="w-full"
-        >
-          {articleId ? `Add to Article` : "Create New Sentence"}
-        </Button>
+        <div className="grid">
+          <ServerActionPendingButton
+            disabled={selectedHanziIds.some((id) => !id)}
+            label={articleId ? `Add to Article` : "Create New Sentence"}
+          />
+        </div>
       </form>
     </div>
   );

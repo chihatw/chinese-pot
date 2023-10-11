@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Hanzi, PinyinHanzi, buildHanziId } from "@/features/hanzi";
 
@@ -20,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 
 import { addHanziAction } from "@/app/_actions";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import {
   INITIAL_PINYIN,
   INITIAL_PINYIN_FILTERL,
@@ -94,7 +94,7 @@ const HanziFormDialogContent = ({
           <PinyinHanzi pinyinStr={getPinyinStr(value.pinyin)} form={form} />
         </div>
         <form action={handleSubmit}>
-          <Button type="submit">登録</Button>
+          <ServerActionPendingButton label="登録" />
         </form>
       </div>
       <div className="text-sm font-extralight text-gray-700">{`Result: ${hanzis.length} hits`}</div>
