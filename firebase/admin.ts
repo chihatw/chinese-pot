@@ -12,7 +12,6 @@ import {
 } from "firebase-admin/firestore";
 import { nanoid } from "nanoid";
 import { COLLECTIONS } from "./constants";
-import { getInvertedIndexesByForms } from "./restapi";
 
 const serviceAccount = JSON.parse(
   process.env.NEXT_FIREBASE_SERVICE_ACCOUNT_KEY as string,
@@ -196,18 +195,17 @@ export const getDocumentCount = async (collection: string) => {
   return snapshot.data().count;
 };
 
-// const getInvertedIndexesByForms = async (
-//   forms: string[],
-// ): Promise<InvertedIndex[]> => {
-//   console.log("work!!");
-//   const snapshot = await dbAdmin
-//     .collection(COLLECTIONS.invertedIndexes)
-//     .withConverter(invertedIndexConverter)
-//     .where("form", "in", forms)
-//     .get();
+const getInvertedIndexesByForms = async (
+  forms: string[],
+): Promise<InvertedIndex[]> => {
+  const snapshot = await dbAdmin
+    .collection(COLLECTIONS.invertedIndexes)
+    .withConverter(invertedIndexConverter)
+    .where("form", "in", forms)
+    .get();
 
-//   return snapshot.docs.map((doc) => doc.data());
-// };
+  return snapshot.docs.map((doc) => doc.data());
+};
 
 const createSentence_in_batch = (
   batch: FirebaseFirestore.WriteBatch,

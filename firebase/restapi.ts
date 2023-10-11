@@ -110,7 +110,7 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
       orderBy: ["createdAt", "desc"],
       limit,
       tags: [REVALIDATE_TAGS.articles],
-      revalidate: 60,
+      cache: "no-store",
     }),
   );
   const docs = await getDocs(res);
@@ -133,7 +133,7 @@ const getInvertedIndexByForm = async (
   return results.at(0);
 };
 
-export const getInvertedIndexesByForms = async (
+const getInvertedIndexesByForms_declare = async (
   forms: string[],
 ): Promise<InvertedIndex[]> => {
   const res = await fetch(
