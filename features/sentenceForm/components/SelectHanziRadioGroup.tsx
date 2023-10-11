@@ -52,7 +52,11 @@ const SelectHanziRadioGroup = ({
                 <div className="grid grid-cols-[auto,36px] items-center gap-2 rounded bg-white px-4 py-2">
                   <RadioGroupItem value={hanzi.id} />
                   <div className="grid place-items-center ">
-                    <PinyinHanzi form={hanzi.form} pinyinStr={pinyinSrt} />
+                    <PinyinHanzi
+                      form={hanzi.form}
+                      pinyinStr={pinyinSrt}
+                      count={hanzi.count}
+                    />
                   </div>
                 </div>
 
