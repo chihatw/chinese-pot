@@ -15,7 +15,7 @@ const ServerActionPendingButton = ({
   return (
     <Button type="submit" disabled={disabled || pending}>
       <div className="flex items-center gap-2">
-        {label}
+        <span className="whitespace-nowrap">{label}</span>
         {pending ? <Loader2 className="animate-spin" /> : null}
       </div>
     </Button>
