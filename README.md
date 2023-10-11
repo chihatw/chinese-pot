@@ -139,6 +139,5 @@ where in __name__ を使って取得する
 restrucredQuery を使う場合は、必ず tags を設定する
 revalidate が必要な時は revalidateTag を使用
 
-# Arc について
-Arc ではキャッシュが更新されないことがあるが、
-chrome では正常に更新される
+# Article List に最新の article が反映されない
+.next を削除すればOK？
