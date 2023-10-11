@@ -70,6 +70,7 @@ export const updateArticleAction = async (
   await updateArticle(id, title, createdAt);
   revalidateTag(REVALIDATE_TAGS.articles);
   revalidateTag(REVALIDATE_TAGS.article);
+  redirect("/article/list");
 };
 
 export const deleteArticleAction = async (id: string) => {
