@@ -6,17 +6,15 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 
 import {
   SentenceFormProps,
-  addSentenceAction,
   getSelectedHanziIds,
 } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
+import { addSentenceAction } from "@/app/_actions";
 import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
-import { useRouter } from "next/navigation";
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
 
@@ -27,9 +25,6 @@ const SentenceForm = ({
   articleId,
   total,
 }: SentenceFormProps) => {
-  const router = useRouter();
-  const { toast } = useToast();
-
   const [input, setInput] = useState(forms);
   const debouncedInput = useDebouce(input, 300);
 
@@ -76,7 +71,6 @@ const SentenceForm = ({
             hanzis={hanzis.filter((h) => h.form === form)}
             selectedHanziId={selectedHanziIds[index]}
             setSelectedHanziIds={setSelectedHanziIds}
-            articleId={articleId}
           />
         ))}
       </div>

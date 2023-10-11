@@ -40,74 +40,6 @@ export const batchAddHanzis = async (hanzis: Hanzi[]) => {
   await batch.commit();
 };
 
-export const addHanzi = async (hanzi: Hanzi) => {
-  await dbAdmin
-    .collection(COLLECTIONS.hanzis)
-    .withConverter(hanziConverter)
-    .doc(hanzi.id)
-    .set(hanzi);
-};
-
-export const updateHanzi_in_batch = (
-  batch: FirebaseFirestore.WriteBatch,
-  hanzi: Hanzi,
-) => {
-  // note converter が機能せず、id や pinyin がそのまま 登録されるので、手動で変換
-  batch.update(dbAdmin.collection(COLLECTIONS.hanzis).doc(hanzi.id), {
-    consonant: hanzi.pinyin.consonant,
-    count: hanzi.count,
-    form: hanzi.form,
-    latestSentenceId: hanzi.latestSentenceId,
-    tone: hanzi.pinyin.tone,
-    vowel: hanzi.pinyin.vowel,
-  });
-};
-
-export const decrementHanziCount_in_batch = (
-  batch: FirebaseFirestore.WriteBatch,
-  hanziId: string,
-) => {
-  batch.update(
-    dbAdmin
-      .collection(COLLECTIONS.hanzis)
-      .withConverter(hanziConverter)
-      .doc(hanziId),
-    {
-      count: FieldValue.increment(-1),
-      latestSentenceId: "",
-    },
-  );
-};
-
-const hanziConverter: FirestoreDataConverter<Hanzi> = {
-  fromFirestore(snapshot) {
-    const data = snapshot.data();
-    return {
-      id: snapshot.id,
-      form: data.form,
-      pinyin: {
-        tone: data.tone,
-        vowel: data.vowel,
-        consonant: data.consonant,
-      },
-      count: data.count,
-      latestSentenceId: data.latestSentenceId,
-    };
-  },
-  toFirestore(hanzi) {
-    const pinyin = hanzi.pinyin as Pinyin;
-
-    return {
-      form: hanzi.form,
-      tone: pinyin.tone,
-      vowel: pinyin.vowel,
-      consonant: pinyin.consonant,
-      count: hanzi.count,
-      latestSentenceId: hanzi.latestSentenceId,
-    };
-  },
-};
-
 export const batchAddArticles = async (articles: Article[]) => {
   const batch = dbAdmin.batch();
   for (const article of articles) {
@@ -120,6 +52,45 @@ export const batchAddArticles = async (articles: Article[]) => {
     );
   }
   await batch.commit();
+};
+
+export const batchAddSentences = async (sentences: Sentence[]) => {
+  console.log("batch add sentences");
+  const batch = dbAdmin.batch();
+  for (const sentence of sentences) {
+    batch.set(
+      dbAdmin
+        .collection(COLLECTIONS.sentences)
+        .withConverter(sentenceConverter)
+        .doc(sentence.id),
+      sentence,
+    );
+  }
+  await batch.commit();
+};
+
+export const batchAddInvertedIndexes = async (
+  invertedIndexes: InvertedIndex[],
+) => {
+  const batch = dbAdmin.batch();
+  for (const invertedIndex of invertedIndexes) {
+    batch.set(
+      dbAdmin
+        .collection(COLLECTIONS.invertedIndexes)
+        .withConverter(invertedIndexConverter)
+        .doc(invertedIndex.id),
+      invertedIndex,
+    );
+  }
+  batch.commit();
+};
+
+export const addHanzi = async (hanzi: Hanzi) => {
+  await dbAdmin
+    .collection(COLLECTIONS.hanzis)
+    .withConverter(hanziConverter)
+    .doc(hanzi.id)
+    .set(hanzi);
 };
 
 export const addArticle = async (article: Article) => {
@@ -146,130 +117,6 @@ export const deleteArticle = async (id: string) => {
   await dbAdmin.collection(COLLECTIONS.articles).doc(id).delete();
 };
 
-const articleConverter: FirestoreDataConverter<Article> = {
-  fromFirestore(snapshot) {
-    const data = snapshot.data();
-    return {
-      id: snapshot.id,
-      title: data.title,
-      createdAt: data.createdAt,
-      sentenceIds: data.sentenceIds,
-    };
-  },
-  toFirestore(article) {
-    return {
-      title: article.title,
-      createdAt: article.createdAt,
-      sentenceIds: article.sentenceIds,
-    };
-  },
-};
-
-export const batchAddInvertedIndexes = async (
-  invertedIndexes: InvertedIndex[],
-) => {
-  const batch = dbAdmin.batch();
-  for (const invertedIndex of invertedIndexes) {
-    batch.set(
-      dbAdmin
-        .collection(COLLECTIONS.invertedIndexes)
-        .withConverter(invertedIndexConverter)
-        .doc(invertedIndex.id),
-      invertedIndex,
-    );
-  }
-  batch.commit();
-};
-
-export const createInvertedIndex_in_batch = (
-  batch: FirebaseFirestore.WriteBatch,
-  form: string,
-  sentenceId: string,
-) => {
-  const id = nanoid(8);
-  batch.set(
-    dbAdmin
-      .collection(COLLECTIONS.invertedIndexes)
-      .withConverter(invertedIndexConverter)
-      .doc(id),
-    {
-      id,
-      form,
-      count: 1,
-      sentenceIds: [sentenceId],
-    },
-  );
-};
-
-export const incrementInvertedIndexCount_in_batch = (
-  batch: FirebaseFirestore.WriteBatch,
-  invertedIndexId: string,
-  sentenceId: string,
-) => {
-  batch.update(
-    dbAdmin
-      .collection(COLLECTIONS.invertedIndexes)
-      .withConverter(invertedIndexConverter)
-      .doc(invertedIndexId),
-    {
-      count: FieldValue.increment(1),
-      sentenceIds: FieldValue.arrayUnion(sentenceId),
-    },
-  );
-};
-
-export const decrementInvertedIndexCount_in_batch = (
-  batch: FirebaseFirestore.WriteBatch,
-  invertedIndexId: string,
-  sentenceId: string,
-) => {
-  batch.update(
-    dbAdmin
-      .collection(COLLECTIONS.invertedIndexes)
-      .withConverter(invertedIndexConverter)
-      .doc(invertedIndexId),
-    {
-      count: FieldValue.increment(-1),
-      sentenceIds: FieldValue.arrayRemove(sentenceId),
-    },
-  );
-};
-
-const invertedIndexConverter: FirestoreDataConverter<InvertedIndex> = {
-  fromFirestore(snapshot) {
-    const data = snapshot.data();
-    return {
-      id: snapshot.id,
-      form: data.form,
-      count: data.count,
-      sentenceIds: data.sentenceIds,
-    };
-  },
-  toFirestore(invertedIndex) {
-    return {
-      form: invertedIndex.form,
-      count: invertedIndex.count,
-      sentenceIds: invertedIndex.sentenceIds,
-    };
-  },
-};
-
-export const batchAddSentences = async (sentences: Sentence[]) => {
-  console.log("batch add sentences");
-  const batch = dbAdmin.batch();
-  for (const sentence of sentences) {
-    batch.set(
-      dbAdmin
-        .collection(COLLECTIONS.sentences)
-        .withConverter(sentenceConverter)
-        .doc(sentence.id),
-      sentence,
-    );
-  }
-  await batch.commit();
-};
-
-// noto addSentence を index に通すと、エラー
 export const addSentence = async (
   sentence: Sentence,
   hanzis: Hanzi[],
@@ -308,7 +155,7 @@ export const addSentence = async (
   batch.commit();
 };
 
-export const removeSentence = async (
+export const deleteSentence = async (
   sentence: Sentence,
   hanzis: Hanzi[],
   articleId?: string,
@@ -343,23 +190,10 @@ export const removeSentence = async (
   }
 };
 
-const sentenceConverter: FirestoreDataConverter<Sentence> = {
-  fromFirestore(snapshot) {
-    const data = snapshot.data();
-    return {
-      id: snapshot.id,
-      text: data.text,
-      pinyinsStr: data.pinyinsStr,
-      createdAt: data.createdAt,
-    };
-  },
-  toFirestore(sentence) {
-    return {
-      text: sentence.text,
-      pinyinsStr: sentence.pinyinsStr,
-      createdAt: sentence.createdAt,
-    };
-  },
+// noto 読み込みレコード削減のため admin を使って、 restapi は使わない
+export const getDocumentCount = async (collection: string) => {
+  const snapshot = await dbAdmin.collection(collection).count().get();
+  return snapshot.data().count;
 };
 
 const createSentence_in_batch = (
@@ -385,4 +219,175 @@ const deleteSentence_in_batch = (
       .withConverter(sentenceConverter)
       .doc(sentenceId),
   );
+};
+
+const updateHanzi_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  hanzi: Hanzi,
+) => {
+  // note converter が機能せず、id や pinyin がそのまま 登録されるので、手動で変換
+  batch.update(dbAdmin.collection(COLLECTIONS.hanzis).doc(hanzi.id), {
+    consonant: hanzi.pinyin.consonant,
+    count: hanzi.count,
+    form: hanzi.form,
+    latestSentenceId: hanzi.latestSentenceId,
+    tone: hanzi.pinyin.tone,
+    vowel: hanzi.pinyin.vowel,
+  });
+};
+
+const decrementHanziCount_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  hanziId: string,
+) => {
+  batch.update(
+    dbAdmin
+      .collection(COLLECTIONS.hanzis)
+      .withConverter(hanziConverter)
+      .doc(hanziId),
+    {
+      count: FieldValue.increment(-1),
+      latestSentenceId: "",
+    },
+  );
+};
+
+const createInvertedIndex_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  form: string,
+  sentenceId: string,
+) => {
+  const id = nanoid(8);
+  batch.set(
+    dbAdmin
+      .collection(COLLECTIONS.invertedIndexes)
+      .withConverter(invertedIndexConverter)
+      .doc(id),
+    {
+      id,
+      form,
+      count: 1,
+      sentenceIds: [sentenceId],
+    },
+  );
+};
+
+const incrementInvertedIndexCount_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  invertedIndexId: string,
+  sentenceId: string,
+) => {
+  batch.update(
+    dbAdmin
+      .collection(COLLECTIONS.invertedIndexes)
+      .withConverter(invertedIndexConverter)
+      .doc(invertedIndexId),
+    {
+      count: FieldValue.increment(1),
+      sentenceIds: FieldValue.arrayUnion(sentenceId),
+    },
+  );
+};
+
+const decrementInvertedIndexCount_in_batch = (
+  batch: FirebaseFirestore.WriteBatch,
+  invertedIndexId: string,
+  sentenceId: string,
+) => {
+  batch.update(
+    dbAdmin
+      .collection(COLLECTIONS.invertedIndexes)
+      .withConverter(invertedIndexConverter)
+      .doc(invertedIndexId),
+    {
+      count: FieldValue.increment(-1),
+      sentenceIds: FieldValue.arrayRemove(sentenceId),
+    },
+  );
+};
+
+const hanziConverter: FirestoreDataConverter<Hanzi> = {
+  fromFirestore(snapshot) {
+    const data = snapshot.data();
+    return {
+      id: snapshot.id,
+      form: data.form,
+      pinyin: {
+        tone: data.tone,
+        vowel: data.vowel,
+        consonant: data.consonant,
+      },
+      count: data.count,
+      latestSentenceId: data.latestSentenceId,
+    };
+  },
+  toFirestore(hanzi) {
+    const pinyin = hanzi.pinyin as Pinyin;
+
+    return {
+      form: hanzi.form,
+      tone: pinyin.tone,
+      vowel: pinyin.vowel,
+      consonant: pinyin.consonant,
+      count: hanzi.count,
+      latestSentenceId: hanzi.latestSentenceId,
+    };
+  },
+};
+
+const articleConverter: FirestoreDataConverter<Article> = {
+  fromFirestore(snapshot) {
+    const data = snapshot.data();
+    return {
+      id: snapshot.id,
+      title: data.title,
+      createdAt: data.createdAt,
+      sentenceIds: data.sentenceIds,
+    };
+  },
+  toFirestore(article) {
+    return {
+      title: article.title,
+      createdAt: article.createdAt,
+      sentenceIds: article.sentenceIds,
+    };
+  },
+};
+
+const sentenceConverter: FirestoreDataConverter<Sentence> = {
+  fromFirestore(snapshot) {
+    const data = snapshot.data();
+    return {
+      id: snapshot.id,
+      text: data.text,
+      pinyinsStr: data.pinyinsStr,
+      createdAt: data.createdAt,
+    };
+  },
+  toFirestore(sentence) {
+    return {
+      text: sentence.text,
+      pinyinsStr: sentence.pinyinsStr,
+      createdAt: sentence.createdAt,
+    };
+  },
+};
+
+const invertedIndexConverter: FirestoreDataConverter<InvertedIndex> = {
+  fromFirestore(snapshot) {
+    const data = snapshot.data();
+    return {
+      id: snapshot.id,
+      form: data.form,
+      count: data.count,
+      sentenceIds: data.sentenceIds,
+    };
+  },
+  toFirestore(invertedIndex) {
+    return {
+      form: invertedIndex.form,
+      count: invertedIndex.count,
+      sentenceIds: invertedIndex.sentenceIds,
+    };
+  },
 };

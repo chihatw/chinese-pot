@@ -7,16 +7,15 @@ export const ERROR_CODES = {
   "auth/email-already-in-use": "auth/email-already-in-use",
 };
 
-export const DOCUMENTID_COUNT_MAX = 10;
-
-export const PROJECT_ID = "chinese-pot";
-
 export const REVALIDATE_TAGS = {
   senences: "sentences",
   articles: "articles",
   hanzis: "hanzis",
   invertedIndexes: "invertedIndexes",
   article: "article",
+  hanzisByForms: "hanzisByForms",
+  invertedIndexByForm: "invertedIndexByForm",
+  invertedIndexesByForms: "invertedIndexesByForms",
 };
 
 export const COLLECTIONS = {

@@ -1,4 +1,4 @@
-import { buildNewSearchParamsPath, getOriginalPath } from "@/utils/utils";
+import { buildNewSearchParamsPath, getCurrentUrl } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -15,7 +15,7 @@ const useBuildSearchParams = (input: string, key: string) => {
       searchParams,
     );
 
-    const originalPath = getOriginalPath(pathname, searchParams);
+    const originalPath = getCurrentUrl(pathname, searchParams);
 
     if (newPath === originalPath) return;
 

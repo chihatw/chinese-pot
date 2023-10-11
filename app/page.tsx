@@ -8,12 +8,9 @@ import {
   Sentence,
   SentenceLine,
 } from "@/features/sentence";
-import { COLLECTIONS, REVALIDATE_TAGS } from "@/firebase/constants";
-import {
-  getDocumentCount,
-  getRecentArticles,
-  getSentencesByIds,
-} from "@/firebase/restapi";
+import { getDocumentCount } from "@/firebase/admin";
+import { COLLECTIONS } from "@/firebase/constants";
+import { getRecentArticles, getSentencesByIds } from "@/firebase/restapi";
 
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -67,21 +64,11 @@ export default async function Home() {
 }
 
 const DataMonitor = async () => {
-  const hanzisCount = await getDocumentCount(
-    COLLECTIONS.hanzis,
-    REVALIDATE_TAGS.hanzis,
-  );
-  const articlesCount = await getDocumentCount(
-    COLLECTIONS.articles,
-    REVALIDATE_TAGS.articles,
-  );
-  const sentencesCount = await getDocumentCount(
-    COLLECTIONS.sentences,
-    REVALIDATE_TAGS.senences,
-  );
+  const hanzisCount = await getDocumentCount(COLLECTIONS.hanzis);
+  const articlesCount = await getDocumentCount(COLLECTIONS.articles);
+  const sentencesCount = await getDocumentCount(COLLECTIONS.sentences);
   const invertedIndexesCount = await getDocumentCount(
     COLLECTIONS.invertedIndexes,
-    REVALIDATE_TAGS.invertedIndexes,
   );
   return (
     <>

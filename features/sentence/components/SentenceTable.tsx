@@ -1,6 +1,6 @@
 "use client";
 
-import { removeSentenceAction } from "@/app/_actions";
+import { deleteSentenceAction } from "@/app/_actions";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -21,7 +21,7 @@ const SentenceTable = ({
   const handleSubmit = async (sentenceId: string) => {
     const sentence = sentences.find((s) => s.id === sentenceId)!;
     const hanzis = buildHanzisFromSentence(sentence);
-    await removeSentenceAction(sentence, hanzis, articleId);
+    await deleteSentenceAction(sentence, hanzis, articleId);
     toast({ description: "deleted sentence" });
   };
   return (

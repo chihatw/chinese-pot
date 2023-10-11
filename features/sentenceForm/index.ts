@@ -1,7 +1,5 @@
 import SentenceForm from "./components/SentenceForm";
 
-import { addSentenceAction } from "./services/actions";
-
 import {
   buildSentenceFormProps,
   buildSentenceFromHanzis,
@@ -13,7 +11,6 @@ import { SentenceFormProps } from "./schema";
 
 export {
   SentenceForm,
-  addSentenceAction,
   buildSentenceFormProps,
   buildSentenceFromHanzis,
   getSelectedHanziIds,

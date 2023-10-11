@@ -4,17 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import { Plus } from "lucide-react";
+import { useState } from "react";
 import HanziFormDialogContent from "./HanziFormDialogContent";
 
-const HanziForm = ({
-  form,
-  articleId,
-}: {
-  form: string;
-  articleId?: string;
-}) => {
+const HanziForm = ({ form }: { form: string }) => {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button
           variant="ghost"
@@ -26,7 +22,7 @@ const HanziForm = ({
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <HanziFormDialogContent form={form} articleId={articleId} />
+        <HanziFormDialogContent form={form} setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );

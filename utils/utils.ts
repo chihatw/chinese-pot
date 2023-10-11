@@ -60,7 +60,7 @@ export const getIntersection = (arrays: string[][]): string[] => {
   return intersection;
 };
 
-export const getOriginalPath = (
+export const getCurrentUrl = (
   pathname: string,
   searchParams: ReadonlyURLSearchParams,
 ) => {

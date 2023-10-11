@@ -132,7 +132,9 @@ firebase deploy
 - `fireabase/client.ts` の `isDev` をコメントアウト
 - `firebase/restapi.ts` `getBaseUrl` の `isDev` を `false` に
 
-# 通信回数が多すぎる
-- 読み出しが少なくなるようにデータ構造を変更する
+# revalidate について
+restructuredQuery を使わずに、直接 url を叩くと、revalidate が反映されない気がする
+where in __name__ を使って取得する
 
-.next フォルダの削除
+restrucredQuery を使う場合は、必ず tags を設定する
+revalidate が必要な時は revalidateTag を使用

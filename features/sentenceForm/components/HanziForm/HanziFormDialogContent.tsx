@@ -25,15 +25,15 @@ import {
   INITIAL_PINYIN_FILTERL,
 } from "@/features/pinyin/schema";
 import { getHanzisByPinyinFilter } from "@/firebase/restapi";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import HanziList from "./HanziList";
 
 const HanziFormDialogContent = ({
   form,
-  articleId,
+  setOpen,
 }: {
   form: string;
-  articleId?: string;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { toast } = useToast();
   const [input, setInput] = useState("");
@@ -75,7 +75,8 @@ const HanziFormDialogContent = ({
       count: 0,
       latestSentenceId: "",
     };
-    await addHanziAction(hanzi, articleId);
+    await addHanziAction(hanzi);
+    setOpen(false);
     toast({ description: `added hanzi: ${hanzi.form}` });
   };
   return (

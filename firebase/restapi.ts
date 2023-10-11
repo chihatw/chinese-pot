@@ -5,233 +5,47 @@ import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
 import { SearchResult } from "@/features/invertedIndex/schema";
 import { PinyinFilter, buildPinyin } from "@/features/pinyin";
 import { Sentence } from "@/features/sentence";
+import { buildFetchRequestOption } from "@/utils/buildFetchRequestOption";
 import { getIntersection } from "@/utils/utils";
-import {
-  COLLECTIONS,
-  DOCUMENTID_COUNT_MAX,
-  PROJECT_ID,
-  REVALIDATE_TAGS,
-} from "./constants";
-import {
-  BuildStructuredQueryProps,
-  StructuredQuery,
-  WhereProps,
-  WhereValue,
-} from "./schema";
+import { COLLECTIONS, REVALIDATE_TAGS } from "./constants";
+import { BuildStructuredQueryProps, WhereProps } from "./schema";
 
-function getBaseUrl() {
-  // note local build
+// note restapi の in の条件は 10項まで
+const IN_ARRAY_MAX = 10;
+
+export const PROJECT_ID = "chinese-pot";
+
+const PROJECT_PATH = `projects/${PROJECT_ID}/databases/(default)/documents`;
+
+const getBaseUrl = () => {
   const isDev = process.env.NODE_ENV === "development";
-  return isDev ? "http://localhost:8080" : "https://firestore.googleapis.com";
-}
 
-export const getDocumentURL = (collection: string, docId: string) => {
-  return `${getBaseUrl()}/v1/projects/${PROJECT_ID}/databases/(default)/documents/${collection}/${docId}`;
+  // note pnpm build のときは isDev が false 、つまり本番環境から fetch される
+  // pnpm build の書き込み先の default は　local なので、書き込み先と読み込み先の統一が必要
+  const pathname = isDev
+    ? "http://localhost:8080"
+    : "https://firestore.googleapis.com";
+  return `${pathname}/v1/${PROJECT_PATH}`;
 };
 
-export const getDocumentCount = async (
-  collectionId: string,
-  tag: string,
-): Promise<number> => {
-  const res = await fetch(
-    FetchRequestURL,
-    buildFetchRequestOption({
-      collectionId,
-      selectFields: [],
-      tags: [tag],
-    }),
-  );
-  const json = await res.json();
+// note structuredQuery を使わずに取得すると、 revalidate されない
+export const getDocumentURL_declare = (collection: string, docId: string) =>
+  `${getBaseUrl()}/${collection}/${docId}`;
 
-  if (json.error) {
-    console.log(json.error);
-    return 0;
-  }
-
-  return (json as any[]).filter((item) => item.document).length;
-};
-
-// index を通して export するとエラー
-export const FetchRequestURL = (() => {
-  return `${getBaseUrl()}/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`;
-})();
-
-// index を通して export するとエラー
-export function buildFetchRequestOption({
-  collectionId,
-  orderBy,
-  selectFields,
-  where,
-  limit,
-  tags,
-}: {
-  collectionId: string;
-  orderBy?: [string, "asc" | "desc"];
-  selectFields?: string[];
-  where?: WhereProps | WhereProps[];
-  limit?: number;
-  tags?: string[];
-}) {
-  const option: { method: string; body: string; next?: { tags: string[] } } = {
-    method: "post",
-    body: buildFetchRequestOptionBody({
-      collectionId,
-      orderBy,
-      selectFields,
-      where,
-      limit,
-    }),
-  };
-  if (!!tags) {
-    option.next = { tags };
-  }
-  return option;
-}
-
-function buildFetchRequestOptionBody({
-  collectionId,
-  orderBy,
-  selectFields,
-  where,
-  limit,
-}: {
-  collectionId: string;
-  orderBy?: [string, "asc" | "desc"];
-  selectFields?: string[];
-  where?: WhereProps | WhereProps[];
-  limit?: number;
-}) {
-  const structuredQuery = buildStructuredQuery({
-    collectionId,
-    orderBy,
-    selectFields,
-    where,
-    limit,
-  });
-  return JSON.stringify({ structuredQuery });
-}
-
-function buildStructuredQuery({
-  collectionId,
-  orderBy,
-  selectFields,
-  where,
-  limit,
-}: BuildStructuredQueryProps): StructuredQuery {
-  const query: StructuredQuery = { from: [{ collectionId }] };
-
-  if (where) {
-    // where の先頭が文字なら WhereProps
-    if (typeof where[0] === "string") {
-      const _where = where as WhereProps;
-      query.where = buildWhere(_where);
-    }
-    // where の先頭が文字でなければ WhereProps[]
-    else {
-      const wheres = where as WhereProps[];
-      const filters = wheres.map((where) => buildWhere(where));
-      query.where = {
-        compositeFilter: {
-          filters,
-          op: "AND",
-        },
-      };
-    }
-  }
-
-  if (orderBy) {
-    query.orderBy = [
-      {
-        field: {
-          fieldPath: orderBy[0],
-        },
-        direction:
-          orderBy[1] === "asc"
-            ? "ASCENDING"
-            : ("DESCENDING" as "ASCENDING" | "DESCENDING"),
-      },
-    ];
-  }
-
-  if (selectFields) {
-    query.select = {
-      fields: selectFields.map((field) => ({ fieldPath: field })),
-    };
-  }
-
-  if (limit) {
-    query.limit = limit;
-  }
-  return query;
-}
-
-function buildFieldFilterValue(value: WhereValue):
-  | { stringValue: string }
-  | { integerValue: string }
-  | { booleanValue: boolean }
-  | {
-      arrayValue: {
-        values: ({ stringValue: string } | { referenceValue: string })[];
-      };
-    }
-  | { referenceValue: string } {
-  switch (typeof value) {
-    case "string":
-      if (value.slice(0, 9) === "projects/") {
-        return { referenceValue: value };
-      }
-      return { stringValue: value };
-    case "number":
-      return { integerValue: String(value) };
-    case "boolean":
-      return { booleanValue: value };
-    case "object":
-      return {
-        arrayValue: {
-          values: value.map((v) => {
-            if (v.slice(0, 9) === "projects/") {
-              return { referenceValue: v };
-            }
-            return { stringValue: v };
-          }),
-        },
-      };
-    default:
-      throw new Error(`where is invalid ${value}`);
-  }
-}
-
-function buildWhere(where: WhereProps) {
-  const value = buildFieldFilterValue(where[2]);
-  return {
-    fieldFilter: {
-      field: {
-        fieldPath: where[0],
-      },
-      op: where[1],
-      value,
-    },
-  };
-}
+const fetchRequestURL = `${getBaseUrl()}:runQuery`;
 
 export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
   const res = await fetch(
-    FetchRequestURL,
+    fetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTIONS.hanzis,
       where: ["form", "IN", forms],
+      tags: [REVALIDATE_TAGS.hanzisByForms],
     }),
   );
 
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return [];
-  }
-
-  return (json as any[])
-    .filter((item) => !!item.document)
-    .map((item) => buildHanzi(item.document));
+  const docs = await getDocs(res);
+  return docs.map((doc) => buildHanzi(doc));
 };
 
 export const getHanzisByPinyinFilter = async (
@@ -254,45 +68,9 @@ export const getHanzisByPinyinFilter = async (
 
   q.where = where;
 
-  const res = await fetch(FetchRequestURL, buildFetchRequestOption(q));
-
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return [];
-  }
-
-  return (json as any[])
-    .filter((item) => !!item.document)
-    .map((item) => buildHanzi(item.document));
-};
-
-const buildHanzi = (document: any): Hanzi => {
-  const fields = document.fields;
-  const pinyinStr =
-    fields.consonant.stringValue +
-    fields.vowel.stringValue +
-    fields.tone.stringValue;
-  return {
-    id: document.name.split("/").at(-1) || "",
-    form: fields.form.stringValue || "",
-    pinyin: buildPinyin(pinyinStr || ""),
-    count: Number(fields.count.integerValue),
-    latestSentenceId: fields.latestSentenceId.stringValue,
-  };
-};
-
-// note structuredQuery を使わずに取得すると、 revalidate されない
-export const getArticle_deprecated = async (id: string) => {
-  const res = await fetch(getDocumentURL(COLLECTIONS.articles, id), {
-    next: { tags: [REVALIDATE_TAGS.article] },
-  });
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return;
-  }
-  return buildArticle(json);
+  const res = await fetch(fetchRequestURL, buildFetchRequestOption(q));
+  const docs = await getDocs(res);
+  return docs.map((doc) => buildHanzi(doc));
 };
 
 export const getArticlesByIds = async (
@@ -302,38 +80,31 @@ export const getArticlesByIds = async (
 
   const uniq_articleIds = [...new Set(articleIds)];
 
-  if (uniq_articleIds.length > DOCUMENTID_COUNT_MAX) {
+  if (uniq_articleIds.length > IN_ARRAY_MAX) {
     throw new Error("articleIds too big");
   }
 
   const res = await fetch(
-    FetchRequestURL,
+    fetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTIONS.articles,
-
       where: [
         "__name__",
         "IN",
         uniq_articleIds.map(
-          (articleId) =>
-            `projects/${PROJECT_ID}/databases/(default)/documents/${COLLECTIONS.articles}/${articleId}`,
+          (articleId) => `${PROJECT_PATH}/${COLLECTIONS.articles}/${articleId}`,
         ),
       ],
       tags: [REVALIDATE_TAGS.articles], // note タグを分けた方がいい？
     }),
   );
-  const json = await res.json();
-  if (json.error) {
-    throw new Error(json.error);
-  }
-  return (json as any[])
-    .filter((item) => item.document)
-    .map((item) => buildArticle(item.document));
+  const docs = await getDocs(res);
+  return docs.map((doc) => buildArticle(doc));
 };
 
 export const getRecentArticles = async (limit: number): Promise<Article[]> => {
   const res = await fetch(
-    FetchRequestURL,
+    fetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTIONS.articles,
       orderBy: ["createdAt", "desc"],
@@ -341,128 +112,59 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
       tags: [REVALIDATE_TAGS.articles],
     }),
   );
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return [];
-  }
-
-  return (json as any[])
-    .filter((item) => !!item.document)
-    .map((item) => {
-      return buildArticle(item.document);
-    });
+  const docs = await getDocs(res);
+  return docs.map((doc) => buildArticle(doc));
 };
 
-const buildArticle = (document: any): Article => {
-  const id = document.name.split("/").at(-1) || "";
-  const fields = document.fields;
-  const sentenceIds: any[] = fields.sentenceIds.arrayValue.values || [];
-  return {
-    id,
-    createdAt: Number(fields.createdAt.integerValue),
-    sentenceIds: sentenceIds.map((value) => value.stringValue),
-    title: fields.title.stringValue,
-  };
-};
-
-export const getInvertedIndexByForm = async (
+const getInvertedIndexByForm = async (
   form: string,
 ): Promise<InvertedIndex | undefined> => {
   const res = await fetch(
-    FetchRequestURL,
+    fetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTIONS.invertedIndexes,
       where: ["form", "EQUAL", form],
+      tags: [REVALIDATE_TAGS.invertedIndexByForm],
     }),
   );
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return;
-  }
-
-  const _json = (json as any[]).filter((item) => item.document);
-
-  if (!_json.length) return;
-
-  return buildInvertedIndex(_json[0].document);
+  const docs = await getDocs(res);
+  const results = docs.map((doc) => buildInvertedIndex(doc));
+  return results.at(0);
 };
 
 export const getInvertedIndexesByForms = async (
   forms: string[],
 ): Promise<InvertedIndex[]> => {
   const res = await fetch(
-    FetchRequestURL,
+    fetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTIONS.invertedIndexes,
       where: ["form", "IN", forms],
+      tags: [REVALIDATE_TAGS.invertedIndexesByForms],
     }),
   );
-  const json = await res.json();
-
-  if (!json) return [];
-
-  if (json.error) {
-    console.log(json.error);
-    return [];
-  }
-
-  return (json as any[])
-    .filter((item) => !!item.document)
-    .map((item) => buildInvertedIndex(item.document));
-};
-
-const buildInvertedIndex = (document: any): InvertedIndex => {
-  const id = document.name.split("/").at(-1) || "";
-  const fields = document.fields;
-  const sentenceIds: any[] =
-    document.fields.sentenceIds.arrayValue.values || [];
-  return {
-    id,
-    form: fields.form.stringValue,
-    count: Number(fields.count.integerValue),
-    sentenceIds: sentenceIds.map((item) => item.stringValue),
-  };
-};
-
-export const getSentence = async (
-  id: string,
-): Promise<Sentence | undefined> => {
-  if (!id) return;
-
-  const res = await fetch(getDocumentURL(COLLECTIONS.invertedIndexes, id));
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return;
-  }
-  return buildSentence(json);
+  const docs = await getDocs(res);
+  return docs.map((doc) => buildInvertedIndex(doc));
 };
 
 export const getRecentSentences = async (
   limit: number,
 ): Promise<Sentence[]> => {
   const res = await fetch(
-    FetchRequestURL,
+    fetchRequestURL,
     buildFetchRequestOption({
-      collectionId: COLLECTIONS.invertedIndexes,
+      collectionId: COLLECTIONS.sentences,
       orderBy: ["createdAt", "desc"],
       limit,
       tags: [REVALIDATE_TAGS.senences],
     }),
   );
 
-  const json = await res.json();
-  if (json.error) {
-    console.log(json.error);
-    return [];
-  }
-
-  return (json as any[])
-    .filter((item) => !!item.document)
-    .map((item) => buildSentence(item.document));
+  const docs = await getDocs(res);
+  return docs.map((doc) => buildSentence(doc));
 };
+
+// note fetch する sentences の上限を SEARCH_SENTENCES_MAX で指定
 
 export const getSentencesByIds = async (
   sentenceIds: string[],
@@ -479,14 +181,12 @@ export const getSentencesByIds = async (
 
   let result: Sentence[] = [];
 
-  for (let i = 0; i < sentenceIds.length; i += DOCUMENTID_COUNT_MAX) {
-    // DOCUMENTID_COUNT_MAX 毎にクエリを実行
-    const subSet = sentenceIds
-      .slice(i, i + DOCUMENTID_COUNT_MAX)
-      .filter(Boolean);
+  for (let i = 0; i < sentenceIds.length; i += IN_ARRAY_MAX) {
+    // IN_ARRAY_MAX 毎にクエリを実行
+    const subSet = sentenceIds.slice(i, i + IN_ARRAY_MAX).filter(Boolean);
     if (!subSet.length) continue;
     const res = await fetch(
-      FetchRequestURL,
+      fetchRequestURL,
       buildFetchRequestOption({
         collectionId: COLLECTIONS.sentences,
         where: [
@@ -500,14 +200,8 @@ export const getSentencesByIds = async (
         tags: [REVALIDATE_TAGS.senences],
       }),
     );
-    const json = await res.json();
-    if (json.error) {
-      throw new Error(json.error);
-    }
-
-    const sentences = (json as any[])
-      .filter((item) => !!item.document)
-      .map((item) => buildSentence(item.document));
+    const docs = await getDocs(res);
+    const sentences = docs.map((doc) => buildSentence(doc));
     result = [...result, ...sentences];
   }
 
@@ -527,7 +221,7 @@ export const getSentencesByForms = async (
   // form の１文字ずつ それを含む sentenceIds を抽出する
   const forms_uniq = [...new Set(forms.split(""))];
   const formSentenceIdsRelations =
-    await getFormSentenceIdsRelations(forms_uniq);
+    await _getFormSentenceIdsRelations(forms_uniq);
 
   // form を含む文が１つもなければ、終了
   if (!Object.keys(formSentenceIdsRelations).length)
@@ -555,6 +249,70 @@ export const getSentencesByForms = async (
   };
 };
 
+const _getFormSentenceIdsRelations = async (forms: string[]) => {
+  const result: { [form: string]: string[] } = {};
+  for (const form of forms) {
+    const invertedIndex = await getInvertedIndexByForm(form);
+    if (invertedIndex && invertedIndex.sentenceIds.length) {
+      result[form] = invertedIndex.sentenceIds;
+    }
+  }
+  return result;
+};
+
+const getDocs = async (res: Response) => {
+  // https://developer.mozilla.org/ja/docs/Web/API/Response
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+
+  const json = await res.json();
+
+  return (json as any[])
+    .filter((item) => !!item.document)
+    .map((item) => item.document);
+};
+
+const buildHanzi = (document: any): Hanzi => {
+  const fields = document.fields;
+  const pinyinStr =
+    fields.consonant.stringValue +
+    fields.vowel.stringValue +
+    fields.tone.stringValue;
+  return {
+    id: document.name.split("/").at(-1) || "",
+    form: fields.form.stringValue || "",
+    pinyin: buildPinyin(pinyinStr || ""),
+    count: Number(fields.count.integerValue),
+    latestSentenceId: fields.latestSentenceId.stringValue,
+  };
+};
+
+const buildArticle = (document: any): Article => {
+  const id = document.name.split("/").at(-1) || "";
+  const fields = document.fields;
+  const sentenceIds: any[] = fields.sentenceIds.arrayValue.values || [];
+  return {
+    id,
+    createdAt: Number(fields.createdAt.integerValue),
+    sentenceIds: sentenceIds.map((value) => value.stringValue),
+    title: fields.title.stringValue,
+  };
+};
+
+const buildInvertedIndex = (document: any): InvertedIndex => {
+  const id = document.name.split("/").at(-1) || "";
+  const fields = document.fields;
+  const sentenceIds: any[] =
+    document.fields.sentenceIds.arrayValue.values || [];
+  return {
+    id,
+    form: fields.form.stringValue,
+    count: Number(fields.count.integerValue),
+    sentenceIds: sentenceIds.map((item) => item.stringValue),
+  };
+};
+
 const buildSentence = (document: any): Sentence => {
   const id = document.name.split("/").at(-1) || "";
   const fields = document.fields;
@@ -564,15 +322,4 @@ const buildSentence = (document: any): Sentence => {
     pinyinsStr: fields.pinyinsStr.stringValue,
     createdAt: Number(fields.createdAt.integerValue),
   };
-};
-
-const getFormSentenceIdsRelations = async (forms: string[]) => {
-  const result: { [form: string]: string[] } = {};
-  for (const form of forms) {
-    const invertedIndex = await getInvertedIndexByForm(form);
-    if (invertedIndex && invertedIndex.sentenceIds.length) {
-      result[form] = invertedIndex.sentenceIds;
-    }
-  }
-  return result;
 };

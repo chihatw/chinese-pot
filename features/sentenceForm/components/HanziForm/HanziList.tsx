@@ -13,7 +13,7 @@ import {
   SentenceLine,
   buildHanzisGroupedByConsonantVowel,
 } from "@/features/sentence";
-import { getSentence } from "@/firebase/restapi";
+import { getSentencesByIds } from "@/firebase/restapi";
 
 import { useEffect, useState } from "react";
 
@@ -72,9 +72,9 @@ const PinyinHanziHoverCardContent = ({ hanzi }: { hanzi: Hanzi }) => {
       return;
     }
     const fetchData = async () => {
-      const sentence = await getSentence(hanzi.latestSentenceId);
-      if (!sentence) return;
-      setSentence(sentence);
+      const { sentences } = await getSentencesByIds([hanzi.latestSentenceId]);
+      if (!sentences.at(0)) return;
+      setSentence(sentences.at(0));
     };
     fetchData();
   }, [hanzi]);

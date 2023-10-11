@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import useDebouce from "@/hooks/useDebounce";
-import { buildNewSearchParamsPath } from "@/utils/utils";
+import { buildNewSearchParamsPath, getCurrentUrl } from "@/utils/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FORM_SEARCH_KEY } from "../constants";
@@ -24,12 +24,8 @@ const SearchSentencesByForms = ({ forms }: { forms: string }) => {
       searchParams,
     );
 
-    let originalPath = pathname;
-    const original = new URLSearchParams(Array.from(searchParams.entries()));
-    if (original.toString()) {
-      originalPath += `?${original.toString()}`;
-    }
-    if (newPath === originalPath) return;
+    const currentUrl = getCurrentUrl(pathname, searchParams);
+    if (newPath === currentUrl) return;
     // formが違う場合は、ページを更新して、データを再fetch
     router.push(newPath);
   }, [debouncedInput, searchParams, pathname, router]);
