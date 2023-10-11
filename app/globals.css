@@ -7,19 +7,19 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   }
 
-  .button {
+  /* .button {
     outline-color: transparent !important;
-  }
+  } */
   /* remove focus border */
-  input:focus {
+  /* input:focus {
     box-shadow: transparent !important;
     border-color: transparent !important;
-  }
+  } */
   /* remove focus border */
-  a:focus-visible {
+  /* a:focus-visible {
     outline: transparent !important;
     text-decoration: underline !important;
-  }
+  } */
 }
 
 /* hide emulators bottom caution */

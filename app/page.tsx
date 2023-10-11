@@ -35,7 +35,8 @@ export default async function Home() {
 
   return (
     <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-10 pb-40 pt-10 sm:mx-auto sm:w-[min(500px,100%-120px)]">
-      {process.env.NODE_ENV === "development" ? <DataMonitor /> : null}
+      {/* {process.env.NODE_ENV === "development" ? <DataMonitor /> : null} */}
+      <DataMonitor />
       {article ? (
         <div className="space-y-4">
           <div className="text-2xl">{article.title}</div>

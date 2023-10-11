@@ -196,6 +196,19 @@ export const getDocumentCount = async (collection: string) => {
   return snapshot.data().count;
 };
 
+// const getInvertedIndexesByForms = async (
+//   forms: string[],
+// ): Promise<InvertedIndex[]> => {
+//   console.log("work!!");
+//   const snapshot = await dbAdmin
+//     .collection(COLLECTIONS.invertedIndexes)
+//     .withConverter(invertedIndexConverter)
+//     .where("form", "in", forms)
+//     .get();
+
+//   return snapshot.docs.map((doc) => doc.data());
+// };
+
 const createSentence_in_batch = (
   batch: FirebaseFirestore.WriteBatch,
   sentence: Sentence,

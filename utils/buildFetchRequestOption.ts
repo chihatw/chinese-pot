@@ -13,6 +13,7 @@ export const buildFetchRequestOption = ({
   limit,
   tags,
   cache,
+  revalidate,
 }: {
   collectionId: string;
   orderBy?: [string, "asc" | "desc"];
@@ -21,11 +22,12 @@ export const buildFetchRequestOption = ({
   limit?: number;
   tags?: string[];
   cache?: "no-store" | "force-cache";
+  revalidate?: number;
 }) => {
   const option: {
     method: string;
     body: string;
-    next?: { tags: string[] };
+    next?: { tags?: string[]; revalidate?: number };
     cache?: "no-store" | "force-cache";
   } = {
     method: "post",
@@ -37,11 +39,17 @@ export const buildFetchRequestOption = ({
       limit,
     }),
   };
+
+  if (!!cache) {
+    option.cache = cache;
+  }
+
   if (!!tags) {
     option.next = { tags };
   }
-  if (!!cache) {
-    option.cache = cache;
+
+  if (!!revalidate) {
+    option.next = { revalidate };
   }
 
   return option;
