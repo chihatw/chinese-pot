@@ -110,6 +110,7 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
       orderBy: ["createdAt", "desc"],
       limit,
       tags: [REVALIDATE_TAGS.articles],
+      cache: "no-store",
     }),
   );
   const docs = await getDocs(res);

@@ -100,6 +100,9 @@ export const addSentenceAction = async (
   revalidateTag(REVALIDATE_TAGS.senences);
   revalidateTag(REVALIDATE_TAGS.articles);
 
+  //　これを更新しないと、deleteSentence の時に、 invertedIndex が見つからなくなる
+  revalidateTag(REVALIDATE_TAGS.invertedIndexesByForms);
+
   if (articleId) {
     redirect(`/article/${articleId}`);
   }

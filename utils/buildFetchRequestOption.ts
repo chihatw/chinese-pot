@@ -12,6 +12,7 @@ export const buildFetchRequestOption = ({
   where,
   limit,
   tags,
+  cache,
 }: {
   collectionId: string;
   orderBy?: [string, "asc" | "desc"];
@@ -19,8 +20,14 @@ export const buildFetchRequestOption = ({
   where?: WhereProps | WhereProps[];
   limit?: number;
   tags?: string[];
+  cache?: "no-store" | "force-cache";
 }) => {
-  const option: { method: string; body: string; next?: { tags: string[] } } = {
+  const option: {
+    method: string;
+    body: string;
+    next?: { tags: string[] };
+    cache?: "no-store" | "force-cache";
+  } = {
     method: "post",
     body: buildFetchRequestOptionBody({
       collectionId,
@@ -33,6 +40,10 @@ export const buildFetchRequestOption = ({
   if (!!tags) {
     option.next = { tags };
   }
+  if (!!cache) {
+    option.cache = cache;
+  }
+
   return option;
 };
 

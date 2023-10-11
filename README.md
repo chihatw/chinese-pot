@@ -140,4 +140,5 @@ restrucredQuery を使う場合は、必ず tags を設定する
 revalidate が必要な時は revalidateTag を使用
 
 # Article List に最新の article が反映されない
-.next を削除すればOK？
+.next を削除すればOK？ 無関係
+no-store ?
