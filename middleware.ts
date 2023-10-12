@@ -37,6 +37,6 @@ export const config = {
     "/signup",
     "/article/:path*",
     "/sentence/:path*",
-    "outline",
+    "/outline",
   ],
 };
