@@ -45,6 +45,7 @@ export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
   );
 
   const docs = await getDocs(res);
+  console.log("getHanzisByForms", docs.length);
   return docs.map((doc) => buildHanzi(doc));
 };
 
@@ -53,6 +54,18 @@ export const getHanzisByPinyinFilter = async (
 ): Promise<Hanzi[]> => {
   const q: BuildStructuredQueryProps = { collectionId: COLLECTIONS.hanzis };
   const where: WhereProps[] = [];
+  // note getHanzisByPinyinFilter のレコード読み取りが多いので、子音、母音、トーンの２つ以上が指定されるまで検索しない
+  let point = 0;
+  if (filter.consonants.length) {
+    point++;
+  }
+  if (filter.vowels.length) {
+    point++;
+  }
+  if (filter.tone.length) {
+    point++;
+  }
+  if (point < 2) return [];
 
   if (filter.consonants.length) {
     where.push(["consonant", "IN", filter.consonants]);
@@ -70,6 +83,7 @@ export const getHanzisByPinyinFilter = async (
 
   const res = await fetch(fetchRequestURL, buildFetchRequestOption(q));
   const docs = await getDocs(res);
+  console.log("getHanzisByPinyinFilter", docs.length);
   return docs.map((doc) => buildHanzi(doc));
 };
 
@@ -99,6 +113,7 @@ export const getArticlesByIds = async (
     }),
   );
   const docs = await getDocs(res);
+  console.log("getArticlesByIds", docs.length);
   return docs.map((doc) => buildArticle(doc));
 };
 
@@ -114,12 +129,16 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
     }),
   );
   const docs = await getDocs(res);
+  console.log("getRecentArticles", docs.length);
   return docs.map((doc) => buildArticle(doc));
 };
 
-const getInvertedIndexByForm = async (
+// form で　１つずつ　sentenceIds を取得して、 すべての form で取得された共通の sentenceIds を抽出する
+// byForms の方が効率が良い？
+export const _getInvertedIndexByForm = async (
   form: string,
 ): Promise<InvertedIndex | undefined> => {
+  console.log("_getInvertedIndexByForm");
   const res = await fetch(
     fetchRequestURL,
     buildFetchRequestOption({
@@ -147,6 +166,7 @@ export const getRecentSentences = async (
   );
 
   const docs = await getDocs(res);
+  console.log("getRecentSentences", docs.length);
   return docs.map((doc) => buildSentence(doc));
 };
 
@@ -171,6 +191,7 @@ export const getSentencesByIds = async (
     // IN_ARRAY_MAX 毎にクエリを実行
     const subSet = sentenceIds.slice(i, i + IN_ARRAY_MAX).filter(Boolean);
     if (!subSet.length) continue;
+
     const res = await fetch(
       fetchRequestURL,
       buildFetchRequestOption({
@@ -187,6 +208,7 @@ export const getSentencesByIds = async (
       }),
     );
     const docs = await getDocs(res);
+    console.log("getSentencesByIds", docs.length);
     const sentences = docs.map((doc) => buildSentence(doc));
     result = [...result, ...sentences];
   }
@@ -206,8 +228,14 @@ export const getSentencesByForms = async (
 
   // form の１文字ずつ それを含む sentenceIds を抽出する
   const forms_uniq = [...new Set(forms.split(""))];
-  const formSentenceIdsRelations =
-    await _getFormSentenceIdsRelations(forms_uniq);
+
+  const formSentenceIdsRelations: { [form: string]: string[] } = {};
+  for (const form of forms_uniq) {
+    const invertedIndex = await _getInvertedIndexByForm(form);
+    if (invertedIndex && invertedIndex.sentenceIds.length) {
+      formSentenceIdsRelations[form] = invertedIndex.sentenceIds;
+    }
+  }
 
   // form を含む文が１つもなければ、終了
   if (!Object.keys(formSentenceIdsRelations).length)
@@ -233,17 +261,6 @@ export const getSentencesByForms = async (
     total: filtered.length,
     sentences: filtered,
   };
-};
-
-const _getFormSentenceIdsRelations = async (forms: string[]) => {
-  const result: { [form: string]: string[] } = {};
-  for (const form of forms) {
-    const invertedIndex = await getInvertedIndexByForm(form);
-    if (invertedIndex && invertedIndex.sentenceIds.length) {
-      result[form] = invertedIndex.sentenceIds;
-    }
-  }
-  return result;
 };
 
 const getDocs = async (res: Response) => {

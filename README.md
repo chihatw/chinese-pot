@@ -142,3 +142,10 @@ revalidate が必要な時は revalidateTag を使用
 # Article List に最新の article が反映されない
 .next を削除すればOK？ 無関係
 no-store ?
+
+# firestore の読み込みについて
+読み込み件数がすぐに50000件に達することへの対策
+getHanzisByPinyinFilter の読み込み件数が多いので、検索開始するフィルターの条件を設定
+
+fetchが遅く感じることへの対策
+`initializeFirestore(app,{preferRest:true})`

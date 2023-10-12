@@ -13,8 +13,8 @@ export const REVALIDATE_TAGS = {
   hanzis: "hanzis",
   invertedIndexes: "invertedIndexes",
   article: "article",
-  hanzisByForms: "hanzisByForms",
-  invertedIndexByForm: "invertedIndexByForm",
+  hanzisByForms: "hanzisByForms", // revalidate されていない
+  invertedIndexByForm: "invertedIndexByForm", // revalidate されない
 };
 
 export const COLLECTIONS = {

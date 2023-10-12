@@ -13,6 +13,7 @@ const SentenceSearchPage = async ({
   const forms = searchParams[FORM_SEARCH_KEY]?.trim() || "";
 
   const { total, sentences } = await getSentencesByForms(forms);
+
   return (
     <div className="mx-auto w-full max-w-md pt-10">
       <SearchSentencesByForms forms={forms} />

@@ -32,5 +32,11 @@ export default async function middleware(req: NextRequest) {
 // リダイレクト処理が必要なページ
 // noto 配列の展開は使えない
 export const config = {
-  matcher: ["/signin", "/signup", "/article/:path*", "/sentence/:path*"],
+  matcher: [
+    "/signin",
+    "/signup",
+    "/article/:path*",
+    "/sentence/:path*",
+    "outline",
+  ],
 };

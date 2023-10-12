@@ -1,9 +1,9 @@
 "use client";
 import { useSession } from "next-auth/react";
 
+import { ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import LinkButton from "../LinkButton";
-import AdminBadge from "./AdminBadge";
 import HomeIcon from "./HomeIcon";
 import LoginIcon from "./LoginIcon";
 import LogoutIcon from "./LogoutIcon";
@@ -13,6 +13,7 @@ const items: { url: string; label: string }[] = [
   { url: "/article/list", label: "Article List" },
   { url: "/sentence/search", label: "Sentence Search" },
   { url: "/sentence/form", label: "Sentence Form" },
+  { url: "/outline", label: "Outline" },
 ];
 
 const Header = () => {
@@ -36,7 +37,7 @@ const Header = () => {
           ))}
         </div>
         <div className="flex items-center gap-x-2">
-          {session?.user && session?.user.admin && <AdminBadge />}
+          {session?.user && session?.user.admin && <ShieldCheck />}
           {session?.user ? <LogoutIcon /> : <LoginIcon />}
         </div>
       </div>

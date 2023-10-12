@@ -1,4 +1,4 @@
-import { authAdnimSDK } from "@/firebase/admin";
+import { authAdmin } from "@/firebase/admin";
 import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -15,7 +15,7 @@ export const authOptions: NextAuthOptions = {
           idToken: string;
         };
         try {
-          const decodedIdToken = await authAdnimSDK.verifyIdToken(idToken);
+          const decodedIdToken = await authAdmin.verifyIdToken(idToken);
           // name, email, image などが渡される
           return decodedIdToken as unknown as User;
         } catch (e) {

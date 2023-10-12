@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent } from "@/components/ui/popover";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { format } from "date-fns";
@@ -16,7 +15,6 @@ import { useState } from "react";
 import { Article } from "../schema";
 
 const ArticleForm = ({ article }: { article?: Article }) => {
-  const { toast } = useToast();
   const [value, setValue] = useState<{ title: string; date?: Date }>({
     title: article?.title || "",
     date: article ? new Date(article.createdAt) : new Date(),
@@ -24,9 +22,9 @@ const ArticleForm = ({ article }: { article?: Article }) => {
 
   const handleSubmit = async () => {
     if (article) {
-      updateArticle(article.id, value.title, value.date!.getTime());
+      await updateArticle(article.id, value.title, value.date!.getTime());
     } else {
-      createArticle(value.title, value.date!);
+      await createArticle(value.title, value.date!);
     }
   };
 
@@ -46,7 +44,6 @@ const ArticleForm = ({ article }: { article?: Article }) => {
     createdAt: number,
   ) => {
     await updateArticleAction(id, title, createdAt);
-    toast({ description: `updated article!` });
   };
 
   return (
