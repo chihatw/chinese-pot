@@ -129,7 +129,7 @@ firebase deploy
 
 # local で　本番環境を使う
 - `.env.local` の　`FIRESTORE_EMULATOR_HOST`, `FIREBASE_AUTH_EMULATOR_HOST` をコメントアウト
-- `fireabase/client.ts` の `isDev` をコメントアウト
+- (現在は不要)`fireabase/client.ts` の `isDev` をコメントアウト
 - `firebase/restapi.ts` `getBaseUrl` の `isDev` を `false` に
 
 # revalidate について

@@ -101,6 +101,7 @@ export const addSentenceAction = async (
   revalidateTag(REVALIDATE_TAGS.articles);
 
   if (articleId) {
+    revalidatePath(`/article/${articleId}`);
     redirect(`/article/${articleId}`);
   }
 };
