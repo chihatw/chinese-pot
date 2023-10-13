@@ -26,13 +26,16 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
     <div className="mx-auto w-full max-w-md space-y-4 pb-40 pt-10">
       <div className="text-2xl font-bold">{article.title}</div>
       <div>{new Date(article.createdAt).toLocaleDateString("ja")}</div>
-      <div className="flex">
+      <div className="flex items-center justify-between">
         <form action={handleSubmit}>
           <Button className="flex gap-2" type="submit">
             <span>Revalidate</span>
             <RefreshCcw />
           </Button>
         </form>
+        <div className="text-xs font-extralight">{`created at ${
+          new Date().toLocaleString("ja").split(" ")[1]
+        }`}</div>
       </div>
       <div className="flex">
         <Link href={`/article/${article.id}/form`}>
