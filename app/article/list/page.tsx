@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
 const ArticleListPage = async () => {
-  const { articles, readTime } = await getRecentArticles(3);
+  const { articles, readTime } = await getRecentArticles(50);
 
   const handleSubmit = async () => {
     "use server";
