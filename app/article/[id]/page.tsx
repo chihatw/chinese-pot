@@ -19,6 +19,7 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
   const handleSubmit = async () => {
     "use server";
     revalidatePath(`/article/${id}`);
+    redirect(`/article/${id}?${Math.random()}`);
   };
 
   return (
