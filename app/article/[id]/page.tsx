@@ -9,7 +9,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
-  const articles = await getArticlesByIds([id]);
+  const { articles, readTime } = await getArticlesByIds([id]);
   const article = articles.at(0);
   if (!article) {
     redirect("/article/list");
@@ -19,7 +19,6 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
   const handleSubmit = async () => {
     "use server";
     revalidatePath(`/article/${id}`);
-    redirect(`/article/${id}?${Math.random()}`);
   };
 
   return (
@@ -33,8 +32,8 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
             <RefreshCcw />
           </Button>
         </form>
-        <div className="text-xs font-extralight">{`created at ${
-          new Date().toLocaleString("ja").split(" ")[1]
+        <div className="text-xs font-extralight">{`fetched at ${
+          new Date(readTime).toLocaleString().split(" ")[1]
         }`}</div>
       </div>
       <div className="flex">

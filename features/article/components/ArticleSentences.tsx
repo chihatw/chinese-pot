@@ -4,7 +4,7 @@ import { SimpleSentenceMonitor } from "@/features/sentence";
 import { getArticlesByIds, getSentencesByIds } from "@/firebase/restapi";
 
 const ArticleSentences = async ({ articleId }: { articleId: string }) => {
-  const articles = await getArticlesByIds([articleId]);
+  const { articles } = await getArticlesByIds([articleId]);
   const article = articles.at(0);
   if (!article) return null;
 

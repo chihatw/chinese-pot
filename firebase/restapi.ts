@@ -44,7 +44,7 @@ export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
     }),
   );
 
-  const docs = await getDocs(res);
+  const { docs } = await getDocs(res);
   console.log("getHanzisByForms", docs.length);
   return docs.map((doc) => buildHanzi(doc));
 };
@@ -82,15 +82,15 @@ export const getHanzisByPinyinFilter = async (
   q.where = where;
 
   const res = await fetch(fetchRequestURL, buildFetchRequestOption(q));
-  const docs = await getDocs(res);
+  const { docs } = await getDocs(res);
   console.log("getHanzisByPinyinFilter", docs.length);
   return docs.map((doc) => buildHanzi(doc));
 };
 
 export const getArticlesByIds = async (
   articleIds: string[],
-): Promise<Article[]> => {
-  if (!articleIds.length) return [];
+): Promise<{ articles: Article[]; readTime: number }> => {
+  if (!articleIds.length) return { articles: [], readTime: 0 };
 
   const uniq_articleIds = [...new Set(articleIds)];
 
@@ -112,9 +112,9 @@ export const getArticlesByIds = async (
       tags: [REVALIDATE_TAGS.articles], // note タグを分けた方がいい？
     }),
   );
-  const docs = await getDocs(res);
-  console.log("getArticlesByIds", docs.length);
-  return docs.map((doc) => buildArticle(doc));
+  const { docs, readTime } = await getDocs(res);
+  const articles = docs.map((doc) => buildArticle(doc));
+  return { articles, readTime };
 };
 
 export const getRecentArticles = async (limit: number): Promise<Article[]> => {
@@ -128,7 +128,7 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
       cache: "no-store",
     }),
   );
-  const docs = await getDocs(res);
+  const { docs } = await getDocs(res);
   console.log("getRecentArticles", docs.length);
   return docs.map((doc) => buildArticle(doc));
 };
@@ -147,7 +147,7 @@ export const _getInvertedIndexByForm = async (
       tags: [REVALIDATE_TAGS.invertedIndexByForm],
     }),
   );
-  const docs = await getDocs(res);
+  const { docs } = await getDocs(res);
   const results = docs.map((doc) => buildInvertedIndex(doc));
   return results.at(0);
 };
@@ -165,7 +165,7 @@ export const getRecentSentences = async (
     }),
   );
 
-  const docs = await getDocs(res);
+  const { docs } = await getDocs(res);
   console.log("getRecentSentences", docs.length);
   return docs.map((doc) => buildSentence(doc));
 };
@@ -207,7 +207,7 @@ export const getSentencesByIds = async (
         tags: [REVALIDATE_TAGS.senences],
       }),
     );
-    const docs = await getDocs(res);
+    const { docs } = await getDocs(res);
     console.log("getSentencesByIds", docs.length);
     const sentences = docs.map((doc) => buildSentence(doc));
     result = [...result, ...sentences];
@@ -271,9 +271,13 @@ const getDocs = async (res: Response) => {
 
   const json = await res.json();
 
-  return (json as any[])
+  const docs = (json as any[])
     .filter((item) => !!item.document)
     .map((item) => item.document);
+
+  const readTime = (json as any[]).at(0)?.readTime || 0;
+
+  return { docs, readTime };
 };
 
 const buildHanzi = (document: any): Hanzi => {

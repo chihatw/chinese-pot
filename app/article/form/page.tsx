@@ -10,7 +10,7 @@ const ArticleFormPage = async ({
 }) => {
   let article = undefined;
   if (id) {
-    const articles = await getArticlesByIds([id]);
+    const { articles } = await getArticlesByIds([id]);
     article = articles.at(0);
   }
   return (

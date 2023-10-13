@@ -15,7 +15,7 @@ const ArticleSentenceFormPage = async ({
 }) => {
   !id && redirect("/");
 
-  const articles = await getArticlesByIds([id]);
+  const { articles } = await getArticlesByIds([id]);
   const article = articles.at(0);
   !article && redirect("/");
 
