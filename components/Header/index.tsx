@@ -9,7 +9,6 @@ import LoginIcon from "./LoginIcon";
 import LogoutIcon from "./LogoutIcon";
 
 const items: { url: string; label: string }[] = [
-  { url: "/article/form", label: "New Article" },
   { url: "/article/list", label: "Article List" },
   { url: "/sentence/search", label: "Sentence Search" },
   { url: "/sentence/form", label: "Sentence Form" },
