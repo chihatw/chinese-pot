@@ -117,7 +117,9 @@ export const getArticlesByIds = async (
   return { articles, readTime };
 };
 
-export const getRecentArticles = async (limit: number): Promise<Article[]> => {
+export const getRecentArticles = async (
+  limit: number,
+): Promise<{ articles: Article[]; readTime: number }> => {
   const res = await fetch(
     fetchRequestURL,
     buildFetchRequestOption({
@@ -125,12 +127,12 @@ export const getRecentArticles = async (limit: number): Promise<Article[]> => {
       orderBy: ["createdAt", "desc"],
       limit,
       tags: [REVALIDATE_TAGS.articles],
-      cache: "no-store",
     }),
   );
-  const { docs } = await getDocs(res);
+  const { docs, readTime } = await getDocs(res);
   console.log("getRecentArticles", docs.length);
-  return docs.map((doc) => buildArticle(doc));
+  const articles = docs.map((doc) => buildArticle(doc));
+  return { articles, readTime };
 };
 
 // form で　１つずつ　sentenceIds を取得して、 すべての form で取得された共通の sentenceIds を抽出する
