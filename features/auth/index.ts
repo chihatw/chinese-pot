@@ -1,18 +1,10 @@
-import {
-  AuthContextProvider,
-  useAuthContext,
-} from "./components/AuthContextProvider";
-
 import SessionProvider from "./components/SessionProvider";
-import SignInForm from "./components/authForm/SignInForm";
-import SignUpForm from "./components/authForm/SignUpForm";
+import SignInForm from "./components/SignInForm";
+import SignUpForm from "./components/SignUpForm";
 
+import { User } from "./schema";
+import { getUser } from "./services/auth";
 
-export {
-  AuthContextProvider,
-  SessionProvider,
-  SignInForm,
-  SignUpForm,
-  useAuthContext
-};
+export { SessionProvider, SignInForm, SignUpForm, getUser };
 
+export type { User };

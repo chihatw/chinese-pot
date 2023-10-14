@@ -2,6 +2,7 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 const GUEST_ONLY_PAGES = ["/signin", "/signup"];
+const ADMIN_ONLY_PAGES = ["/admin"];
 
 // https://stackoverflow.com/questions/74191340/next-auth-middleware-default-is-not-working
 export default async function middleware(req: NextRequest) {
@@ -11,18 +12,28 @@ export default async function middleware(req: NextRequest) {
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
-  const isLoginedUser = !!session?.email;
 
-  // ログインユーザーはリダイレクト
+  const uid = session?.uid || "";
+  const admin = session?.admin || false;
+
+  // ゲスト専用ページ（ログイン等）は、ログインユーザーはリダイレクト
   if (GUEST_ONLY_PAGES.includes(path)) {
-    if (isLoginedUser) {
+    if (!!uid) {
       return NextResponse.redirect(new URL("/", req.url));
     }
     return NextResponse.next();
   }
 
-  // 未ログインユーザーはリダイレクト
-  if (!isLoginedUser) {
+  // 管理者専用ページで、管理者でない場合は、リダイレクト
+  if (ADMIN_ONLY_PAGES.includes(path)) {
+    if (!admin) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    return NextResponse.next();
+  }
+
+  if (!uid) {
+    // ユーザー情報を表示するページは、未ログインユーザーはリダイレクト
     return NextResponse.redirect(new URL("/signin", req.url));
   }
 
@@ -33,6 +44,7 @@ export default async function middleware(req: NextRequest) {
 // noto 配列の展開は使えない
 export const config = {
   matcher: [
+    "/admin",
     "/signin",
     "/signup",
     "/article/:path*",

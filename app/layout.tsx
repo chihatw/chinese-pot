@@ -16,7 +16,7 @@ export default function RootLayout({
         <body
           className={cn(
             "grid min-h-screen grid-rows-[auto_1fr] bg-slate-200 font-sans text-gray-700",
-            fontSans.variable,
+            fontSans.className,
           )}
         >
           <Header />

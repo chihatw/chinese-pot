@@ -1,6 +1,6 @@
 "use client";
 
-import TextField from "@/features/auth/components/authForm/TextField";
+import TextField from "@/features/auth/components/TextField";
 import { SignUpSchema } from "@/features/auth/schema";
 import { signUpFirebaseWithEmailAndPassword } from "@/features/auth/services/auth";
 import { fontZenMaruGothic } from "@/lib/fonts";

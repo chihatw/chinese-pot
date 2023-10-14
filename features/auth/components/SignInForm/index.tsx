@@ -1,6 +1,6 @@
 "use client";
 
-import TextField from "@/features/auth/components/authForm/TextField";
+import TextField from "@/features/auth/components/TextField";
 import { SignInSchema } from "@/features/auth/schema";
 import { signInAppWithEmailAndPassword } from "@/features/auth/services/auth";
 import { fontZenMaruGothic } from "@/lib/fonts";

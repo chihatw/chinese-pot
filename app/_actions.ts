@@ -1,6 +1,7 @@
 "use server";
 
 import { Article } from "@/features/article";
+
 import { Hanzi } from "@/features/hanzi";
 import { InvertedIndex } from "@/features/invertedIndex";
 import { Sentence } from "@/features/sentence";
@@ -19,6 +20,7 @@ import {
   updateArticle,
 } from "@/firebase/admin";
 import { REVALIDATE_TAGS } from "@/firebase/constants";
+import { sleep } from "@/utils/utils";
 import { nanoid } from "nanoid";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
@@ -102,6 +104,7 @@ export const addSentenceAction = async (
 
   if (articleId) {
     revalidatePath(`/article/${articleId}`);
+    await sleep(200); // note revalidate の反映を待機
     redirect(`/article/${articleId}`);
   }
 };

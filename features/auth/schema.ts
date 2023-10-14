@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export interface User {
+  uid: string;
+  admin: boolean;
+}
+
 export const SignInSchema = z.object({
   email: z.string().email({ message: "請輸入有效的電郵地址" }),
   password: z.string().min(6, { message: "請輸入六字以上的密碼" }),

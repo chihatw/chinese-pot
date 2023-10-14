@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 
+import { getUser } from "@/features/auth";
 import { ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import LinkButton from "../LinkButton";
@@ -16,7 +17,9 @@ const items: { url: string; label: string }[] = [
 ];
 
 const Header = () => {
-  const { data: session } = useSession();
+  const { data } = useSession();
+  const { uid, admin } = getUser(data);
+
   const pathname = usePathname();
 
   return (
@@ -36,8 +39,8 @@ const Header = () => {
           ))}
         </div>
         <div className="flex items-center gap-x-2">
-          {session?.user && session?.user.admin && <ShieldCheck />}
-          {session?.user ? <LogoutIcon /> : <LoginIcon />}
+          {admin && <ShieldCheck />}
+          {!!uid ? <LogoutIcon /> : <LoginIcon />}
         </div>
       </div>
     </nav>

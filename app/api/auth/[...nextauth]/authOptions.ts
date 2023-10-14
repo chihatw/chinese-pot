@@ -9,7 +9,6 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {},
-
       async authorize(credentials): Promise<User | null> {
         const { idToken } = credentials as {
           idToken: string;
