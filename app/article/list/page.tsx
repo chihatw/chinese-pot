@@ -24,7 +24,7 @@ const ArticleListPage = async () => {
           <ServerActionPendingButton label="revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
-          new Date(readTime).toLocaleString("ja").split(" ")[1]
+          new Date(readTime).toLocaleString("ja-JP").split(" ")[1]
         }`}</div>
       </div>
       <div className="flex">

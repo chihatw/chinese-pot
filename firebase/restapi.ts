@@ -27,8 +27,7 @@ const getBaseUrl = () => {
 
   // note pnpm build のときは isDev が false 、つまり本番環境から fetch される
   // pnpm build の書き込み先の default は　local なので、書き込み先と読み込み先の統一が必要
-  // debug
-  const pathname = false
+  const pathname = isDev
     ? "http://localhost:8080"
     : "https://firestore.googleapis.com";
   return `${pathname}/v1/${PROJECT_PATH}`;

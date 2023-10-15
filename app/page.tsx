@@ -47,7 +47,7 @@ export default async function Home() {
           <ServerActionPendingButton label="Revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
-          new Date(readTime).toLocaleString("ja").split(" ")[1]
+          new Date(readTime).toLocaleString("ja-JP").split(" ")[1]
         }`}</div>
       </div>
       {process.env.NODE_ENV === "development" ? <DataMonitor /> : null}
@@ -55,7 +55,7 @@ export default async function Home() {
         <div className="space-y-4">
           <div className="text-2xl">{article.title}</div>
           <div className="text-right text-2xl font-extralight">
-            {new Date(article.createdAt).toLocaleDateString("ja")}
+            {new Date(article.createdAt).toLocaleDateString("ja-JP")}
           </div>
           <div className="space-y-2">
             {article.sentenceIds.map((sentenceId, index) => {
