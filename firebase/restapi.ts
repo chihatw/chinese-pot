@@ -133,7 +133,6 @@ export const getRecentArticles = async (
       limit,
       tags: [REVALIDATE_TAGS.articles],
       cache: "no-store",
-      revalidate: 10,
     }),
   );
   const { docs, readTime } = await getDocs(res);
