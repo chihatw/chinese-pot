@@ -1,13 +1,18 @@
 import { Article } from "@/features/article";
 import { Hanzi } from "@/features/hanzi";
 import { InvertedIndex } from "@/features/invertedIndex";
-import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
+
 import { SearchResult } from "@/features/invertedIndex/schema";
 import { PinyinFilter, buildPinyin } from "@/features/pinyin";
 import { Sentence } from "@/features/sentence";
 import { buildFetchRequestOption } from "@/utils/buildFetchRequestOption";
 import { getIntersection } from "@/utils/utils";
-import { COLLECTIONS, REVALIDATE_TAGS } from "./constants";
+import {
+  COLLECTIONS,
+  REVALIDATE_TAGS,
+  SEARCH_ARTICLES_BY_SENTENCEIDS_MAX,
+  SEARCH_SENTENCES_MAX,
+} from "./constants";
 import { BuildStructuredQueryProps, WhereProps } from "./schema";
 
 // note restapi の in の条件は 10項まで
@@ -22,6 +27,7 @@ const getBaseUrl = () => {
 
   // note pnpm build のときは isDev が false 、つまり本番環境から fetch される
   // pnpm build の書き込み先の default は　local なので、書き込み先と読み込み先の統一が必要
+
   const pathname = isDev
     ? "http://localhost:8080"
     : "https://firestore.googleapis.com";
@@ -95,7 +101,7 @@ export const getArticlesByIds = async (
   const uniq_articleIds = [...new Set(articleIds)];
 
   if (uniq_articleIds.length > IN_ARRAY_MAX) {
-    throw new Error("articleIds too big");
+    throw new Error(`articleIds bigger than ${IN_ARRAY_MAX}`);
   }
 
   const res = await fetch(
@@ -135,22 +141,54 @@ export const getRecentArticles = async (
   return { articles, readTime };
 };
 
+export const getArticlesBySentenceIds = async (sentenceIds: string[]) => {
+  const articles: Article[] = [];
+  if (sentenceIds.length <= SEARCH_ARTICLES_BY_SENTENCEIDS_MAX) {
+    for (const sentenceId of sentenceIds) {
+      if (_checkArticlesAlreadyHasSentence(articles, sentenceId)) continue;
+      const article = await getArticleBySentenceId(sentenceId);
+      if (!article) continue;
+
+      articles.push(article);
+    }
+  }
+  return articles;
+};
+
+export const getArticleBySentenceId = async (
+  sentenceId: string,
+): Promise<Article | undefined> => {
+  if (!sentenceId) return;
+
+  const res = await fetch(
+    fetchRequestURL,
+    buildFetchRequestOption({
+      collectionId: COLLECTIONS.articles,
+      where: ["sentenceIds", "ARRAY_CONTAINS", sentenceId],
+    }),
+  );
+  const { docs } = await getDocs(res);
+  const articles = docs.map((doc) => buildArticle(doc));
+  console.log("getArticleBySentenceId", docs.length);
+  return articles.at(0);
+};
+
 // form で　１つずつ　sentenceIds を取得して、 すべての form で取得された共通の sentenceIds を抽出する
 // byForms の方が効率が良い？
 export const _getInvertedIndexByForm = async (
   form: string,
 ): Promise<InvertedIndex | undefined> => {
-  console.log("_getInvertedIndexByForm");
   const res = await fetch(
     fetchRequestURL,
     buildFetchRequestOption({
       collectionId: COLLECTIONS.invertedIndexes,
       where: ["form", "EQUAL", form],
-      tags: [REVALIDATE_TAGS.invertedIndexByForm],
+      tags: [REVALIDATE_TAGS.invertedIndexByForm], // sentence を変更した時は、これを update しないと、 seartch に反映されない
     }),
   );
   const { docs } = await getDocs(res);
   const results = docs.map((doc) => buildInvertedIndex(doc));
+  console.log("_getInvertedIndexByForm", docs.length);
   return results.at(0);
 };
 
@@ -331,4 +369,17 @@ const buildSentence = (document: any): Sentence => {
     pinyinsStr: fields.pinyinsStr.stringValue,
     createdAt: Number(fields.createdAt.integerValue),
   };
+};
+const _checkArticlesAlreadyHasSentence = (
+  articles: Article[],
+  sentenceId: string,
+) => {
+  let alreadyHas = false;
+  for (const article of articles) {
+    if (article.sentenceIds.includes(sentenceId)) {
+      alreadyHas = true;
+      break;
+    }
+  }
+  return alreadyHas;
 };

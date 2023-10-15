@@ -1,20 +1,20 @@
 import SentenceForm from "./components/SentenceForm";
 
 import {
-  buildSentenceFormProps,
-  buildSentenceFromHanzis,
+  buildSentence_from_props,
+  buildSentence_from_selectedHanzis,
   getSelectedHanziIds,
-  updateHanzis,
+  updateCountAndLastestSentenceId_in_Hanzis,
 } from "./services/utils";
 
 import { SentenceFormProps } from "./schema";
 
 export {
   SentenceForm,
-  buildSentenceFormProps,
-  buildSentenceFromHanzis,
+  buildSentence_from_props,
+  buildSentence_from_selectedHanzis,
   getSelectedHanziIds,
-  updateHanzis,
+  updateCountAndLastestSentenceId_in_Hanzis,
 };
 
 export type { SentenceFormProps };

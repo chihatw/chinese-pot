@@ -14,7 +14,9 @@ import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
 import { addSentenceAction } from "@/app/_actions";
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
-import { SEARCH_SENTENCES_MAX } from "@/features/invertedIndex/constants";
+
+import { SEARCH_SENTENCES_MAX } from "@/firebase/constants";
+import { nanoid } from "nanoid";
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
 
@@ -45,7 +47,11 @@ const SentenceForm = ({
   }, [forms, hanzis]);
 
   const handleSubmit = async () => {
-    await addSentenceAction(selectedHanziIds, hanzis, articleId);
+    const selectedHanzis = selectedHanziIds.map(
+      (id) => hanzis.find((h) => h.id === id)!,
+    );
+    const sentenceId = nanoid();
+    await addSentenceAction(sentenceId, selectedHanzis, articleId);
   };
 
   return (
@@ -59,7 +65,7 @@ const SentenceForm = ({
         <div className="font-extralight">
           <span> {total}</span>
           {total > SEARCH_SENTENCES_MAX ? (
-            <span>該当文が多すぎます</span>
+            <span>{`該当文が ${SEARCH_SENTENCES_MAX} を超えます`}</span>
           ) : null}
         </div>
         {searchParamsValue.split("").map((form, index) => (

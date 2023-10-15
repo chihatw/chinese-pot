@@ -3,11 +3,7 @@
 import { deleteSentenceAction } from "@/app/_actions";
 import ServerActionPendingIconButton from "@/components/ServerActionPendingIconButton";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Sentence,
-  SentenceLine,
-  buildHanzisFromSentence,
-} from "@/features/sentence";
+import { Sentence, SentenceLine } from "@/features/sentence";
 import { Delete } from "lucide-react";
 
 const SentenceTable = ({
@@ -20,8 +16,7 @@ const SentenceTable = ({
   const { toast } = useToast();
   const handleSubmit = async (sentenceId: string) => {
     const sentence = sentences.find((s) => s.id === sentenceId)!;
-    const hanzis = buildHanzisFromSentence(sentence);
-    await deleteSentenceAction(sentence, hanzis, articleId);
+    await deleteSentenceAction(sentence, articleId);
     toast({ description: "deleted sentence" });
   };
   return (

@@ -4,14 +4,14 @@ import { Sentence } from "@/features/sentence";
 import { getHanzisByForms, getSentencesByIds } from "@/firebase/restapi";
 import { SentenceFormProps } from "..";
 
-export const buildSentenceFromHanzis = (
-  hanzis: Hanzi[],
+export const buildSentence_from_selectedHanzis = (
+  selectedHanzis: Hanzi[],
   sentenceId: string,
 ): Sentence => {
   return {
     id: sentenceId,
-    text: hanzis.map((h) => h.form).join(""),
-    pinyinsStr: hanzis.map((h) => getPinyinStr(h.pinyin)).join(" "),
+    text: selectedHanzis.map((h) => h.form).join(""),
+    pinyinsStr: selectedHanzis.map((h) => getPinyinStr(h.pinyin)).join(" "),
     createdAt: Date.now(),
   };
 };
@@ -27,7 +27,10 @@ export const getSelectedHanziIds = (forms: string, hanzis: Hanzi[]) => {
   });
 };
 
-export const updateHanzis = (hanzis: Hanzi[], sentenceId: string): Hanzi[] => {
+export const updateCountAndLastestSentenceId_in_Hanzis = (
+  hanzis: Hanzi[],
+  sentenceId: string,
+): Hanzi[] => {
   return hanzis.map((h) => ({
     ...h,
     count: h.count + 1,
@@ -38,7 +41,7 @@ export const updateHanzis = (hanzis: Hanzi[], sentenceId: string): Hanzi[] => {
 /**
  *
  */
-export const buildSentenceFormProps = async (
+export const buildSentence_from_props = async (
   forms: string,
 ): Promise<SentenceFormProps> => {
   const forms_uniq = [...new Set(forms.split("").filter(Boolean))];

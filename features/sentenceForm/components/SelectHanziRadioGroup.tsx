@@ -5,7 +5,7 @@ import { Hanzi, PinyinHanzi } from "@/features/hanzi";
 import {
   Sentence,
   SentenceLine,
-  buildHanzisFromSentence,
+  buildHanziIds_from_Sentence,
 } from "@/features/sentence";
 import { Dispatch, SetStateAction } from "react";
 
@@ -42,9 +42,8 @@ const SelectHanziRadioGroup = ({
 
             const sentence = sentences
               .filter((s) => {
-                const hanzis = buildHanzisFromSentence(s);
-                hanzis.map((h) => h.id).includes(hanzi.id);
-                return hanzis.map((h) => h.id).includes(hanzi.id);
+                const hanzisIds = buildHanziIds_from_Sentence(s);
+                return hanzisIds.includes(hanzi.id);
               })
               .at(0);
             return (

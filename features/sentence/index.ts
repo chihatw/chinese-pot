@@ -5,7 +5,7 @@ import SimpleSentenceMonitor from "./components/SimpleSentenceMonitor";
 import { Sentence } from "./schema";
 
 import {
-  buildHanzisFromSentence,
+  buildHanziIds_from_Sentence,
   buildHanzisGroupedByConsonantVowel,
   buildSentenceChars,
 } from "./services/utils";
@@ -15,7 +15,7 @@ export {
   SentenceLine,
   SentenceTable,
   SimpleSentenceMonitor,
-  buildHanzisFromSentence,
+  buildHanziIds_from_Sentence,
   buildHanzisGroupedByConsonantVowel,
   buildSentenceChars,
 };

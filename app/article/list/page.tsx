@@ -1,10 +1,10 @@
 "server only";
 
-import { Button } from "@/components/ui/button";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { ArticleList } from "@/features/article";
 import { getRecentArticles } from "@/firebase/restapi";
 
-import { Plus, RefreshCcw } from "lucide-react";
+import { Plus } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
@@ -21,10 +21,7 @@ const ArticleListPage = async () => {
       <div className="text-4xl font-extrabold">Article List</div>
       <div className="flex items-center justify-between">
         <form action={handleSubmit}>
-          <Button className="flex gap-2" type="submit">
-            <span>Revalidate</span>
-            <RefreshCcw />
-          </Button>
+          <ServerActionPendingButton label="revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
           new Date(readTime).toLocaleString().split(" ")[1]

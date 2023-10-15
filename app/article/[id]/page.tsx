@@ -1,9 +1,8 @@
 "server only";
 
-import { Button } from "@/components/ui/button";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import SentenceTable from "@/features/sentence/components/SentenceTable";
 import { getArticlesByIds, getSentencesByIds } from "@/firebase/restapi";
-import { RefreshCcw } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -27,10 +26,7 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
       <div>{new Date(article.createdAt).toLocaleDateString("ja")}</div>
       <div className="flex items-center justify-between">
         <form action={handleSubmit}>
-          <Button className="flex gap-2" type="submit">
-            <span>Revalidate</span>
-            <RefreshCcw />
-          </Button>
+          <ServerActionPendingButton label="Revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
           new Date(readTime).toLocaleString().split(" ")[1]

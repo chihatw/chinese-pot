@@ -3,7 +3,10 @@ import {
   SearchSentencesByForms,
 } from "@/features/invertedIndex";
 import { FORM_SEARCH_KEY } from "@/features/invertedIndex/constants";
-import { getSentencesByForms } from "@/firebase/restapi";
+import {
+  getArticlesBySentenceIds,
+  getSentencesByForms,
+} from "@/firebase/restapi";
 
 const SentenceSearchPage = async ({
   searchParams,
@@ -14,10 +17,17 @@ const SentenceSearchPage = async ({
 
   const { total, sentences } = await getSentencesByForms(forms);
 
+  const articles = await getArticlesBySentenceIds(sentences.map((s) => s.id));
+
   return (
-    <div className="mx-auto w-full max-w-md pt-10">
+    <div className="mx-auto w-full max-w-md pb-40 pt-10">
       <SearchSentencesByForms forms={forms} />
-      <SearchResultList forms={forms} total={total} sentences={sentences} />
+      <SearchResultList
+        forms={forms}
+        total={total}
+        sentences={sentences}
+        articles={articles}
+      />
     </div>
   );
 };

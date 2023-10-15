@@ -5,7 +5,10 @@ import { Article } from "@/features/article";
 import { Hanzi } from "@/features/hanzi";
 import { InvertedIndex } from "@/features/invertedIndex";
 import { Sentence } from "@/features/sentence";
-import { buildSentenceFromHanzis, updateHanzis } from "@/features/sentenceForm";
+import {
+  buildSentence_from_selectedHanzis,
+  updateCountAndLastestSentenceId_in_Hanzis,
+} from "@/features/sentenceForm";
 
 import {
   addArticle,
@@ -21,13 +24,12 @@ import {
 } from "@/firebase/admin";
 import { REVALIDATE_TAGS } from "@/firebase/constants";
 import { sleep } from "@/utils/utils";
-import { nanoid } from "nanoid";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const batchAddHanzisAction = async (hanzis: Hanzi[]) => {
   await batchAddHanzis(hanzis);
-  // note revalidatePath をつけなければ、 top page は更新されない
+  // debug revalidatePath をつけなければ、 top page は更新されないのか？
   revalidatePath("/");
 };
 
@@ -84,23 +86,26 @@ export const deleteArticleAction = async (id: string) => {
 };
 
 export const addSentenceAction = async (
-  selectedHanziIds: string[],
-  hanzis: Hanzi[],
+  sentenceId: string,
+  selectedHanzis: Hanzi[],
   articleId?: string,
 ) => {
-  const selectedHanzis = selectedHanziIds.map(
-    (id) => hanzis.find((h) => h.id === id)!,
+  const sentence = buildSentence_from_selectedHanzis(
+    selectedHanzis,
+    sentenceId,
   );
 
-  const sentenceId = nanoid();
-  const sentence = buildSentenceFromHanzis(selectedHanzis, sentenceId);
-  const updatedHanzis = updateHanzis(selectedHanzis, sentenceId);
+  const updatedHanzis = updateCountAndLastestSentenceId_in_Hanzis(
+    selectedHanzis,
+    sentenceId,
+  );
 
   await addSentence(sentence, updatedHanzis, articleId);
 
   // note revalidatePath にすると、現在表示されていないページは更新されない
   revalidateTag(REVALIDATE_TAGS.senences);
   revalidateTag(REVALIDATE_TAGS.articles);
+  revalidateTag(REVALIDATE_TAGS.invertedIndexByForm); // sentence search を更新
 
   if (articleId) {
     revalidatePath(`/article/${articleId}`);
@@ -111,10 +116,10 @@ export const addSentenceAction = async (
 
 export const deleteSentenceAction = async (
   sentence: Sentence,
-  hanzis: Hanzi[],
   articleId?: string,
 ) => {
-  await deleteSentence(sentence, hanzis, articleId);
+  await deleteSentence(sentence, articleId);
   revalidateTag(REVALIDATE_TAGS.senences);
   revalidateTag(REVALIDATE_TAGS.articles);
+  revalidateTag(REVALIDATE_TAGS.invertedIndexByForm); // sentence search を更新
 };

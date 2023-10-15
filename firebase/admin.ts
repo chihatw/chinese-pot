@@ -2,7 +2,7 @@ import { Article } from "@/features/article";
 import { Hanzi } from "@/features/hanzi";
 import { InvertedIndex } from "@/features/invertedIndex";
 import { Pinyin } from "@/features/pinyin";
-import { Sentence } from "@/features/sentence";
+import { Sentence, buildHanziIds_from_Sentence } from "@/features/sentence";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import {
@@ -160,9 +160,10 @@ export const addSentence = async (
 
 export const deleteSentence = async (
   sentence: Sentence,
-  hanzis: Hanzi[],
   articleId?: string,
 ) => {
+  const hanziIds = buildHanziIds_from_Sentence(sentence);
+
   const forms = [...new Set(sentence.text.split(""))];
   const invertedIndexes = await _getInvertedIndexesByForms(forms);
 
@@ -174,8 +175,8 @@ export const deleteSentence = async (
     decrementInvertedIndexCount_in_batch(batch, invertedIndex.id, sentence.id);
   }
 
-  for (const hanzi of hanzis) {
-    decrementHanziCount_in_batch(batch, hanzi.id);
+  for (const hanziId of hanziIds) {
+    decrementHanziCount_in_batch(batch, hanziId);
   }
 
   deleteSentence_in_batch(batch, sentence.id);

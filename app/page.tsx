@@ -1,6 +1,6 @@
 "server only";
 
-import { Button } from "@/components/ui/button";
+import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import { Article, BatchAddArticlesButton } from "@/features/article";
 import { BatchAddHanzisButton } from "@/features/hanzi";
 import { BuildInvetedIndexesButton } from "@/features/invertedIndex";
@@ -15,7 +15,6 @@ import { getRecentArticles, getSentencesByIds } from "@/firebase/restapi";
 
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { RefreshCcw } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
 export default async function Home() {
@@ -45,10 +44,7 @@ export default async function Home() {
     <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-10 pb-40 pt-10 sm:mx-auto sm:w-[min(500px,100%-120px)]">
       <div className="flex items-center justify-between">
         <form action={handleSubmit}>
-          <Button className="flex gap-2" type="submit">
-            <span>Revalidate</span>
-            <RefreshCcw />
-          </Button>
+          <ServerActionPendingButton label="Revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
           new Date(readTime).toLocaleString().split(" ")[1]
