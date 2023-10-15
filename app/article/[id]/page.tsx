@@ -28,7 +28,11 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
           <ServerActionPendingButton label="Revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
-          new Date(readTime).toLocaleString("ja-JP").split(" ")[1]
+          new Date(readTime)
+            .toLocaleString("ja-JP", {
+              timeZone: "Asia/Tokyo",
+            })
+            .split(" ")[1]
         }`}</div>
       </div>
       <ArticleSentenceList article={article} sentences={sentences} />
