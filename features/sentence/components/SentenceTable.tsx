@@ -2,7 +2,7 @@
 
 import { deleteSentenceAction } from "@/app/_actions";
 import ServerActionPendingIconButton from "@/components/ServerActionPendingIconButton";
-import { useToast } from "@/components/ui/use-toast";
+import { useArticleSentences } from "@/features/articleSentences";
 import { Sentence, SentenceLine } from "@/features/sentence";
 import { Delete } from "lucide-react";
 
@@ -13,11 +13,13 @@ const SentenceTable = ({
   sentences: Sentence[];
   articleId?: string;
 }) => {
-  const { toast } = useToast();
+  const { dispatch } = useArticleSentences();
   const handleSubmit = async (sentenceId: string) => {
     const sentence = sentences.find((s) => s.id === sentenceId)!;
+    if (articleId) {
+      dispatch({ type: "DELETE_SENTENCE", payload: sentenceId });
+    }
     await deleteSentenceAction(sentence, articleId);
-    toast({ description: "deleted sentence" });
   };
   return (
     <div>
@@ -30,20 +32,23 @@ const SentenceTable = ({
         </div>
       ) : null}
       <div className="space-y-4 ">
-        {sentences.map((sentence, index) => (
-          <div
-            key={sentence.id}
-            className="grid grid-cols-[24px,1fr,auto] items-center gap-2"
-          >
-            <div className="text-xs">{index + 1}</div>
-            <SentenceLine sentence={sentence} />
-            <form action={() => handleSubmit(sentence.id)}>
-              <ServerActionPendingIconButton variant="ghost">
-                <Delete />
-              </ServerActionPendingIconButton>
-            </form>
-          </div>
-        ))}
+        {sentences.map((sentence, index) => {
+          if (!sentence) return null;
+          return (
+            <div
+              key={sentence.id}
+              className="grid grid-cols-[24px,1fr,auto] items-center gap-2"
+            >
+              <div className="text-xs">{index + 1}</div>
+              <SentenceLine sentence={sentence} />
+              <form action={() => handleSubmit(sentence.id)}>
+                <ServerActionPendingIconButton variant="ghost">
+                  <Delete />
+                </ServerActionPendingIconButton>
+              </form>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

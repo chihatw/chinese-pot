@@ -8,15 +8,18 @@ import { Input } from "@/components/ui/input";
 
 import {
   SentenceFormProps,
+  buildSentence_from_selectedHanzis,
   getSelectedHanziIds,
 } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 
-import { addSentenceAction } from "@/app/_actions";
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 
+import { addSentenceAction } from "@/app/_actions";
+import { useArticleSentences } from "@/features/articleSentences";
 import { SEARCH_SENTENCES_MAX } from "@/firebase/constants";
 import { nanoid } from "nanoid";
+
 import FormMonitor from "./FormMonitor";
 import SelectedHanzisMonitor from "./SelectedHanzisMonitor";
 
@@ -27,6 +30,7 @@ const SentenceForm = ({
   articleId,
   total,
 }: SentenceFormProps) => {
+  const { dispatch } = useArticleSentences();
   const [input, setInput] = useState(forms);
   const debouncedInput = useDebouce(input, 300);
 
@@ -51,7 +55,16 @@ const SentenceForm = ({
       (id) => hanzis.find((h) => h.id === id)!,
     );
     const sentenceId = nanoid();
-    await addSentenceAction(sentenceId, selectedHanzis, articleId);
+
+    const sentence = buildSentence_from_selectedHanzis(
+      selectedHanzis,
+      sentenceId,
+    );
+
+    if (articleId) {
+      dispatch({ type: "ADD_SENTENCE", payload: sentence });
+    }
+    await addSentenceAction(sentence, selectedHanzis, articleId);
   };
 
   return (

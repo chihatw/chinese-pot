@@ -5,10 +5,7 @@ import { Article } from "@/features/article";
 import { Hanzi } from "@/features/hanzi";
 import { InvertedIndex } from "@/features/invertedIndex";
 import { Sentence } from "@/features/sentence";
-import {
-  buildSentence_from_selectedHanzis,
-  updateCountAndLastestSentenceId_in_Hanzis,
-} from "@/features/sentenceForm";
+import { updateCountAndLastestSentenceId_in_Hanzis } from "@/features/sentenceForm";
 
 import {
   addArticle,
@@ -23,7 +20,6 @@ import {
   updateArticle,
 } from "@/firebase/admin";
 import { REVALIDATE_TAGS } from "@/firebase/constants";
-import { sleep } from "@/utils/utils";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -86,30 +82,27 @@ export const deleteArticleAction = async (id: string) => {
 };
 
 export const addSentenceAction = async (
-  sentenceId: string,
+  sentence: Sentence,
   selectedHanzis: Hanzi[],
   articleId?: string,
 ) => {
-  const sentence = buildSentence_from_selectedHanzis(
-    selectedHanzis,
-    sentenceId,
-  );
-
   const updatedHanzis = updateCountAndLastestSentenceId_in_Hanzis(
     selectedHanzis,
-    sentenceId,
+    sentence.id,
   );
-
-  await addSentence(sentence, updatedHanzis, articleId);
-
-  // note revalidatePath にすると、現在表示されていないページは更新されない
-  revalidateTag(REVALIDATE_TAGS.senences);
-  revalidateTag(REVALIDATE_TAGS.articles);
-  revalidateTag(REVALIDATE_TAGS.invertedIndexByForm); // sentence search を更新
+  try {
+    await addSentence(sentence, updatedHanzis, articleId);
+    // note revalidatePath にすると、現在表示されていないページは更新されない
+    revalidateTag(REVALIDATE_TAGS.senences);
+    revalidateTag(REVALIDATE_TAGS.articles);
+    revalidateTag(REVALIDATE_TAGS.invertedIndexByForm); // sentence search を更新
+  } catch (e) {
+    if (articleId) {
+      revalidatePath(`/article/${articleId}`); // optimisticValue を上書きするため
+    }
+  }
 
   if (articleId) {
-    revalidatePath(`/article/${articleId}`);
-    await sleep(200); // note revalidate の反映を待機
     redirect(`/article/${articleId}`);
   }
 };

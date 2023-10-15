@@ -47,7 +47,7 @@ export default async function Home() {
           <ServerActionPendingButton label="Revalidate" />
         </form>
         <div className="text-xs font-extralight">{`fetched at ${
-          new Date(readTime).toLocaleString().split(" ")[1]
+          new Date(readTime).toLocaleString("ja").split(" ")[1]
         }`}</div>
       </div>
       {process.env.NODE_ENV === "development" ? <DataMonitor /> : null}
