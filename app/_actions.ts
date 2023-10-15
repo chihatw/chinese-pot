@@ -97,8 +97,11 @@ export const addSentenceAction = async (
     revalidateTag(REVALIDATE_TAGS.articles);
     revalidateTag(REVALIDATE_TAGS.invertedIndexByForm); // sentence search を更新
   } catch (e) {
+    console.error(e);
+  } finally {
+    // 成功しても、失敗しても optimistic を上書きする
     if (articleId) {
-      revalidatePath(`/article/${articleId}`); // optimisticValue を上書きするため
+      revalidatePath(`/article/${articleId}`);
     }
   }
 
