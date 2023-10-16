@@ -44,13 +44,20 @@ const Header = () => {
           {!!uid ? <LogoutIcon /> : <LoginIcon />}
         </div>
       </div>
-      {uid ? (
-        <div className="absolute right-10 top-12">
-          <span className="text-xs font-extralight">{getBaseUrl()}</span>
-        </div>
-      ) : null}
+      {uid ? <DatabaseConnectTo /> : null}
     </nav>
   );
 };
 
 export default Header;
+
+const DatabaseConnectTo = () => {
+  let baseUrl = getBaseUrl();
+  const tail = "/databases/(default)/documents";
+  baseUrl = baseUrl.substring(0, baseUrl.length - tail.length);
+  return (
+    <div className="absolute right-10 top-12">
+      <span className="text-xs font-extralight">{baseUrl}</span>
+    </div>
+  );
+};
