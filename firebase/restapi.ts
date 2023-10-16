@@ -9,20 +9,20 @@ import { buildFetchRequestOption } from "@/utils/buildFetchRequestOption";
 import { getIntersection } from "@/utils/utils";
 import {
   COLLECTIONS,
+  IN_ARRAY_MAX,
   REVALIDATE_TAGS,
   SEARCH_ARTICLES_BY_SENTENCEIDS_MAX,
   SEARCH_SENTENCES_MAX,
+  SENTENCE_TEXT_MAX,
 } from "./constants";
 import { BuildStructuredQueryProps, WhereProps } from "./schema";
 
 // note restapi の in の条件は 10項まで
-const IN_ARRAY_MAX = 10;
 
-export const PROJECT_ID = "chinese-pot";
-
+const PROJECT_ID = "chinese-pot";
 const PROJECT_PATH = `projects/${PROJECT_ID}/databases/(default)/documents`;
 
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
   const isDev = process.env.NODE_ENV === "development";
 
   // note pnpm build のときは isDev が false 、つまり本番環境から fetch される
@@ -34,24 +34,61 @@ const getBaseUrl = () => {
 };
 
 // note structuredQuery を使わずに取得すると、 revalidate されない
-export const getDocumentURL_declare = (collection: string, docId: string) =>
+export const documentURL_declare = (collection: string, docId: string) =>
   `${getBaseUrl()}/${collection}/${docId}`;
+
+export const getArticle_declare = async (articleId: string) => {
+  const res = await fetch(
+    documentURL_declare(COLLECTIONS.articles, articleId),
+    { next: { tags: [REVALIDATE_TAGS.article] } },
+  );
+  const json = await res.json();
+  console.log(json);
+};
 
 const fetchRequestURL = `${getBaseUrl()}:runQuery`;
 
+/**
+ *
+ * SentenceForm で searchParams から form（字形） を取得
+ *
+ * 取得した　form を持つ　Hanzi を抽出
+ */
 export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
-  const res = await fetch(
-    fetchRequestURL,
-    buildFetchRequestOption({
-      collectionId: COLLECTIONS.hanzis,
-      where: ["form", "IN", forms],
-      tags: [REVALIDATE_TAGS.hanzisByForms],
-    }),
-  );
+  // 引数がない
+  if (!forms.length) return [];
 
-  const { docs } = await getDocs(res);
-  console.log("getHanzisByForms", docs.length);
-  return docs.map((doc) => buildHanzi(doc));
+  // 重複削除
+  const uniq_forms = [...new Set(forms)];
+
+  if (uniq_forms.length > SENTENCE_TEXT_MAX) {
+    console.error(`more than ${SENTENCE_TEXT_MAX}`);
+    return [];
+  }
+
+  let result: Hanzi[] = [];
+
+  for (let i = 0; i < uniq_forms.length; i += IN_ARRAY_MAX) {
+    // IN_ARRAY_MAX 毎にクエリを実行
+    const subSet = uniq_forms.slice(i, i + IN_ARRAY_MAX).filter(Boolean);
+    if (!subSet.length) continue;
+
+    const res = await fetch(
+      fetchRequestURL,
+      buildFetchRequestOption({
+        collectionId: COLLECTIONS.hanzis,
+        where: ["form", "IN", subSet],
+        tags: [REVALIDATE_TAGS.sentenceForm],
+      }),
+    );
+
+    const { docs } = await getDocs(res);
+    console.log("getHanzisByForms", docs.length);
+    const hanzis = docs.map((doc) => buildHanzi(doc));
+    result = [...result, ...hanzis];
+  }
+
+  return result;
 };
 
 export const getHanzisByPinyinFilter = async (
@@ -59,19 +96,6 @@ export const getHanzisByPinyinFilter = async (
 ): Promise<Hanzi[]> => {
   const q: BuildStructuredQueryProps = { collectionId: COLLECTIONS.hanzis };
   const where: WhereProps[] = [];
-  // note getHanzisByPinyinFilter のレコード読み取りが多いので、子音、母音、トーンの２つ以上が指定されるまで検索しない
-  let point = 0;
-  if (filter.consonants.length) {
-    point++;
-  }
-  if (filter.vowels.length) {
-    point++;
-  }
-  if (filter.tone.length) {
-    point++;
-  }
-  if (point < 2) return [];
-
   if (filter.consonants.length) {
     where.push(["consonant", "IN", filter.consonants]);
   }
@@ -210,7 +234,6 @@ export const getRecentSentences = async (
 };
 
 // note fetch する sentences の上限を SEARCH_SENTENCES_MAX で指定
-
 export const getSentencesByIds = async (
   sentenceIds: string[],
 ): Promise<SearchResult> => {
@@ -240,7 +263,7 @@ export const getSentencesByIds = async (
           "IN",
           subSet.map(
             (sentenceId) =>
-              `projects/${PROJECT_ID}/databases/(default)/documents/${COLLECTIONS.sentences}/${sentenceId}`,
+              `${PROJECT_PATH}/${COLLECTIONS.sentences}/${sentenceId}`,
           ),
         ],
         tags: [REVALIDATE_TAGS.senences],

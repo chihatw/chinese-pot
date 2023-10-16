@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 
 import { getUser } from "@/features/auth";
+import { getBaseUrl } from "@/firebase/restapi";
 import { ShieldCheck } from "lucide-react";
 import { usePathname } from "next/navigation";
 import LinkButton from "../LinkButton";
@@ -23,7 +24,7 @@ const Header = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="grid h-12 shadow duration-100">
+    <nav className="grid h-12 shadow ">
       <div className="container flex w-full items-center justify-between gap-16">
         <HomeIcon />
         <div className="flex grow justify-between">
@@ -43,6 +44,11 @@ const Header = () => {
           {!!uid ? <LogoutIcon /> : <LoginIcon />}
         </div>
       </div>
+      {uid ? (
+        <div className="absolute right-10 top-12">
+          <span className="text-xs font-extralight">{getBaseUrl()}</span>
+        </div>
+      ) : null}
     </nav>
   );
 };

@@ -18,7 +18,7 @@ const Loading = async () => {
         articleId={""}
         forms={""}
         hanzis={[]}
-        sentences={[]}
+        hanziSentences={[]}
         total={0}
       />
     </div>

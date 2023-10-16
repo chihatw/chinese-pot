@@ -1,10 +1,7 @@
 "server only";
 
 import { SentenceTable } from "@/features/sentence";
-import {
-  SentenceForm,
-  buildSentence_from_props,
-} from "@/features/sentenceForm";
+import { SentenceForm, buildSentenceFormProps } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 import { getRecentSentences } from "@/firebase/restapi";
 
@@ -14,7 +11,7 @@ const SentenceFormPage = async ({
   searchParams: { [SENTENCE_FORM_KEY]?: string };
 }) => {
   const forms = searchParams[SENTENCE_FORM_KEY]?.trim() || "";
-  const { hanzis, sentences } = await buildSentence_from_props(forms);
+  const { hanzis, hanziSentences, total } = await buildSentenceFormProps(forms);
 
   const recentSentences = await getRecentSentences(5);
 
@@ -23,9 +20,9 @@ const SentenceFormPage = async ({
       <div className="text-4xl font-bold">Sentence Form</div>
       <SentenceForm
         forms={forms}
+        total={total}
         hanzis={hanzis}
-        sentences={sentences}
-        total={sentences.length}
+        hanziSentences={hanziSentences}
       />
       <div className="text-2xl font-bold">Recent Sentences</div>
       <SentenceTable sentences={recentSentences} />

@@ -7,7 +7,7 @@ const Loading = async () => {
   return (
     <div className="mx-auto w-full max-w-md  space-y-10 pb-40 pt-10">
       <div className="text-4xl font-bold">Sentence Form</div>
-      <SentenceForm forms={""} hanzis={[]} sentences={[]} total={0} />
+      <SentenceForm forms={""} hanzis={[]} hanziSentences={[]} total={0} />
       <div className="text-2xl font-bold">Recent Sentences</div>
       <SentenceTable sentences={[]} />
     </div>

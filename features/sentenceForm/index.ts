@@ -1,7 +1,7 @@
 import SentenceForm from "./components/SentenceForm";
 
 import {
-  buildSentence_from_props,
+  buildSentenceFormProps,
   buildSentence_from_selectedHanzis,
   getSelectedHanziIds,
   updateCountAndLastestSentenceId_in_Hanzis,
@@ -11,7 +11,7 @@ import { SentenceFormProps } from "./schema";
 
 export {
   SentenceForm,
-  buildSentence_from_props,
+  buildSentenceFormProps,
   buildSentence_from_selectedHanzis,
   getSelectedHanziIds,
   updateCountAndLastestSentenceId_in_Hanzis,

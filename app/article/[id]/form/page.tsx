@@ -1,9 +1,6 @@
 "server only";
 
-import {
-  SentenceForm,
-  buildSentence_from_props,
-} from "@/features/sentenceForm";
+import { SentenceForm, buildSentenceFormProps } from "@/features/sentenceForm";
 import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 import { getArticlesByIds } from "@/firebase/restapi";
 import Link from "next/link";
@@ -26,7 +23,7 @@ const ArticleSentenceFormPage = async ({
   }
 
   const forms = searchParams[SENTENCE_FORM_KEY]?.trim() || "";
-  const { hanzis, sentences } = await buildSentence_from_props(forms);
+  const { hanzis, hanziSentences, total } = await buildSentenceFormProps(forms);
 
   return (
     <div className="mx-auto w-full max-w-md space-y-8 pb-40 pt-10">
@@ -42,8 +39,8 @@ const ArticleSentenceFormPage = async ({
         articleId={article.id}
         forms={forms}
         hanzis={hanzis}
-        sentences={sentences}
-        total={sentences.length}
+        hanziSentences={hanziSentences}
+        total={total}
       />
     </div>
   );

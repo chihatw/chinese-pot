@@ -59,6 +59,10 @@ const HanziFormDialogContent = ({
       setHanzis([]);
       return;
     }
+
+    const isValidFilter = validateFilter(value.filter);
+    if (!isValidFilter) return;
+
     const fetchData = async () => {
       const hanzis = await getHanzisByPinyinFilter(value.filter);
       setHanzis(hanzis);
@@ -120,4 +124,24 @@ const JSONMonitor = ({ form, pinyin }: { form: string; pinyin: Pinyin }) => {
       )}
     </pre>
   );
+};
+
+/**
+ * fetch 件数削減のために
+ *
+ * 子音、母音、四声のうち、２つ以上入力されている場合のみ、fetchする
+ */
+const validateFilter = (filter: PinyinFilter): boolean => {
+  let point = 0;
+  if (filter.consonants.length) {
+    point++;
+  }
+  if (filter.vowels.length) {
+    point++;
+  }
+  if (filter.tone.length) {
+    point++;
+  }
+
+  return point > 1;
 };

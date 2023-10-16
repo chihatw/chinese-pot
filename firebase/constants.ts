@@ -1,4 +1,6 @@
+export const SENTENCE_TEXT_MAX = 200; // sentenceForm sentenceのtextの最大は200字
 export const SEARCH_SENTENCES_MAX = 70;
+export const IN_ARRAY_MAX = 30;
 export const SEARCH_ARTICLES_BY_SENTENCEIDS_MAX = 20;
 
 // https://firebase.google.com/docs/reference/js/v8/firebase.auth.Error#message
@@ -12,10 +14,9 @@ export const ERROR_CODES = {
 export const REVALIDATE_TAGS = {
   senences: "sentences",
   articles: "articles",
-  hanzis: "hanzis",
   invertedIndexes: "invertedIndexes",
   article: "article",
-  hanzisByForms: "hanzisByForms", // revalidate されていない
+  sentenceForm: "sentenceForm",
   invertedIndexByForm: "invertedIndexByForm", // revalidate されない
 };
 
