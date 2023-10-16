@@ -1,9 +1,10 @@
 "server only";
 
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
-import ArticleSentenceList from "@/features/articleSentences/components/ArticleSentenceList";
+import { SentenceTable } from "@/features/sentence";
 import { getArticlesByIds, getSentencesByIds } from "@/firebase/restapi";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
@@ -35,7 +36,19 @@ const ArticlePage = async ({ params: { id } }: { params: { id: string } }) => {
             .split(" ")[1]
         }`}</div>
       </div>
-      <ArticleSentenceList article={article} sentences={sentences} />
+      <div className="flex">
+        <Link href={`/article/${article.id}/form`}>
+          <div className="rounded-lg bg-primary px-4 py-1.5 text-white">
+            Create New Sentence
+          </div>
+        </Link>
+      </div>
+      <SentenceTable
+        sentences={article.sentenceIds.map(
+          (id) => sentences.find((s) => s.id === id)!,
+        )}
+        articleId={article.id}
+      />
     </div>
   );
 };

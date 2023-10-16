@@ -16,7 +16,6 @@ import { SENTENCE_FORM_KEY } from "@/features/sentenceForm/constants";
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 
 import { addSentenceAction } from "@/app/_actions";
-import { useArticleSentences } from "@/features/articleSentences";
 import { SEARCH_SENTENCES_MAX } from "@/firebase/constants";
 import { nanoid } from "nanoid";
 
@@ -30,7 +29,6 @@ const SentenceForm = ({
   articleId,
   total,
 }: SentenceFormProps) => {
-  const { dispatch } = useArticleSentences();
   const [input, setInput] = useState(forms);
   const debouncedInput = useDebouce(input, 300);
 
@@ -61,9 +59,6 @@ const SentenceForm = ({
       sentenceId,
     );
 
-    if (articleId) {
-      dispatch({ type: "ADD_SENTENCE", payload: sentence });
-    }
     await addSentenceAction(sentence, selectedHanzis, articleId);
   };
 
@@ -90,6 +85,7 @@ const SentenceForm = ({
             hanzis={hanzis.filter((h) => h.form === form)}
             selectedHanziId={selectedHanziIds[index]}
             setSelectedHanziIds={setSelectedHanziIds}
+            articleId={articleId}
           />
         ))}
       </div>
@@ -100,7 +96,9 @@ const SentenceForm = ({
       <form action={handleSubmit}>
         <div className="grid">
           <ServerActionPendingButton
-            disabled={selectedHanziIds.some((id) => !id)}
+            disabled={
+              selectedHanziIds.some((id) => !id) || !selectedHanziIds.length
+            }
             label={articleId ? `Add to Article` : "Create New Sentence"}
           />
         </div>

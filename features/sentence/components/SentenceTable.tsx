@@ -2,7 +2,7 @@
 
 import { deleteSentenceAction } from "@/app/_actions";
 import ServerActionPendingIconButton from "@/components/ServerActionPendingIconButton";
-import { useArticleSentences } from "@/features/articleSentences";
+
 import { Sentence, SentenceLine } from "@/features/sentence";
 import { Delete } from "lucide-react";
 
@@ -13,12 +13,8 @@ const SentenceTable = ({
   sentences: Sentence[];
   articleId?: string;
 }) => {
-  const { dispatch } = useArticleSentences();
   const handleSubmit = async (sentenceId: string) => {
     const sentence = sentences.find((s) => s.id === sentenceId)!;
-    if (articleId) {
-      dispatch({ type: "DELETE_SENTENCE", payload: sentenceId });
-    }
     await deleteSentenceAction(sentence, articleId);
   };
   return (

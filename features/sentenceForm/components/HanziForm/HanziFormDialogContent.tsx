@@ -16,8 +16,6 @@ import useDebouce from "@/hooks/useDebounce";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
-import { useToast } from "@/components/ui/use-toast";
-
 import { addHanziAction } from "@/app/_actions";
 import ServerActionPendingButton from "@/components/ServerActionPendingButton";
 import {
@@ -31,11 +29,12 @@ import HanziList from "./HanziList";
 const HanziFormDialogContent = ({
   form,
   setOpen,
+  articleId,
 }: {
   form: string;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  articleId?: string;
 }) => {
-  const { toast } = useToast();
   const [input, setInput] = useState("");
   const [hanzis, setHanzis] = useState<Hanzi[]>([]);
   const [value, setValue] = useState<{ filter: PinyinFilter; pinyin: Pinyin }>({
@@ -75,9 +74,8 @@ const HanziFormDialogContent = ({
       count: 0,
       latestSentenceId: "",
     };
-    await addHanziAction(hanzi);
+    await addHanziAction(hanzi, articleId);
     setOpen(false);
-    toast({ description: `added hanzi: ${hanzi.form}` });
   };
   return (
     <div className="grid h-[calc(100vh-200px)] grid-rows-[auto,auto,auto,auto,1fr] space-y-4">

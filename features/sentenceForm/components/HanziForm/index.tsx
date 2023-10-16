@@ -7,7 +7,13 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import HanziFormDialogContent from "./HanziFormDialogContent";
 
-const HanziForm = ({ form }: { form: string }) => {
+const HanziForm = ({
+  form,
+  articleId,
+}: {
+  form: string;
+  articleId?: string;
+}) => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -22,7 +28,11 @@ const HanziForm = ({ form }: { form: string }) => {
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <HanziFormDialogContent form={form} setOpen={setOpen} />
+        <HanziFormDialogContent
+          form={form}
+          setOpen={setOpen}
+          articleId={articleId}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -46,11 +46,14 @@ export const batchAddInvertedIndexesAction = async (
   revalidatePath("/");
 };
 
-export const addHanziAction = async (hanzi: Hanzi) => {
+export const addHanziAction = async (hanzi: Hanzi, articleId?: string) => {
   await addHanzi(hanzi);
   revalidateTag(REVALIDATE_TAGS.hanzis);
   // note sentence form でキャッシュが利用されているので、 revalidate が必要
   revalidateTag(REVALIDATE_TAGS.hanzisByForms);
+  if (articleId) {
+    revalidatePath(`/article/${articleId}/form`);
+  }
 };
 
 export const addArticleAction = async (article: Article) => {
