@@ -13,13 +13,13 @@ import {
 import { nanoid } from "nanoid";
 import { COLLECTIONS } from "./constants";
 
-const serviceAccount = JSON.parse(
-  process.env.NEXT_FIREBASE_SERVICE_ACCOUNT_KEY as string,
-);
-
 if (typeof global.readCount !== "number") {
   global.readCount = 0;
 }
+
+const serviceAccount = JSON.parse(
+  process.env.NEXT_FIREBASE_SERVICE_ACCOUNT_KEY as string,
+);
 
 // https://zenn.dev/mktu/articles/55b3bfee839cfc
 const app = !getApps()[0]
@@ -62,7 +62,6 @@ export const batchAddArticles = async (articles: Article[]) => {
 };
 
 export const batchAddSentences = async (sentences: Sentence[]) => {
-  console.log("batch add sentences");
   const batch = dbAdmin.batch();
   for (const sentence of sentences) {
     batch.set(
@@ -137,7 +136,13 @@ export const addSentence = async (
   for (const form of forms) {
     const invertedIndex = invertedIndexes.find((i) => i.form === form);
     if (!invertedIndex) {
-      createInvertedIndex_in_batch(batch, form, sentence.id);
+      const newInvertedIndex: InvertedIndex = {
+        id: nanoid(8),
+        form,
+        count: 1,
+        sentenceIds: [sentence.id],
+      };
+      createInvertedIndex_in_batch(batch, newInvertedIndex);
     } else {
       incrementInvertedIndexCount_in_batch(
         batch,
@@ -298,21 +303,14 @@ const decrementHanziCount_in_batch = (
 
 const createInvertedIndex_in_batch = (
   batch: FirebaseFirestore.WriteBatch,
-  form: string,
-  sentenceId: string,
+  invertedIndex: InvertedIndex,
 ) => {
-  const id = nanoid(8);
   batch.set(
     dbAdmin
       .collection(COLLECTIONS.invertedIndexes)
       .withConverter(invertedIndexConverter)
-      .doc(id),
-    {
-      id,
-      form,
-      count: 1,
-      sentenceIds: [sentenceId],
-    },
+      .doc(invertedIndex.id),
+    invertedIndex,
   );
 };
 
