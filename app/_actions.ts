@@ -25,17 +25,19 @@ import { redirect } from "next/navigation";
 
 export const batchAddHanzisAction = async (hanzis: Hanzi[]) => {
   await batchAddHanzis(hanzis);
-  // debug revalidatePath をつけなければ、 top page は更新されないのか？
+  // count は restapi ではなく、　admin sdk を使っているので、 tag の設定がない
   revalidatePath("/");
 };
 
 export const batchAddArticlesAction = async (articles: Article[]) => {
   await batchAddArticles(articles);
+  // count は restapi ではなく、　admin sdk を使っているので、 tag の設定がない
   revalidatePath("/");
 };
 
 export const batchAddSentencesAction = async (sentences: Sentence[]) => {
   await batchAddSentences(sentences);
+  // count は restapi ではなく、　admin sdk を使っているので、 tag の設定がない
   revalidatePath("/");
 };
 
@@ -43,6 +45,7 @@ export const batchAddInvertedIndexesAction = async (
   invertedIndexes: InvertedIndex[],
 ) => {
   await batchAddInvertedIndexes(invertedIndexes);
+  // count は restapi ではなく、　admin sdk を使っているので、 tag の設定がない
   revalidatePath("/");
 };
 

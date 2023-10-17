@@ -21,29 +21,18 @@ const ArticleForm = ({ article }: { article?: Article }) => {
   });
 
   const handleSubmit = async () => {
+    if (!value.date) return;
     if (article) {
-      await updateArticle(article.id, value.title, value.date!.getTime());
+      await updateArticleAction(article.id, value.title, value.date!.getTime());
     } else {
-      await createArticle(value.title, value.date!);
+      const article: Article = {
+        id: nanoid(),
+        title: value.title,
+        createdAt: value.date.getTime(),
+        sentenceIds: [],
+      };
+      await addArticleAction(article);
     }
-  };
-
-  const createArticle = async (title: string, date: Date) => {
-    const article: Article = {
-      id: nanoid(),
-      title,
-      createdAt: date.getTime(),
-      sentenceIds: [],
-    };
-    await addArticleAction(article);
-  };
-
-  const updateArticle = async (
-    id: string,
-    title: string,
-    createdAt: number,
-  ) => {
-    await updateArticleAction(id, title, createdAt);
   };
 
   return (
