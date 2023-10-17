@@ -7,7 +7,7 @@ import { BuildInvetedIndexesButton } from "@/features/invertedIndex";
 import {
   BatchAddSentencesButton,
   Sentence,
-  SentenceLine,
+  SentenceTable,
 } from "@/features/sentence";
 import { getDocumentCount } from "@/firebase/admin";
 import { COLLECTIONS } from "@/firebase/constants";
@@ -16,6 +16,7 @@ import { getRecentArticles, getSentencesByIds } from "@/firebase/restapi";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
 
 export default async function Home() {
   const { articles, readTime } = await getRecentArticles(1);
@@ -41,7 +42,12 @@ export default async function Home() {
   };
 
   return (
-    <main className="mx-[10vw] w-[calc(100%-20vw)] space-y-10 pb-40 pt-10 sm:mx-auto sm:w-[min(500px,100%-120px)]">
+    <main className="mx-auto w-full  max-w-md space-y-4 pb-40 pt-10">
+      {process.env.NODE_ENV === "development" ? <DataMonitor /> : null}
+      <div className="text-2xl font-bold">{article?.title}</div>
+      {article ? (
+        <div>{new Date(article.createdAt).toLocaleDateString("ja-JP")}</div>
+      ) : null}
       <div className="flex items-center justify-between">
         <form action={handleSubmit}>
           <ServerActionPendingButton label="Revalidate" />
@@ -54,29 +60,21 @@ export default async function Home() {
             .split(" ")[1]
         }`}</div>
       </div>
-      {process.env.NODE_ENV === "development" ? <DataMonitor /> : null}
       {article ? (
-        <div className="space-y-4">
-          <div className="text-2xl">{article.title}</div>
-          <div className="text-right text-2xl font-extralight">
-            {new Date(article.createdAt).toLocaleDateString("ja-JP")}
-          </div>
-          <div className="space-y-2">
-            {article.sentenceIds.map((sentenceId, index) => {
-              const sentence = sentences.find((s) => s.id === sentenceId);
-              if (!sentence) return null;
-              return (
-                <div
-                  key={sentenceId}
-                  className="grid grid-cols-[24px,1fr] items-center"
-                >
-                  <div>{index + 1}</div>
-                  <SentenceLine sentence={sentence} />
-                </div>
-              );
-            })}
-          </div>
+        <div className="flex">
+          <Link href={`/article/${article.id}/form`}>
+            <div className="rounded-lg bg-primary px-4 py-1.5 text-white">
+              Create New Sentence
+            </div>
+          </Link>
         </div>
+      ) : null}
+      {article ? (
+        <SentenceTable
+          sentences={article.sentenceIds
+            .map((id) => sentences.find((s) => s.id === id)!)
+            .filter(Boolean)}
+        />
       ) : null}
     </main>
   );
