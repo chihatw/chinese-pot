@@ -1,6 +1,4 @@
-"server only";
-
-import ServerActionPendingButton from "@/components/ServerActionPendingButton";
+import RevalidatePane from "@/components/RevalidatePane";
 import { Article, BatchAddArticlesButton } from "@/features/article";
 import { BatchAddHanzisButton } from "@/features/hanzi";
 import { BuildInvetedIndexesButton } from "@/features/invertedIndex";
@@ -15,7 +13,6 @@ import { getRecentArticles, getSentencesByIds } from "@/firebase/restapi";
 
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
 export default async function Home() {
@@ -36,11 +33,6 @@ export default async function Home() {
     }
   }
 
-  const handleSubmit = async () => {
-    "use server";
-    revalidatePath(`/`);
-  };
-
   return (
     <main className="mx-auto w-full  max-w-md space-y-4 pb-40 pt-10">
       {process.env.NODE_ENV === "development" ? <DataMonitor /> : null}
@@ -48,18 +40,7 @@ export default async function Home() {
       {article ? (
         <div>{new Date(article.createdAt).toLocaleDateString("ja-JP")}</div>
       ) : null}
-      <div className="flex items-center justify-between">
-        <form action={handleSubmit}>
-          <ServerActionPendingButton label="Revalidate" />
-        </form>
-        <div className="text-xs font-extralight">{`fetched at ${
-          new Date(readTime)
-            .toLocaleString("ja-JP", {
-              timeZone: "Asia/Tokyo",
-            })
-            .split(" ")[1]
-        }`}</div>
-      </div>
+      <RevalidatePane readTime={readTime} pathname="/" />
       {article ? (
         <div className="flex">
           <Link href={`/article/${article.id}/form`}>
