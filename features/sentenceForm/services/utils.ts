@@ -56,7 +56,11 @@ export const buildSentenceFormProps = async (
   const forms_uniq = [...new Set(forms.split("").filter(Boolean))];
 
   // forms に含まれる Hanzi を取得
-  const hanzis = forms_uniq.length ? await getHanzisByForms(forms_uniq) : [];
+
+  const { hanzis } = forms_uniq.length
+    ? await getHanzisByForms(forms_uniq)
+    : { hanzis: [] };
+
   const latestSentenceIds = [...new Set(hanzis.map((h) => h.latestSentenceId))];
   const { sentences, total } = await getSentencesByIds(latestSentenceIds);
 

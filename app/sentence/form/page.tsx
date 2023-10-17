@@ -13,7 +13,7 @@ const SentenceFormPage = async ({
   const forms = searchParams[SENTENCE_FORM_KEY]?.trim() || "";
   const { hanzis, hanziSentences, total } = await buildSentenceFormProps(forms);
 
-  const recentSentences = await getRecentSentences(5);
+  const { sentences } = await getRecentSentences(5);
 
   return (
     <div className="mx-auto w-full max-w-md  space-y-10 pb-40 pt-10">
@@ -25,7 +25,7 @@ const SentenceFormPage = async ({
         hanziSentences={hanziSentences}
       />
       <div className="text-2xl font-bold">Recent Sentences</div>
-      <SentenceTable sentences={recentSentences} />
+      <SentenceTable sentences={sentences} />
     </div>
   );
 };

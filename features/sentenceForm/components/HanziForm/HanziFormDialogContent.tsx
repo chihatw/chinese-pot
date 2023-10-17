@@ -35,6 +35,10 @@ const HanziFormDialogContent = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   articleId?: string;
 }) => {
+  if (typeof global.readCount !== "number") {
+    global.readCount = 0;
+  }
+
   const [input, setInput] = useState("");
   const [hanzis, setHanzis] = useState<Hanzi[]>([]);
   const [value, setValue] = useState<{ filter: PinyinFilter; pinyin: Pinyin }>({
@@ -64,7 +68,7 @@ const HanziFormDialogContent = ({
     if (!isValidFilter) return;
 
     const fetchData = async () => {
-      const hanzis = await getHanzisByPinyinFilter(value.filter);
+      const { hanzis } = await getHanzisByPinyinFilter(value.filter);
       setHanzis(hanzis);
     };
     fetchData();

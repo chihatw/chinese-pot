@@ -17,7 +17,9 @@ const SentenceSearchPage = async ({
 
   const { total, sentences } = await getSentencesByForms(forms);
 
-  const articles = await getArticlesBySentenceIds(sentences.map((s) => s.id));
+  const { articles } = await getArticlesBySentenceIds(
+    sentences.map((s) => s.id),
+  );
 
   return (
     <div className="mx-auto w-full max-w-md pb-40 pt-10">

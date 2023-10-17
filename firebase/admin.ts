@@ -17,11 +17,13 @@ const serviceAccount = JSON.parse(
   process.env.NEXT_FIREBASE_SERVICE_ACCOUNT_KEY as string,
 );
 
+if (typeof global.readCount !== "number") {
+  global.readCount = 0;
+}
+
 // https://zenn.dev/mktu/articles/55b3bfee839cfc
 const app = !getApps()[0]
-  ? initializeApp({
-      credential: cert(serviceAccount),
-    })
+  ? initializeApp({ credential: cert(serviceAccount) })
   : getApps()[0];
 
 export const authAdmin = getAuth();
@@ -195,7 +197,8 @@ export const deleteSentence = async (
 // noto 読み込みレコード削減のため admin を使って、 restapi は使わない
 export const getDocumentCount = async (collection: string) => {
   const snapshot = await dbAdmin.collection(collection).count().get();
-  console.log("getDocumentCount", 1);
+  global.readCount++;
+  console.log("getDocumentCount", 1, "readCount: ", global.readCount);
   return snapshot.data().count;
 };
 
@@ -207,7 +210,13 @@ const _getInvertedIndexesByForms = async (
     .withConverter(invertedIndexConverter)
     .where("form", "in", forms)
     .get();
-  console.log("_getInvertedIndexesByForms", snapshot.size);
+  global.readCount += snapshot.size;
+  console.log(
+    "_getInvertedIndexesByForms",
+    snapshot.size,
+    "readCount: ",
+    global.readCount,
+  );
   return snapshot.docs.map((doc) => doc.data());
 };
 

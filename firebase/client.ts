@@ -5,6 +5,10 @@ const firebaseConfig = JSON.parse(
   process.env.NEXT_PUBLIC_FIREBASE_CONFIG as string,
 );
 
+if (typeof global.readCount !== "number") {
+  global.readCount = 0;
+}
+
 // Initialize Firebase
 const app = getApps()?.length ? getApps()[0] : initializeApp(firebaseConfig);
 

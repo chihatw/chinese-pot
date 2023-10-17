@@ -17,7 +17,7 @@ import {
 } from "./constants";
 import { BuildStructuredQueryProps, WhereProps } from "./schema";
 
-// note restapi の in の条件は 10項まで
+// note restapi の in の条件は 30項まで
 
 const PROJECT_ID = "chinese-pot";
 const PROJECT_PATH = `projects/${PROJECT_ID}/databases/(default)/documents`;
@@ -44,6 +44,7 @@ export const getArticle_declare = async (articleId: string) => {
   );
   const json = await res.json();
   console.log(json);
+  // return
 };
 
 const fetchRequestURL = `${getBaseUrl()}:runQuery`;
@@ -54,16 +55,18 @@ const fetchRequestURL = `${getBaseUrl()}:runQuery`;
  *
  * 取得した　form を持つ　Hanzi を抽出
  */
-export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
+export const getHanzisByForms = async (
+  forms: string[],
+): Promise<{ hanzis: Hanzi[] }> => {
   // 引数がない
-  if (!forms.length) return [];
+  if (!forms.length) return { hanzis: [] };
 
   // 重複削除
   const uniq_forms = [...new Set(forms)];
 
   if (uniq_forms.length > SENTENCE_TEXT_MAX) {
     console.error(`more than ${SENTENCE_TEXT_MAX}`);
-    return [];
+    return { hanzis: [] };
   }
 
   let result: Hanzi[] = [];
@@ -82,18 +85,27 @@ export const getHanzisByForms = async (forms: string[]): Promise<Hanzi[]> => {
       }),
     );
 
-    const { docs } = await getDocs(res);
-    console.log("getHanzisByForms", docs.length);
+    const { docs, readCount } = await getDocs(res);
+    global.readCount += readCount;
+    console.log(
+      "getHanzisByForms",
+      docs.length,
+      `readCount: `,
+      global.readCount,
+    );
     const hanzis = docs.map((doc) => buildHanzi(doc));
     result = [...result, ...hanzis];
   }
 
-  return result;
+  return { hanzis: result };
 };
 
+// note おそらく、1回当たりの読み込み件数はこれが一番多い
+// 読み込み件数を減らす方法は、filter を key, hanzis を value にもつ collection　を作ること
+// 例) key: 'ji', value: [{ id: '..', form: '..', pinyin: {...} }, {...}, ...]
 export const getHanzisByPinyinFilter = async (
   filter: PinyinFilter,
-): Promise<Hanzi[]> => {
+): Promise<{ hanzis: Hanzi[] }> => {
   const q: BuildStructuredQueryProps = { collectionId: COLLECTIONS.hanzis };
   const where: WhereProps[] = [];
   if (filter.consonants.length) {
@@ -111,39 +123,66 @@ export const getHanzisByPinyinFilter = async (
   q.where = where;
 
   const res = await fetch(fetchRequestURL, buildFetchRequestOption(q));
-  const { docs } = await getDocs(res);
-  console.log("getHanzisByPinyinFilter", docs.length);
-  return docs.map((doc) => buildHanzi(doc));
+  const { docs, readCount } = await getDocs(res);
+  global.readCount += readCount;
+  console.log(
+    "getHanzisByPinyinFilter",
+    docs.length,
+    `readCount:`,
+    global.readCount,
+  );
+  const hanzis = docs.map((doc) => buildHanzi(doc));
+  return { hanzis };
 };
 
 export const getArticlesByIds = async (
   articleIds: string[],
 ): Promise<{ articles: Article[]; readTime: number }> => {
+  // 引数がない
   if (!articleIds.length) return { articles: [], readTime: 0 };
 
+  // 重複削除
   const uniq_articleIds = [...new Set(articleIds)];
 
-  if (uniq_articleIds.length > IN_ARRAY_MAX) {
-    throw new Error(`articleIds bigger than ${IN_ARRAY_MAX}`);
+  if (uniq_articleIds.length > SENTENCE_TEXT_MAX) {
+    console.error(`more than ${SENTENCE_TEXT_MAX}`);
+    return { articles: [], readTime: 0 };
   }
 
-  const res = await fetch(
-    fetchRequestURL,
-    buildFetchRequestOption({
-      collectionId: COLLECTIONS.articles,
-      where: [
-        "__name__",
-        "IN",
-        uniq_articleIds.map(
-          (articleId) => `${PROJECT_PATH}/${COLLECTIONS.articles}/${articleId}`,
-        ),
-      ],
-      tags: [REVALIDATE_TAGS.articles], // note タグを分けた方がいい？
-    }),
-  );
-  const { docs, readTime } = await getDocs(res);
-  const articles = docs.map((doc) => buildArticle(doc));
-  return { articles, readTime };
+  let result: Article[] = [];
+  let readTime = 0;
+
+  for (let i = 0; i < uniq_articleIds.length; i += IN_ARRAY_MAX) {
+    const subSet = uniq_articleIds.slice(i, i + IN_ARRAY_MAX).filter(Boolean);
+    if (!subSet.length) continue;
+    const res = await fetch(
+      fetchRequestURL,
+      buildFetchRequestOption({
+        collectionId: COLLECTIONS.articles,
+        where: [
+          "__name__",
+          "IN",
+          subSet.map(
+            (articleId) =>
+              `${PROJECT_PATH}/${COLLECTIONS.articles}/${articleId}`,
+          ),
+        ],
+        tags: [REVALIDATE_TAGS.articles], // note タグを分けた方がいい？
+      }),
+    );
+    const { docs, readTime: _readTime, readCount } = await getDocs(res);
+    global.readCount += readCount;
+    console.log(
+      "getArticlesByIds",
+      docs.length,
+      `readCount: `,
+      global.readCount,
+    );
+    const articles = docs.map((doc) => buildArticle(doc));
+    result = [...result, ...articles];
+    readTime = _readTime;
+  }
+  return { articles: result, readTime };
 };
 
 export const getRecentArticles = async (
@@ -158,30 +197,42 @@ export const getRecentArticles = async (
       tags: [REVALIDATE_TAGS.articles],
     }),
   );
-  const { docs, readTime } = await getDocs(res);
-  console.log("getRecentArticles", docs.length);
+  const { docs, readTime, readCount } = await getDocs(res);
+  global.readCount += readCount;
+  console.log(
+    "getRecentArticles",
+    docs.length,
+    `readCount: `,
+    global.readCount,
+  );
+
   const articles = docs.map((doc) => buildArticle(doc));
   return { articles, readTime };
 };
 
-export const getArticlesBySentenceIds = async (sentenceIds: string[]) => {
+export const getArticlesBySentenceIds = async (
+  sentenceIds: string[],
+): Promise<{ articles: Article[] }> => {
   const articles: Article[] = [];
+  let readCount = 0;
   if (sentenceIds.length <= SEARCH_ARTICLES_BY_SENTENCEIDS_MAX) {
     for (const sentenceId of sentenceIds) {
       if (_checkArticlesAlreadyHasSentence(articles, sentenceId)) continue;
-      const article = await getArticleBySentenceId(sentenceId);
+      const { article, readCount: _readCount } =
+        await _getArticleBySentenceId(sentenceId);
+      readCount += _readCount;
       if (!article) continue;
 
       articles.push(article);
     }
   }
-  return articles;
+  return { articles };
 };
 
-export const getArticleBySentenceId = async (
+const _getArticleBySentenceId = async (
   sentenceId: string,
-): Promise<Article | undefined> => {
-  if (!sentenceId) return;
+): Promise<{ article: Article | undefined; readCount: number }> => {
+  if (!sentenceId) return { article: undefined, readCount: 0 };
 
   const res = await fetch(
     fetchRequestURL,
@@ -190,17 +241,23 @@ export const getArticleBySentenceId = async (
       where: ["sentenceIds", "ARRAY_CONTAINS", sentenceId],
     }),
   );
-  const { docs } = await getDocs(res);
+  const { docs, readCount } = await getDocs(res);
   const articles = docs.map((doc) => buildArticle(doc));
-  console.log("getArticleBySentenceId", docs.length);
-  return articles.at(0);
+  global.readCount += readCount;
+  console.log(
+    "_getArticleBySentenceId",
+    docs.length,
+    "readCount: ",
+    global.readCount,
+  );
+  return { article: articles.at(0), readCount };
 };
 
 // form で　１つずつ　sentenceIds を取得して、 すべての form で取得された共通の sentenceIds を抽出する
 // byForms の方が効率が良い？
 export const _getInvertedIndexByForm = async (
   form: string,
-): Promise<InvertedIndex | undefined> => {
+): Promise<{ invertedIndex: InvertedIndex | undefined }> => {
   const res = await fetch(
     fetchRequestURL,
     buildFetchRequestOption({
@@ -209,15 +266,21 @@ export const _getInvertedIndexByForm = async (
       tags: [REVALIDATE_TAGS.invertedIndexByForm], // sentence を変更した時は、これを update しないと、 seartch に反映されない
     }),
   );
-  const { docs } = await getDocs(res);
+  const { docs, readCount } = await getDocs(res);
   const results = docs.map((doc) => buildInvertedIndex(doc));
-  console.log("_getInvertedIndexByForm", docs.length);
-  return results.at(0);
+  global.readCount += readCount;
+  console.log(
+    "_getInvertedIndexByForm",
+    docs.length,
+    "readCount: ",
+    global.readCount,
+  );
+  return { invertedIndex: results.at(0) };
 };
 
 export const getRecentSentences = async (
   limit: number,
-): Promise<Sentence[]> => {
+): Promise<{ sentences: Sentence[] }> => {
   const res = await fetch(
     fetchRequestURL,
     buildFetchRequestOption({
@@ -228,9 +291,16 @@ export const getRecentSentences = async (
     }),
   );
 
-  const { docs } = await getDocs(res);
-  console.log("getRecentSentences", docs.length);
-  return docs.map((doc) => buildSentence(doc));
+  const { docs, readCount } = await getDocs(res);
+  global.readCount += readCount;
+  console.log(
+    "getRecentSentences",
+    docs.length,
+    "readCount: ",
+    global.readCount,
+  );
+  const sentences = docs.map((doc) => buildSentence(doc));
+  return { sentences };
 };
 
 // note fetch する sentences の上限を SEARCH_SENTENCES_MAX で指定
@@ -248,6 +318,7 @@ export const getSentencesByIds = async (
   }
 
   let result: Sentence[] = [];
+  let totalCount = 0;
 
   for (let i = 0; i < sentenceIds.length; i += IN_ARRAY_MAX) {
     // IN_ARRAY_MAX 毎にクエリを実行
@@ -269,16 +340,24 @@ export const getSentencesByIds = async (
         tags: [REVALIDATE_TAGS.senences],
       }),
     );
-    const { docs } = await getDocs(res);
-    console.log("getSentencesByIds", docs.length);
+    const { docs, readCount } = await getDocs(res);
+    global.readCount += readCount;
+    console.log(
+      "getSentencesByIds",
+      docs.length,
+      "readCount: ",
+      global.readCount,
+    );
     const sentences = docs.map((doc) => buildSentence(doc));
     result = [...result, ...sentences];
+    totalCount += readCount;
   }
 
   return { total: result.length, sentences: result };
 };
 
 // forms の並びで厳選するので、重複ありの forms を受け取る
+
 export const getSentencesByForms = async (
   forms: string,
 ): Promise<SearchResult> => {
@@ -293,7 +372,8 @@ export const getSentencesByForms = async (
 
   const formSentenceIdsRelations: { [form: string]: string[] } = {};
   for (const form of forms_uniq) {
-    const invertedIndex = await _getInvertedIndexByForm(form);
+    const { invertedIndex } = await _getInvertedIndexByForm(form);
+
     if (invertedIndex && invertedIndex.sentenceIds.length) {
       formSentenceIdsRelations[form] = invertedIndex.sentenceIds;
     }
@@ -339,7 +419,11 @@ const getDocs = async (res: Response) => {
 
   const readTime = (json as any[]).at(0)?.readTime || 0;
 
-  return { docs, readTime };
+  return {
+    docs,
+    readTime,
+    readCount: (json as any[]).length,
+  };
 };
 
 const buildHanzi = (document: any): Hanzi => {
