@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Form } from "@/components/ui/form";
-import GoogleSignInButton from "../GoogleSignInButton";
+import GoogleSignInButton from "./GoogleSignInButton";
 import ResetPasswordButton from "./ResetPasswordButton";
 import SignInButton from "./SignInButton";
 

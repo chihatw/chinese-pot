@@ -1,4 +1,5 @@
 export const SENTENCE_TEXT_MAX = 200; // sentenceForm sentenceのtextの最大は200字
+export const GET_BY_IDS_MAX = 200;
 export const SEARCH_SENTENCES_MAX = 70;
 export const IN_ARRAY_MAX = 30;
 export const SEARCH_ARTICLES_BY_SENTENCEIDS_MAX = 20;

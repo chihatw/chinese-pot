@@ -1,4 +1,4 @@
-import { SignInSchema, User } from "@/features/auth/schema";
+import { SignInSchema, User } from "@/features/auth";
 import { authClient } from "@/firebase/client";
 import { ERROR_CODES } from "@/firebase/constants";
 import { FirebaseError } from "firebase/app";

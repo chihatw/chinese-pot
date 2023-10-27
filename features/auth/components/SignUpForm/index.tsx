@@ -1,5 +1,6 @@
 "use client";
 
+import { Form } from "@/components/ui/form";
 import TextField from "@/features/auth/components/TextField";
 import { SignUpSchema } from "@/features/auth/schema";
 import { signUpFirebaseWithEmailAndPassword } from "@/features/auth/services/auth";
@@ -11,8 +12,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
-import { Form } from "@/components/ui/form";
 import SignUpButton from "./SignUpButton";
 
 const SignUpForm = () => {

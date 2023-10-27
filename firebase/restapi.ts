@@ -1,7 +1,6 @@
 import { Article } from "@/features/article";
 import { Hanzi } from "@/features/hanzi";
 import { InvertedIndex } from "@/features/invertedIndex";
-
 import { SearchResult } from "@/features/invertedIndex/schema";
 import { PinyinFilter, buildPinyin } from "@/features/pinyin";
 import { Sentence } from "@/features/sentence";
@@ -9,6 +8,7 @@ import { buildFetchRequestOption } from "@/utils/buildFetchRequestOption";
 import { getIntersection } from "@/utils/utils";
 import {
   COLLECTIONS,
+  GET_BY_IDS_MAX,
   IN_ARRAY_MAX,
   REVALIDATE_TAGS,
   SEARCH_ARTICLES_BY_SENTENCEIDS_MAX,
@@ -144,8 +144,8 @@ export const getArticlesByIds = async (
   // 重複削除
   const uniq_articleIds = [...new Set(articleIds)];
 
-  if (uniq_articleIds.length > SENTENCE_TEXT_MAX) {
-    console.error(`more than ${SENTENCE_TEXT_MAX}`);
+  if (uniq_articleIds.length > GET_BY_IDS_MAX) {
+    console.error(`more than ${GET_BY_IDS_MAX}`);
     return { articles: [], readTime: 0 };
   }
 
@@ -255,7 +255,7 @@ const _getArticleBySentenceId = async (
 
 // form で　１つずつ　sentenceIds を取得して、 すべての form で取得された共通の sentenceIds を抽出する
 // byForms の方が効率が良い？
-export const _getInvertedIndexByForm = async (
+const _getInvertedIndexByForm = async (
   form: string,
 ): Promise<{ invertedIndex: InvertedIndex | undefined }> => {
   const res = await fetch(

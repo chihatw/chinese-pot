@@ -1,12 +1,4 @@
 "use client";
-import { resetFirebasePassword } from "@/features/auth/services/auth";
-import { fontZenMaruGothic } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import { Mail, SendHorizontal } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +11,13 @@ import {
 import { FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { resetFirebasePassword } from "@/features/auth/services/auth";
+import { fontZenMaruGothic } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
+import { Mail, SendHorizontal } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { z } from "zod";
 
 const ResetPasswordButton = () => {
   const [input, setInput] = useState("");

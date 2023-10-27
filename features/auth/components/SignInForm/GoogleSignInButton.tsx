@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { signInAppWithGoogle } from "@/features/auth/services/auth";
 import { ReactNode, useState } from "react";
-
 import { FaGoogle } from "react-icons/fa";
 
 const GoogleSignInButton = ({ children }: { children: ReactNode }) => {

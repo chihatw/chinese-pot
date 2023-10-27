@@ -27,9 +27,7 @@ const app = !getApps()[0]
   : getApps()[0];
 
 export const authAdmin = getAuth();
-// export const dbAdmin = getFirestore();
 
-// https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore
 // https://firebase.google.com/docs/reference/admin/node/firebase-admin.firestore.firestoresettings.md#firestoresettings_interface
 const dbAdmin = initializeFirestore(app, { preferRest: true });
 
@@ -169,26 +167,38 @@ export const deleteSentence = async (
   sentence: Sentence,
   articleId?: string,
 ) => {
-  const hanziIds = buildHanziIds_from_Sentence(sentence);
-
+  /**
+   * invertedIndex の更新
+   */
   const forms = [...new Set(sentence.text.split(""))];
   const invertedIndexes = await _getInvertedIndexesByForms(forms);
-
   const batch = dbAdmin.batch();
-
   for (const form of forms) {
     const invertedIndex = invertedIndexes.find((i) => i.form === form);
     if (!invertedIndex) throw new Error("invertedIndex cannot find");
+    // sentenceId の削除と、カウントを１つ減らす
     decrementInvertedIndexCount_in_batch(batch, invertedIndex.id, sentence.id);
   }
 
+  /**
+   * hanzi の更新
+   */
+  const hanziIds = buildHanziIds_from_Sentence(sentence);
   for (const hanziId of hanziIds) {
+    // latestSentenceId の削除と、カウントを１つ減らす
     decrementHanziCount_in_batch(batch, hanziId);
   }
 
+  /**
+   * sentence の削除
+   */
   deleteSentence_in_batch(batch, sentence.id);
 
   if (!!articleId) {
+    /**
+     * article の更新
+     */
+    // sentenceIds　からの削除
     removeSentenceIdFromArticle_in_batch(batch, articleId, sentence.id);
   }
 
