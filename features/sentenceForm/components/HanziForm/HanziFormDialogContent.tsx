@@ -23,7 +23,7 @@ import {
   INITIAL_PINYIN_FILTERL,
 } from "@/features/pinyin/schema";
 import { getHanzisByPinyinFilter } from "@/firebase/restapi";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import HanziList from "./HanziList";
 
 const HanziFormDialogContent = ({
@@ -47,6 +47,15 @@ const HanziFormDialogContent = ({
   });
 
   const debouncedInput = useDebouce(input, 300);
+
+  const disabled = useMemo(() => {
+    const { pinyin } = value;
+    // pinyin が空の場合は、 ok
+    if (!getPinyinStr(pinyin)) return false;
+
+    // pinyin に何か入っていれば、トーンと母音は必須
+    return !pinyin.tone || !pinyin.vowel;
+  }, [value]);
 
   useEffect(() => {
     if (!debouncedInput) {
@@ -100,7 +109,10 @@ const HanziFormDialogContent = ({
           <PinyinHanzi pinyinStr={getPinyinStr(value.pinyin)} form={form} />
         </div>
         <form action={handleSubmit}>
-          <ServerActionPendingButton label="登録" />
+          <ServerActionPendingButton
+            label={getPinyinStr(value.pinyin) ? "登錄" : "記号"}
+            disabled={disabled}
+          />
         </form>
       </div>
       <div className="text-sm font-extralight text-gray-700">{`Result: ${hanzis.length} hits`}</div>
