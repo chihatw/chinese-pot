@@ -32,10 +32,16 @@ const SentenceForm = ({
   const [input, setInput] = useState(forms);
   const debouncedInput = useDebouce(input, 300);
 
-  const searchParamsValue = useMemo(
-    () => debouncedInput.trim().replace(/[a-zA-Z]/gi, "") || "",
-    [debouncedInput],
-  );
+  const searchParamsValue = useMemo(() => {
+    // ローマ字 a-zA-Z
+    // ひらがな \u3041-\u3096
+    // カタカナ \u30A1-\u30FA
+    return (
+      debouncedInput
+        .trim()
+        .replace(/[a-zA-Z\u3041-\u3096\u30A1-\u30FA]/gi, "") || ""
+    );
+  }, [debouncedInput]);
 
   useBuildSearchParams(searchParamsValue, SENTENCE_FORM_KEY);
 
