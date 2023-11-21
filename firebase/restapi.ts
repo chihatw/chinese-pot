@@ -194,7 +194,7 @@ export const getRecentArticles = async (
       collectionId: COLLECTIONS.articles,
       orderBy: ["createdAt", "desc"],
       limit,
-      tags: [REVALIDATE_TAGS.articles],
+      cache: "no-store",
     }),
   );
   const { docs, readTime, readCount } = await getDocs(res);
